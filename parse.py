@@ -1,8 +1,11 @@
 import re
+import os
+dir = os.path.dirname('__file__')
 
-path = r"C:\Users\Yijun\Desktop\OCaml\alperez.json"
-out = r"C:\Users\Yijun\Desktop\ERSP-PL\test.json"
-out2 = r"C:\Users\Yijun\Desktop\ERSP-PL\after.json"
+parent = os.path.join(dir, os.pardir)
+path = os.path.join(parent, os.path.join('OCaml', 'alperez.json'))
+out = os.path.join(dir, 'test.json')
+out2 = os.path.join(dir, 'after.json')
 
 # parse n number of json objects from the system path from a certain start point
 def parse(infile, outfile, n = 0, start = 0):
@@ -40,3 +43,5 @@ def replace(match):
       replacement += 'X'
   replacement += '*)'
   return replacement
+
+parse(path, out2, 1, 2893)
