@@ -32,13 +32,13 @@ def parse(infile, outfile, n = 0, start = 0):
   of.close()
   #return data
 
-# replace 
+# replace matched pattern
 def replace(match):
   replacement = '(*'
   match = match.group()[2:-2]
   for c in match:
-    if c == '\n':
-      replacement += '\n'
+    if c == "\n":
+      replacement += "\n"
     else:
       replacement += 'X'
   replacement += '*)'
