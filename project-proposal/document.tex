@@ -40,25 +40,54 @@
 
 \section{Research context and problem statement}
 
-% An article style is separated into sections and subsections with 
+% An article style is separated into sections and subsections with --
 %   markup such as this.  Use \section*{Principles} for unnumbered sections.
-When the beginner of computer science try to write codes in an unfamiliar programming language, especially turns from object oriented language to functional programming language, there will be a lot of unexpected problems result from the switching between the languages. In order to observe and avoid these issues, the graduate students recorded the homework  activities by three cse 130 students, and trying to analysis how to help the students avoid the problems by add-ons. We are going to be the small group sample for testing the add-on, for both basic programming language studying purpose and for the testing aim. Also, we are going to help them in data analysis part.
+Learning a new paradigm in programming languages can be challenging. We are interested in analyzing students’ learning process, particularly, when learning functional programming. We have gathered data from many undergraduate students at UCSD when taking a functional programming class using OCAML, CSE 130. We want to find out where exactly students face problems or fail when doing homework, such as the types of errors that they encounter, the amount of time taken for them to fix a problem, and instances where students ‘give-up’ in doing their homework in order to help improve teaching about functional programming.
 
-
-Students are troubled with the different characters of FB from the OOP based language which they have already studied. Hence, some graduate students are developing an add-on to alleviate the toughness. Our mission is to evaluate the effectiveness of the add-on and study about programming language at the same time. We only have limited knowledge on the Functional Programming language, but we need to solve the high-level problems. Therefore, we are going to study the material for cse130, and get acquaintance to the developing environment. Then, we are going to do the programming assignments, to check the effectiveness of the add-on. At the same time, we help the graduate student with the data analysis job as well.
 
 \section{Proposed solution}
 
-Studying cse130 is a good way to start our research. We can get access to Prof. Jhala’s cse130 piazza right now, and will be able to access podcast of the class soon. We can probably catch up the course and study it in a shorter period. Also, the graduate students and professor helped us in break the analysis part into something we are able to help with, such as make the files anonymous. 
+In order to solve the problems mentioned above, there are several basic questions we first want to answer: 
+
+\begin{itemize}
+	
+	\item How long does it take students to complete homeworks and where do the errors show up? 
+	
+	\begin{itemize}
+		\item By answering this question, we can have a general idea on how hard each problem is for the students, and therefore knowing what type of errors should we focus on.
+	\end{itemize}
+	
+	\item What kind of errors do the students encounter?
+	\begin{itemize}
+		\item If the compiler is not friendly in telling students exactly what is wrong for this kind of error, then we may do something to improve students' learning experience.
+	\end{itemize}
+	
+	\item How long does it take them to fix the error?
+	\begin{itemize}
+		\item We will be able to see whether students get better over time if they spend less time to fix the error
+	\end{itemize}
+	
+\end{itemize}
+
+We have recorded students’ activity when doing homework in functional programming language by taking a snapshot every 30 seconds to observe any problems that a student may have--such as getting stuck on a particular line, or running the code with an error. The recorded data is compiled into JSON files. We will write Python scripts to analyze data to answer those questions.
+
 
 \section{Evaluation and Implementation plan}
 
 \paragraph{Evaluation}
-This project is something we can help with and benefit from. 
-
+The data was collected and compiled into JSON files and each log is composed of five different sections: unix timestamp, filename, file contents, offset into file contents, and event where event is one of six different kinds of objects (eval, abort, restart, timer, confused or submit). First, using Python, the data will be anonymized by converting text in the string literals to repetitions of single character to protect the privacy of the students.
 
 \paragraph{Timeline}
-I think one of the most important things is we need to master the cse130 skills in a short period, so we need a well-designed timeline to go with the course. 
+
+\begin{itemize} 
+	\item FALL 2015
+	
+	\begin{itemize}
+		\item Get familiar with the techniques that we will be using for the following quarters, i.e. Python and OCaml.
+		\item Help implement the functions needed for the code as assigned by Prof. Jhala
+	\end{itemize}
+
+\end{itemize}
 
 
 \end{document}

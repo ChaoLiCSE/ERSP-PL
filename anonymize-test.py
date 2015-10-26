@@ -12,7 +12,7 @@ import json
 
 dir = os.path.dirname('__file__')
 
-target = os.path.join(dir, 'OCaml')
+target = os.path.join(dir, 'logs')
 directory = os.path.join(dir, 'anonymous')
 
 # parse n number of json objects from the system path from a certain start point
