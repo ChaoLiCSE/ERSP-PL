@@ -43,7 +43,7 @@ if not os.path.exists(directory):
     os.makedirs(directory)
 
 for i in os.listdir(target):
-  print i
+  print(i)
   if i == 'tkua.json':
     continue
   infile = os.path.join(target, i)
