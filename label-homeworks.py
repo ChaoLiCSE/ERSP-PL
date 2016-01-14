@@ -46,6 +46,10 @@ def group_sessions(infile,  problems):
         session_numbers.append([item['event']['type'], num, tag])
     return session_numbers
 
+# for each infile, writes the following foramt to the outfile:
+# {'tag': #, 'time': #}
+# where 'tag' is the index of the problem in list problems,
+# and 'time' is the unix time stamp
 def label_problems(infile, outfile, problems, groups):
     currtag = len(problems)-1
     index = 0
