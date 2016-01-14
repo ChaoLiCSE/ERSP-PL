@@ -9,10 +9,12 @@ def build_dict(infile, problems):
     with open(infile) as inf:
         for line in inf:
             item = eval(line)
+
+            if item['tag'] == 0 or item['time'] == 0: 
+                continue
+
             current = item['time']
 
-            if item['tag'] == 0: 
-                continue
 
             problemID = problems[item['tag']]
 
@@ -32,7 +34,7 @@ dir = os.path.dirname('__file__')
 infile = os.path.join(dir, 'homework1-withtag')
 
 # homework 1 problems
-problems = ['???','palindrome', 'listReverse', 'digitalRoot', 'additivePersistence', 'digits', 'digitsOfInt', 'sumList']
+problems = ['???','palindrome', 'listReverse', 'digitalRoot', 'additivePersistence', 'digitsOfInt', 'sumList']
 
 hw1 = list()
 for i in os.listdir(infile):
@@ -51,14 +53,15 @@ print summary
 summary = dict()
 for i in problems:
     if i == '???': continue
-    summary[i] = [int(item[i]['duration'])/60 for item in hw1 if item.has_key(i)]
+    summary[i] = [int(item[i]['duration']/60) for item in hw1 if item.has_key(i)]
 
 #print summary
-#print max([max(summary[i]) for i in summary])
+#print int(max(summary['sumList']))
+#print int(min(summary['sumList']))
 
 #for i in summary['palindrome']:
     #print(i)
 
-for c in range(1, 800):
-    print sum(i < c for i in summary['palindrome'])
+for c in range(1, 1500):
+    print sum(i < c for i in summary['sumList'])
     c += 30

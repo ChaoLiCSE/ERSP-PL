@@ -51,7 +51,6 @@ def group_sessions(infile,  problems):
 # where 'tag' is the index of the problem in list problems,
 # and 'time' is the unix time stamp
 def label_problems(infile, outfile, problems, groups):
-    currtag = len(problems)-1
     index = 0
     with open(infile) as inf, open(outfile,'a') as of:
         for line in inf:
@@ -59,15 +58,13 @@ def label_problems(infile, outfile, problems, groups):
             toStore = dict()
             toStore['time'] = item['time']
 
-            if item['event']['type'] == 'eval':
-                if groups[index][2] != 0:
-                    currtag = groups[index][2]
-                toStore['tag'] = currtag
+            if item['event']['type'] == 'eval' and groups[index][2] != 0:
+                toStore['tag'] = groups[index][2]
             else:
                 flag = False
                 for i in range(index, len(groups)):
-                    if groups[i][0] == 'eval' and currtag != 0:
-                        toStore['tag'] = currtag if groups[i][2] == currtag else currtag-1
+                    if groups[i][0] == 'eval'and groups[i][2] != 0:
+                        toStore['tag'] = groups[i][2]
                         flag = True
                         break
                 if flag == False: toStore['tag'] = 0
@@ -87,7 +84,7 @@ output = os.path.join(dir, 'homework1')
 output2 = os.path.join(dir, 'homework1-withtag')
 
 # homework 1 problems
-problems = ['???','palindrome', 'listReverse', 'digitalRoot', 'additivePersistence', 'digits', 'digitsOfInt', 'sumList']
+problems = ['???','palindrome', 'listReverse', 'digitalRoot', 'additivePersistence', 'digitsOfInt', 'sumList']
 
 """
 findhw(target, output)
@@ -101,7 +98,7 @@ for i in os.listdir(output):
     session_numbers = group_sessions(os.path.join(target,i), problems)
     label_problems(os.path.join(target,i), os.path.join(output2,i), problems, session_numbers)
 
-"""
+
 i = 0
 j = 0
 with open(os.path.join(output2,'alperez.hw1.ml.json'), 'r') as inf:
@@ -113,4 +110,3 @@ with open(os.path.join(output2,'alperez.hw1.ml.json'), 'r') as inf:
             j += 1
 print(i)
 print(j)
-"""
