@@ -2,8 +2,6 @@ import re
 import os
 import json
 from shutil import copy
-from os.path import basename
-from os.path import splitext
 
 # find all student files for a homework, and copy the files into a new dir
 def findhw(targets, outputs):
@@ -95,16 +93,3 @@ hw1 = list()
 for i in os.listdir(output):
     session_numbers = group_sessions(os.path.join(target,i), problems)
     label_problems(os.path.join(target,i), os.path.join(output2,i), problems, session_numbers)
-
-
-i = 0
-j = 0
-with open(os.path.join(output2,'alperez.hw1.ml.json'), 'r') as inf:
-    for line in inf:
-        item = eval(line)
-        if 'tag' not in item or item['tag'] == 0:
-            i += 1
-        else:
-            j += 1
-print(i)
-print(j)
