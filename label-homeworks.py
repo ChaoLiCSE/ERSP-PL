@@ -77,18 +77,16 @@ def label_problems(infile, outfile, problems, groups):
 
 
 ############################################################################################################# Main
-dir = os.path.dirname('__file__')
+dir = os.path.abspath(__file__ + '/../../')
 
-target = os.path.join(dir, 'logs-detail')
+target = os.path.join(dir, 'sp14')
 output = os.path.join(dir, 'homework1')
 output2 = os.path.join(dir, 'homework1-withtag')
 
 # homework 1 problems
 problems = ['???','palindrome', 'listReverse', 'digitalRoot', 'additivePersistence', 'digitsOfInt', 'sumList']
 
-"""
 findhw(target, output)
-"""
 
 if not os.path.exists(output2):
     os.makedirs(output2)
