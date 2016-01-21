@@ -11,7 +11,7 @@ import json
 dir = os.path.abspath(__file__ + '/../../')
 target = os.path.join(dir, 'sp14')
 output = os.path.join(dir, 'output')
-
+"""
 summary = dict()
 
 for i in os.listdir(target):
@@ -52,14 +52,15 @@ with open(output, 'a') as of:
     json.dump(summary, of)
     of.close()
 """
+
 with open(output) as inf:
     for line in inf:
         summary = eval(line)
 
-for key, value in sorted(summary.items()):
-    print(key)
+#for key, value in sorted(summary.items()):
+#    print(key)
 
 for key, value in sorted(summary.items()):
-    print(value['hw3'][1])
-"""
-print(summary)
+    print(value['hw3'][2])
+
+#print(sorted(summary.items()))
