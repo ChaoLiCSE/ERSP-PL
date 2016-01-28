@@ -56,7 +56,7 @@ for i in os.listdir(target):
                                 json.dump(item, of1)
                                 break
                             else:
-                                json.dump(item, of1)
+                                json.dump(item, of2)
                                 type_error += 1
                                 break
         summary[student][hw] = [syntax_error, type_error, success]
