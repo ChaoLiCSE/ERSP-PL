@@ -15,6 +15,15 @@ output2 = os.path.join(dir, 'output-syntax')
 
 summary = dict()
 
+#print(summary)
+if not os.path.exists(output1):
+    os.makedirs(output1)
+
+
+if not os.path.exists(output2):
+    os.makedirs(output2)
+    
+
 for i in os.listdir(target):
 
     filename = str.split(i, '.')
@@ -31,44 +40,30 @@ for i in os.listdir(target):
         type_error = 0
         success = 0
 
-        for line in inf:
-            item = eval(line)
-            
-            if item['event']['type'] == 'eval':
-                for i in item['ocaml']:
-                    if not i['out']:
-                        success += 1
-                        continue
-                    elif re.search('Syntax error',i['out'], re.IGNORECASE) is not None:
-                        syntax_error += 1
-                        """
-                        NOT SURE HOW TO COPY A LINE IN JSON FILE HERE
-                        """
-                        break
-                    else:
-                        """
-                        NOT SURE HOW TO COPY A LINE IN JSON FILE HERE
-                        """
-                        type_error += 1
-                        break
+        with open(output1, 'a') as of1:
+            with open(output2, 'a') as of2:
+
+                for line in inf:
+                    item = eval(line)
+                    
+                    if item['event']['type'] == 'eval':
+                        for i in item['ocaml']:
+                            if not i['out']:
+                                success += 1
+                                continue
+                            elif re.search('Syntax error',i['out'], re.IGNORECASE) is not None:
+                                syntax_error += 1
+                                json.dump(item, of1)
+                                break
+                            else:
+                                json.dump(item, of1)
+                                type_error += 1
+                                break
         summary[student][hw] = [syntax_error, type_error, success]
         inf.close()
 
-#print(summary)
-if not os.path.exists(output1):
-    os.makedirs(output1)
-
-with open(output1, 'a') as of:
-    json.dump(summary, of)
-    of.close()
-
-
-if not os.path.exists(output2):
-    os.makedirs(output2)
-
-with open(output2, 'a') as of:
-    json.dump(summary, of)
-    of.close()
+of1.close()
+of2.close()
        
 
 """
