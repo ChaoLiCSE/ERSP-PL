@@ -7,17 +7,7 @@ def error_by_problem(infile, dic):
 
     student = i.split('.')[0]
     hw_num = i.split('.')[1]
-    """
-    if hw_num == 'hw1':
-        dic = {key: {'syntax': 0, 'type': 0, 'success': 0} for key in problems_hw1}
-    elif hw_num == 'hw2':
-        dic = {key: {'syntax': 0, 'type': 0, 'success': 0} for key in problems_hw2}
-    elif hw_num == 'hw3':
-        dic = {key: {'syntax': 0, 'type': 0, 'success': 0} for key in problems_hw3}
 
-    dic['hw_num'] = hw_num
-    dic['student'] = student
-    """
     with open(infile) as inf:
 
         for line in inf:
