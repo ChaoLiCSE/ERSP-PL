@@ -8,8 +8,8 @@ import json
 3. for each file, count the number of errors and fill in corresponding entry
 """
 
-dir = os.path.abspath(__file__ + '/../../')
-target = os.path.join(dir, 'sp14')
+dir = os.path.abspath(__file__ + '/../')
+target = os.path.join(dir, 'sp14-hw')
 output1 = os.path.join(dir, 'output-type')
 output2 = os.path.join(dir, 'output-syntax')
 
@@ -35,7 +35,7 @@ for i in os.listdir(target):
     if student not in summary:
         summary[student] = dict()
 
-    with open(os.path.join(target, i), encoding='utf-8') as inf:
+    with open(os.path.join(target, i),) as inf:
         syntax_error = 0
         type_error = 0
         success = 0
@@ -56,7 +56,7 @@ for i in os.listdir(target):
                                 json.dump(item, of1)
                                 break
                             else:
-                                json.dump(item, of2)
+                                json.dump(item, of1)
                                 type_error += 1
                                 break
         summary[student][hw] = [syntax_error, type_error, success]
