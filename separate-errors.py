@@ -2,12 +2,6 @@ import re
 import os
 import json
 
-"""
-1. loop through all files from sp14
-2. build dict, key is student name: {'name':{'hw1':[syntax, type]}, 'hw2':[syntax, type], 'hw3':[syntax, type]}}
-3. for each file, count the number of errors and fill in corresponding entry
-"""
-
 dir = os.path.abspath(__file__ + '/../')
 target = os.path.join(dir, 'sp14-hw')
 output = os.path.join(dir, 'output_syntax')
@@ -82,12 +76,4 @@ for i in os.listdir(target):
         of1.close()
        
 
-"""
-with open(output) as inf:
-    for line in inf:
-        summary = eval(line)
-for key, value in sorted(summary.items()):
-    print(key)
-for key, value in sorted(summary.items()):
-    print(value['hw3'][1])
-"""
+
