@@ -10,60 +10,76 @@ import json
 
 dir = os.path.abspath(__file__ + '/../')
 target = os.path.join(dir, 'sp14-hw')
-output1 = os.path.join(dir, 'output-type')
-output2 = os.path.join(dir, 'output-syntax')
+output = os.path.join(dir, 'output_syntax')
+output2 = os.path.join(dir, 'output_type')
 
-summary = dict()
+problems_hw1 = ['???','palindrome', 'listReverse', 'digitalRoot', 'additivePersistence', 'digitsOfInt', 'sumList']
+problems_hw2 = ['???','build', 'eval', 'exprToString', 'expr', 'fixpoint', 'wwhile', 'removeDuplicates', 'assoc']
+problems_hw3 = ['???', 'bigMul', 'mulByDigit', 'bigAdd', 'removeZero', 'padZero', 'clone', 'stringOfList', 'sepConcat', 'pipe', 'sqsum']
 
-#print(summary)
-if not os.path.exists(output1):
-    os.makedirs(output1)
+def find_label(problem_set, event):
+    for i in problem_set:
+        for j in event['ocaml']:
+            if i in str.split(j['in']):
+                return i
+    for j in event['ocaml']:
+        print(j['in'])
+    return '???'
 
-
-if not os.path.exists(output2):
-    os.makedirs(output2)
-    
 
 for i in os.listdir(target):
+
+    if i == '.DS_Store':
+        continue
 
     filename = str.split(i, '.')
 
     student = filename[0]
-    hw = filename[1]
+    hw_num = filename[1]
     #print(student, hw)
+    print(i)
 
-    if student not in summary:
-        summary[student] = dict()
 
-    with open(os.path.join(target, i),) as inf:
-        syntax_error = 0
-        type_error = 0
-        success = 0
 
-        with open(output1, 'a') as of1:
-            with open(output2, 'a') as of2:
+    with open(os.path.join(target, i)) as inf, open(output, 'a') as of1, open(output2, 'a') as of2:
 
-                for line in inf:
-                    item = eval(line)
-                    
-                    if item['event']['type'] == 'eval':
-                        for i in item['ocaml']:
-                            if not i['out']:
-                                success += 1
-                                continue
-                            elif re.search('Syntax error',i['out'], re.IGNORECASE) is not None:
-                                syntax_error += 1
-                                json.dump(item, of1)
-                                break
-                            else:
-                                json.dump(item, of1)
-                                type_error += 1
-                                break
-        summary[student][hw] = [syntax_error, type_error, success]
+        for line in inf:
+            item = eval(line)
+
+            if item['event']['type'] == 'eval':
+
+                if hw_num == 'hw1':
+                    label = find_label(problems_hw1, item)
+
+                elif hw_num == 'hw2':
+                    label = find_label(problems_hw2, item)
+
+                elif hw_num == 'hw3':
+                    label = find_label(problems_hw3, item)
+
+                else:
+                    label = 'I dont know'
+            
+            if item['event']['type'] == 'eval':
+
+                for i in item['ocaml']:
+                    if not i['out']:
+                        continue
+                    elif re.search('Syntax error',i['out'], re.IGNORECASE) is not None:
+                        of1.write(label)
+                        of1.write('\n')
+                        of1.write(i['out'])
+                        of1.write('\n')
+                        break
+                    else:
+                        of2.write(label)
+                        of2.write('\n')
+                        of2.write(i['out'])
+                        of2.write('\n')
+
+                        break
         inf.close()
-
-of1.close()
-of2.close()
+        of1.close()
        
 
 """
@@ -75,4 +91,3 @@ for key, value in sorted(summary.items()):
 for key, value in sorted(summary.items()):
     print(value['hw3'][1])
 """
-print(summary)
