@@ -36,7 +36,7 @@ def group_sessions(infile,  problems):
         if item['event']['type'] == 'eval':
             for i in problems:
                 for j in item['ocaml']:
-                    if i in str.split(j['in']):
+                    if i in re.findall(r"[\w']+",j['in']):
                         tag = problems.index(i)
                         done = True
                         break
