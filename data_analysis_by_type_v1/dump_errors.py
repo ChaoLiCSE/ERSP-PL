@@ -27,8 +27,8 @@ def findhw(targets, outputs):
     for i in os.listdir(targets):
       print(i)
 
-      # skip anything that is not hw1
-      homework = re.search('hw1',i) 
+      # skip anything that is not hw3
+      homework = re.search('hw3',i) 
       if homework is None:
         continue
 
@@ -39,9 +39,11 @@ def findhw(targets, outputs):
 # group all the events that completed in a session by adding a group number to the events
 def dump_events(infile, outputfile, problems):
     session_numbers = []
-    with open(infile, 'r+') as inf, open(outputfile,'a') as of:
-      num = 0
-      lastcheck = 0
+    num = 0
+    lastcheck = 0
+    
+    with open(infile, 'r+', encoding="utf8") as inf, open(outputfile,'a') as of:
+
       for line in inf:
         item = eval(line)
         tag = 0
@@ -51,6 +53,8 @@ def dump_events(infile, outputfile, problems):
         #a new session starts
         if item['time'] - lastcheck > 62:
 
+            #print(lastcheck)
+
             #record the last event in the session
             toStore['session'] = num
 
@@ -59,12 +63,13 @@ def dump_events(infile, outputfile, problems):
             toStore['start'] = item['time']
             toStore['type'] = "session"
 
+            lastcheck = item['time']
+            num = num + 1
+            
             #store the last event of a session
             json.dump(toStore,of)
             of.write('\n')
 
-            lastcheck = item['time']
-            num += 1
             continue
 
         lastcheck = item['time']
@@ -81,8 +86,8 @@ def dump_events(infile, outputfile, problems):
                     else:
                         toStore['error'] = "Type error"
 
-                    if i in str.split(j['in']):
-                        #tag the problem it belong to
+                    if i in re.split(' |\(',j['in']):
+                        #tag the problem it 
                         tag = problems.index(i)
 
                         #create a dictionary for every eval event
@@ -108,11 +113,15 @@ def dump_events(infile, outputfile, problems):
 dir = os.path.abspath(__file__ + '/../../')
 
 target = os.path.join(dir, 'sp14')
-output = os.path.join(dir, 'homework1')
-output2 = os.path.join(dir, 'homework1-withtag')
+output = os.path.join(dir, 'homework3')
+output2 = os.path.join(dir, 'homework3-withtag')
 
 # homework 1 problems
-problems = ['???','palindrome', 'listReverse', 'digitalRoot', 'additivePersistence', 'digitsOfInt', 'sumList']
+# problems = ['???','palindrome', 'listReverse', 'digitalRoot', 'additivePersistence', 'digitsOfInt', 'sumList']
+#homework2 problems
+#problems = ['???','build','eval','exprToString','fixpoint','wwhile','removeDuplicates','assoc']
+# homework 3 problems
+problems = ['???','bigMul','mulByDigit','bigAdd','removeZero', 'padZero', 'clone', 'stringOfList', 'sepConcat', 'pipe', 'sqsum']
 
 findhw(target, output)
 
