@@ -4,7 +4,7 @@ import json
 
 """
 1. loop through all files from sp14
-2. build dict for each file {hw: #, problem: p, bad: [], fix: f}
+2. build dict for each file {hw: #, problem: p, bad: [], message: [], fix: f}
 3. flag_end to look for a 'fix': False for evals, True for timer
 """
 
@@ -75,6 +75,7 @@ for i in os.listdir(target):
             summary['problem'] = label
             summary['bad'] = []
             summary['fix'] = []
+            summary['message'] = []
 
             flag_end = False
 
@@ -130,13 +131,7 @@ for i in os.listdir(target):
                 # normal error
                 for i in item['ocaml']:
                     summary['bad'].append(i['in'])
-                    """
-                    if re.search('Syntax error', i['out'], re.IGNORECASE) is not None:
-                        summary['bad'].append(i['out'])
-                    
-                    else:
-                        summary['bad'].append(i['out'])
-                    """
+                    summary['message'].append(i['out'])
                 index = index + 1
 
             index = index + 1
