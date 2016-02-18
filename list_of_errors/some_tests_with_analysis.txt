@@ -1,0 +1,55 @@
+sumList_plus
+
+fix:
+let rec sumList xs = match xs with
+| [] -> 0
+| x::xs' -> x + sumList xs'
+
+bad:
+let rec sumList xs = match xs with
+| [] -> []
+| h1::h2::t -> h1+h2 sumList t
+Error: This expression has type int
+       This is not a function; it cannot be applied.
+
+#########################################################
+
+digitsOfInt_paranthesis
+
+fix:
+let rec digitsOfInt n = match n with
+| _ -> (n mod 10) + digitsOfInt  (n/10)
+
+bad:
+let rec digitsOfInt n = match n with
+| _     -> n mod 10 digitsOfInt  n/10
+Error: This expression has type int
+       This is not a function; it cannot be applied.
+
+#########################################################
+
+pipe_type
+
+fix:
+let pipe fs = 
+let f a x = (fun x a -> x a) in
+let base = (fun x -> x) in
+List.fold_left f base fs
+
+bad:
+let pipe fs = 
+let f a x = (fun a x -> x a) in
+let base = (fun x -> x) in
+List.fold_left f base fs
+Error: This expression has type 'a -> 'a
+       but an expression was expected of type 'a -> ('a -> 'b) -> 'b
+       The type variable 'a occurs inside ('a -> 'b) -> 'b
+
+########################################################
+
+1. providing even more messages than the error: 
+   especially with recursions 
+   ex. sumList and pipe
+2. simplest fix: probably not the right one
+   ex. adding semicolon in sumList_plus and digitsOfInt
+3. does not do anything with syntax
