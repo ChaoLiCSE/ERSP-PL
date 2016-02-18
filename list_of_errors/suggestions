@@ -1,0 +1,310 @@
+------------------------------------------------------------------
+File "test_bad1.ml", line 1, characters 0-7:
+Unbound value sumList
+Relevant code: sumList
+------------------------------------------------------------------
+Triaged the following locations:
+File "test_bad1.ml", line 1, characters 0-10:
+And modified the following location:
+File "test_bad1.ml", line 1, characters 13-68:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (match xs with 
+     | [] -> []
+     | h1 :: h2 :: t -> h1 + (h2 sumList t))
+with
+    [[...]]
+The actual replacement has type
+    'a
+==============================
+Triaged the following locations:
+File "test_bad1.ml", line 1, characters 13-68:
+And modified the following location:
+File "test_bad1.ml", line 1, characters 0-10:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (sumList xs)
+with
+    [[...]]
+The actual replacement has type
+    'b
+within context
+    [[...]] = [[...other program...]];; 
+==============================
+------------------------------------------------------------------
+File "test_bad2.ml", line 1, characters 0-7:
+Unbound value sumList
+Relevant code: sumList
+------------------------------------------------------------------
+Triaged the following locations:
+File "test_bad2.ml", line 1, characters 0-10:
+And modified the following location:
+File "test_bad2.ml", line 1, characters 13-67:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (match xs with 
+     | [] -> []
+     | x :: xs' -> x + (1 sumList xs'))
+with
+    [[...]]
+The actual replacement has type
+    'a
+==============================
+Triaged the following locations:
+File "test_bad2.ml", line 1, characters 13-67:
+And modified the following location:
+File "test_bad2.ml", line 1, characters 0-10:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (sumList xs)
+with
+    [[...]]
+The actual replacement has type
+    'b
+within context
+    [[...]] = [[...other program...]];; 
+==============================
+------------------------------------------------------------------
+File "test_bad3.ml", line 1, characters 0-7:
+Unbound value sumList
+Relevant code: sumList
+------------------------------------------------------------------
+Triaged the following locations:
+File "test_bad3.ml", line 1, characters 0-10:
+And modified the following location:
+File "test_bad3.ml", line 1, characters 13-65:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (match xs with 
+     | [] -> []
+     | x :: xs' -> (x sumList xs'))
+with
+    [[...]]
+The actual replacement has type
+    'a
+==============================
+Triaged the following locations:
+File "test_bad3.ml", line 1, characters 13-65:
+And modified the following location:
+File "test_bad3.ml", line 1, characters 0-10:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (sumList xs)
+with
+    [[...]]
+The actual replacement has type
+    'b
+within context
+    [[...]] = [[...other program...]];; 
+==============================
+------------------------------------------------------------------
+File "test_bad4.ml", line 1, characters 0-7:
+Unbound value sumList
+Relevant code: sumList
+------------------------------------------------------------------
+Triaged the following locations:
+File "test_bad4.ml", line 1, characters 0-10:
+And modified the following location:
+File "test_bad4.ml", line 1, characters 13-67:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (match xs with 
+     | [] -> []
+     | x :: xs' -> x + (sumList xs'))
+with
+    [[...]]
+The actual replacement has type
+    'a
+==============================
+Triaged the following locations:
+File "test_bad4.ml", line 1, characters 13-67:
+And modified the following location:
+File "test_bad4.ml", line 1, characters 0-10:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (sumList xs)
+with
+    [[...]]
+The actual replacement has type
+    'b
+within context
+    [[...]] = [[...other program...]];; 
+==============================
+------------------------------------------------------------------
+File "test_bad5.ml", line 1, characters 0-7:
+Unbound value sumList
+Relevant code: sumList
+------------------------------------------------------------------
+Triaged the following locations:
+File "test_bad5.ml", line 1, characters 0-10:
+And modified the following location:
+File "test_bad5.ml", line 1, characters 13-66:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (match xs with 
+     | [] -> []
+     | x :: xs' -> (1 sumList xs'))
+with
+    [[...]]
+The actual replacement has type
+    'a
+==============================
+Triaged the following locations:
+File "test_bad5.ml", line 1, characters 13-66:
+And modified the following location:
+File "test_bad5.ml", line 1, characters 0-10:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (sumList xs)
+with
+    [[...]]
+The actual replacement has type
+    'b
+within context
+    [[...]] = [[...other program...]];; 
+==============================
+------------------------------------------------------------------
+File "test_bad6.ml", line 1, characters 0-7:
+Unbound value sumList
+Relevant code: sumList
+------------------------------------------------------------------
+Triaged the following locations:
+File "test_bad6.ml", line 1, characters 0-10:
+And modified the following location:
+File "test_bad6.ml", line 1, characters 13-65:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (match xs with 
+     | [] -> []
+     | x :: xs' -> (x sumList xs'))
+with
+    [[...]]
+The actual replacement has type
+    'a
+==============================
+Triaged the following locations:
+File "test_bad6.ml", line 1, characters 13-65:
+And modified the following location:
+File "test_bad6.ml", line 1, characters 0-10:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (sumList xs)
+with
+    [[...]]
+The actual replacement has type
+    'b
+within context
+    [[...]] = [[...other program...]];; 
+==============================
+------------------------------------------------------------------
+File "test_bad7.ml", line 1, characters 0-7:
+Unbound value sumList
+Relevant code: sumList
+------------------------------------------------------------------
+Triaged the following locations:
+File "test_bad7.ml", line 1, characters 0-10:
+And modified the following location:
+File "test_bad7.ml", line 1, characters 13-67:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (match xs with 
+     | [] -> []
+     | x :: xs' -> x + (sumList xs'))
+with
+    [[...]]
+The actual replacement has type
+    'a
+==============================
+Triaged the following locations:
+File "test_bad7.ml", line 1, characters 13-67:
+And modified the following location:
+File "test_bad7.ml", line 1, characters 0-10:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (sumList xs)
+with
+    [[...]]
+The actual replacement has type
+    'b
+within context
+    [[...]] = [[...other program...]];; 
+==============================
+------------------------------------------------------------------
+File "test_bad8.ml", line 1, characters 0-7:
+Unbound value sumList
+Relevant code: sumList
+------------------------------------------------------------------
+Triaged the following locations:
+File "test_bad8.ml", line 1, characters 0-10:
+And modified the following location:
+File "test_bad8.ml", line 1, characters 13-65:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (match xs with 
+     | [] -> []
+     | x :: xs' -> (x sumList xs'))
+with
+    [[...]]
+The actual replacement has type
+    'a
+==============================
+Triaged the following locations:
+File "test_bad8.ml", line 1, characters 13-65:
+And modified the following location:
+File "test_bad8.ml", line 1, characters 0-10:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (sumList xs)
+with
+    [[...]]
+The actual replacement has type
+    'b
+within context
+    [[...]] = [[...other program...]];; 
+==============================
+------------------------------------------------------------------
+File "test_bad9.ml", line 1, characters 0-7:
+Unbound value sumList
+Relevant code: sumList
+------------------------------------------------------------------
+Triaged the following locations:
+File "test_bad9.ml", line 1, characters 0-10:
+And modified the following location:
+File "test_bad9.ml", line 1, characters 13-63:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (match xs with 
+     | [] -> []
+     | x :: xs' -> (x sumList xs'))
+with
+    [[...]]
+The actual replacement has type
+    'a
+==============================
+Triaged the following locations:
+File "test_bad9.ml", line 1, characters 13-63:
+And modified the following location:
+File "test_bad9.ml", line 1, characters 0-10:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (sumList xs)
+with
+    [[...]]
+The actual replacement has type
+    'b
+within context
+    [[...]] = [[...other program...]];; 
+==============================
+------------------------------------------------------------------
+File "test_fix.ml", line 1, characters 0-7:
+Unbound value sumList
+Relevant code: sumList
+------------------------------------------------------------------
+Triaged the following locations:
+File "test_fix.ml", line 1, characters 0-10:
+And modified the following location:
+File "test_fix.ml", line 1, characters 13-64:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (match xs with 
+     | [] -> 0
+     | x :: xs' -> x + (sumList xs'))
+with
+    [[...]]
+The actual replacement has type
+    'a
+==============================
+Triaged the following locations:
+File "test_fix.ml", line 1, characters 13-64:
+And modified the following location:
+File "test_fix.ml", line 1, characters 0-10:
+Your code has several type errors.  If you ignore other surrounding code, try replacing
+    (sumList xs)
+with
+    [[...]]
+The actual replacement has type
+    'b
+within context
+    [[...]] = [[...other program...]];; 
+==============================
