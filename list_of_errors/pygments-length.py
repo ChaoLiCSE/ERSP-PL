@@ -1,4 +1,5 @@
 import os
+import statistics
 from pygments.token import Token
 from pygments.lexers import get_lexer_by_name
 
@@ -7,7 +8,7 @@ target = os.path.join(dir, 'list_of_errors.json')
 
 # Ocaml lexer, strip all leading and trailing whitespace from the input 
 lexer = get_lexer_by_name('Ocaml', stripall=True)
-
+VarD = 0;
 # length of all 'bad' programs
 summary = []
 
@@ -23,6 +24,7 @@ with open(target) as inf:
           num += 1
       summary.append(num)
 
+'''
 print(sum(i <= 10 for i in summary))
 print(sum(i <= 20 for i in summary))
 print(sum(i <= 30 for i in summary))
@@ -63,8 +65,10 @@ print(sum(i <= 370 for i in summary))
 print(sum(i <= 380 for i in summary))
 print(sum(i <= 390 for i in summary))
 print(sum(i <= 400 for i in summary))
-
-
+'''
+#standard deviation of the data set
+print(statistics.stdev(summary))
+print(statistics.mean(summary))
 
 # 7066 'bad' programs
 #print(len(summary))
