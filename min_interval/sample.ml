@@ -1,0 +1,1 @@
+let _ failwith "" ( n mod 10 ) + sum ( n / 10 )
