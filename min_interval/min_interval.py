@@ -2,6 +2,7 @@ import os
 import subprocess
 from pygments.token import Token
 from pygments.lexers import get_lexer_by_name
+import math
 
 """
 1. loop through all files
@@ -49,7 +50,7 @@ def find_min_interval(tokens):
       j = i+counter
 
       if j == len(tokens) - 1:
-        code = ' '.join([str(token) for token in tokens[0:i]]) + ('failwith "" ;;')
+        code = ' '.join([str(token) for token in tokens[0:i]]) + (' (failwith "") ;;')
       else:
         tmp1 = [str(token) for token in tokens[0:i]]
         tmp2 = [str(token) for token in tokens[j + 1:len(tokens)]]
@@ -59,20 +60,59 @@ def find_min_interval(tokens):
         print (code)
         return counter
 
-    
     counter = counter+1
 
 
 ################################################ MAIN
 
 dir = os.path.abspath(__file__ + '/../../')
-target = os.path.join(dir, 'unify_syntax')
+target = os.path.join(dir, 'list_of_errors.json')
+target2 = os.path.join(dir, 'problems.txt')
 
-for i in os.listdir(target):
-  with open (os.path.join(target, i), 'r') as myfile:
-    text = myfile.read().replace('\n', ' ')
-    tokens = to_array(text)
-    myfile.close()
+list_of_num = []
+counter1 = 0
 
-  print(find_min_interval(tokens))
+with open (os.path.join(target), 'r') as myfile:
+    for line in myfile:
+
+      if counter1 > 100:
+        break
+      counter1= counter1+1
+
+      item = eval(line)
+      for i in range(len(item["bad"])):
+        text = item["bad"][i].replace('\n', ' ')
+        tokens = to_array(text)
+
+        #only deal with the token < 40 situations
+        if(len(tokens) < 40):
+          num = (find_min_interval(tokens))
+          list_of_num.append(num)
+        
+
+    myfile.close() 
+
+'''
+with open(os.path.join(target2), 'a') as of:
+  of.write(''.join(list_of_num))
+  of.write('\n')
+output.close()
+'''
+
+print (list_of_num)
+
+list_of_bin=[0,0,0,0,0,0,0,0,0]
+
+for i in range (len(list_of_num)):
+  
+  if(list_of_num[i] != None):
+    bin = math.floor(list_of_num[i]/5)
+    list_of_bin[bin]= list_of_bin[bin]+1
+  else:
+    #case is None
+    list_of_bin[8]= list_of_bin[8]+1
+
+
+print(list_of_bin)
+#print(find_min_interval(tokens))
 
