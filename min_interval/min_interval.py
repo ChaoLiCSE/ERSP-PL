@@ -23,34 +23,48 @@ def to_array(text):
 
   return tokens
 
+#suppose I got a string of code, I will run the string as a piece
+#of ocaml code, and return 1 if I capture an error, 0 if no error
+def check_err(string_of_code):
+  #print([string_of_code])
+  error_output = subprocess.run(["ocaml"], input = string_of_code, 
+                                stdout=subprocess.PIPE,universal_newlines = True)
+  if "rror" in error_output.stdout:
+    return 1
+  return 0
 
 # given an array of tokens, find the min interval of fix
 def find_min_interval(tokens):
   min_val = float('inf')
+  counter = 1
+  i = 0
   
-  for i in range(0, len(tokens) - 1):
-    for j in range(i + 1, len(tokens)):
-    
+  tmp1 = [str(token) for token in tokens[0:len(tokens)]]
+  print (' '.join(tmp1) + ';;')
+
+
+  while (counter < len(tokens)):
+    for i in range(0, len(tokens) - 1):
+      
+      j = i+counter
+
       if j == len(tokens) - 1:
-        code = ' '.join([str(token) for token in tokens[0:i]]) + 'failwith ""'
+        code = ' '.join([str(token) for token in tokens[0:i]]) + ('failwith "" ;;')
       else:
         tmp1 = [str(token) for token in tokens[0:i]]
         tmp2 = [str(token) for token in tokens[j + 1:len(tokens)]]
-        code = ' '.join(tmp1) + ' failwith "" ' + ' '.join(tmp2)
+        code = ' '.join(tmp1) + ' (failwith "") ' + ' '.join(tmp2) + ';;'
 
-      f = open('sample.ml', 'w')
-      f.write(code)
-      f.close()
- 
-      result = subprocess.call(['ocamlc', 'sample.ml'], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+      if (check_err(code) == 0):
+        print (code)
+        return counter
 
-      if result is 0:
-        if j - i < min_val:
-          min_val = j - i
+    
+    counter = counter+1
 
-  return min_val
 
 ################################################ MAIN
+
 dir = os.path.abspath(__file__ + '/../../')
 target = os.path.join(dir, 'unify_syntax')
 
@@ -61,3 +75,4 @@ for i in os.listdir(target):
     myfile.close()
 
   print(find_min_interval(tokens))
+
