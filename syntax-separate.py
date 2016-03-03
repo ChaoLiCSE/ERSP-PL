@@ -2,12 +2,12 @@
 import re
 import os
 import json
+import pyparsing
 
 
 dir = os.path.abspath(__file__ + '/../')
 target = os.path.join(dir, 'sp14-hw')
 output_folder = os.path.join(dir, 'unify_syntax')
-
 
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
@@ -48,7 +48,9 @@ for i in os.listdir(target):
                         with open(output, 'a') as of1, open(output2, 'a') as of2:                            
 
                             #input code
-                            of1.write(i['in'])
+                            code = pyparsing.nestedExpr("(*", "*)").suppress()
+                            of1.write(code.transformString(i['in']))
+                            
                             #output error message
                             of2.write(i['out'])
                             j += 1
@@ -58,5 +60,9 @@ for i in os.listdir(target):
         inf.close()
         of1.close()
         of2.close()
+
+
+
+
        
 
