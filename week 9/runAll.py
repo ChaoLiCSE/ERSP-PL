@@ -38,6 +38,8 @@ pretty_print = os.path.join(target, 'summary.txt')
 index = 0
 result = runOnRandomPrograms(min_interval.find_min_interval, target2, 1,4874)
 
+
+
 with open(summary, 'w') as of:
   for i in result:
     print("this is i")
@@ -60,5 +62,6 @@ with open(summary, 'r') as inf, open(pretty_print, 'w') as of2:
     of2.write('span fraction: \n' + str(item['span-fraction']) + ' \n')
 
     of2.write('\n')
+    index += 1
 
   of2.close()
