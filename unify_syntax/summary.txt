@@ -1,126 +1,19 @@
 file no.: 0
 original code: 
-let rec digitsOfInt n = match n with
-| n < 0 -> []
-| _     -> n%10 digitsOfInt  n/10 
+
+let rec at a b = match a with | [] -> [b] | head::tail -> head :: (at tail b);;
+
+let rec listReverse l =
+  match l with | [] -> [] | head::tail -> at (listReverse tail) head;;
+
+let palindrome w = w = (listReverse w);;
+
+let _ = palindrome "myxomatosis";;
+ 
 fixed code: 
-let rec digitsOfInt n = (failwith "") 10 digitsOfInt n / 10;; 
+['let rec at a b = match (failwith "") with | [] -> [ b ] | head :: tail -> head :: ( at tail b );;', 'let _ = (failwith "") " myxomatosis ";;'] 
 span size: 
-13 
+[0, 0] 
 span fraction: 
-0.5416666666666666 
-
-file no.: 0
-original code: 
-let rec digitsOfInt n = match n with
-| n < 0 -> []
-| _     -> n%10 digitsOfInt  n/10 
-fixed code: 
-let rec digitsOfInt n = (failwith "") 10 digitsOfInt n / 10;; 
-span size: 
-13 
-span fraction: 
-0.5416666666666666 
-
-file no.: 0
-original code: 
-let rec digitsOfInt n = match n with
-| (n mod 10) + digitsOfInt  (n/10) 
-fixed code: 
-let rec digitsOfInt n = (failwith "") ( n mod 10 ) + digitsOfInt ( n / 10 );; 
-span size: 
-3 
-span fraction: 
-0.14285714285714285 
-
-file no.: 0
-original code: 
-let rec digitsOfInt n = match n with
-| (n>0) -> 0
-| _ -> (n mod 10) + digitsOfInt  (n/10) 
-fixed code: 
-let rec digitsOfInt n = (failwith "") ( n mod 10 ) + digitsOfInt ( n / 10 );; 
-span size: 
-13 
-span fraction: 
-0.41935483870967744 
-
-file no.: 0
-original code: 
-let rec digitsOfInt n = match true with
-| n<0 -> 0
-| _ -> (n mod 10) + digitsOfInt  (n/10) 
-fixed code: 
-let rec digitsOfInt n = (failwith "") ( n mod 10 ) + digitsOfInt ( n / 10 );; 
-span size: 
-11 
-span fraction: 
-0.3793103448275862 
-
-file no.: 0
-original code: 
-let rec digitalRoot n = 
-let temp = sum n
-if temp > 10
-then digitalRoot temp 
-fixed code: 
-let rec digitalRoot n =(failwith "");; 
-span size: 
-11 
-span fraction: 
-0.6470588235294118 
-
-file no.: 0
-original code: 
-let _= additivePersistence 987623444;
-
-
-
-
-let rec sum n = 
-if n <= 0 
-then 0
-else (n mod 10) + sum (n/10) 
-fixed code: 
-let _ =(failwith "");; 
-span size: 
-27 
-span fraction: 
-0.8709677419354839 
-
-file no.: 0
-original code: 
-let rec last l = match l with 
-| [] -> []
-| _::tl -> last tl :: _ 
-fixed code: 
-let rec last l = match l with | [] -> [] | _ :: tl -> last(failwith "");; 
-span size: 
-2 
-span fraction: 
-0.09523809523809523 
-
-file no.: 0
-original code: 
-let rec listReverse l = match l with
-| [] -> []
-| _ -> let x = last tl 
-fixed code: 
-let rec listReverse l = match l with | [] -> [] | _ ->(failwith "");; 
-span size: 
-4 
-span fraction: 
-0.2 
-
-file no.: 0
-original code: 
-let rec listReverse l = match l with
-| [] -> []
-| hd::tl -> let x = last tl 
-fixed code: 
-let rec listReverse l = match l with | [] -> [] | hd :: tl -> (failwith "") tl;; 
-span size: 
-3 
-span fraction: 
-0.13636363636363635 
+[0.0, 0.0] 
 
