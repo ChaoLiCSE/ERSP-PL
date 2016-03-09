@@ -51,7 +51,7 @@ def find_min_interval(directory, filename):
     print(res[i][1])
     print("res here")
     ans['span-size'].append(res[i][1])
-    ans['span-fraction'].append(res[i][1]/len(tokens))
+    ans['span-fraction'].append((res[i][1]+1)/len(tokens[i]))
     print(ans)
     print("ans here")
   return ans
@@ -83,6 +83,8 @@ def to_array(text):
       function = function + 1
       tokens.append([])
 
+  for i in range(1,len(tokens)):
+    print(tokens[i])
   return tokens
 
 # given a string of code, check whether it can pass the compiler test
@@ -103,6 +105,7 @@ def min_size_and_fixed_code(tokenList):
   #jump out is a flag to jump out of the loops and get the next program to run
   jumpout = 0
 
+  
   print("this is length: "+str(length) )
 
   #for all the programs the tokenList contains
@@ -127,7 +130,7 @@ def min_size_and_fixed_code(tokenList):
     while (spansize < len(tokens)):
 
       #substitude all the tokens one by one
-      for i in range(0, len(tokens) - 1):
+      for i in range(0, len(tokens)):
 
         j = i + spansize
 
@@ -144,7 +147,6 @@ def min_size_and_fixed_code(tokenList):
 
           print(spansize)
           print(code)
-          spansize+=1
           #sent the program to check whether it contains any error
           value = check_err(code)
 
@@ -176,14 +178,19 @@ def min_size_and_fixed_code(tokenList):
       #when we meet jump out situation, we change a program
       if jumpout != 0:
         break
+    
+      spansize+=1
 
-      spansize += 1
+    
     
 
     print("this is spansize")
     print(spansize)
+    print("this is jumpout")
+    print(jumpout)
   for i in range(0,len(retList)):
     print(retList[i])
   print("before ret")
+
 
   return retList
