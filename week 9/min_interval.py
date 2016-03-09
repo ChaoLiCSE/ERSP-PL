@@ -3,7 +3,6 @@ File name: find_min_interval.py
 Discription: this is a file which takes in a text based program and
 gives out a list of objects in file, out file, and the min interval,
 and min_interval protion
-
 TODO: 
 Need to change the size to how much the interval is
 change the type of the output list, and print in runall
@@ -70,18 +69,24 @@ def to_array(text):
   li = lexer.get_tokens(text)
   
 
-  for token in li:
+  for token, next in li:
 
+    # or operator, not pattern matching 
+    if(token[1] == '|') and (next[1] == '|'): 
+      continue
+    
     #print typeof(token)
     if token[0] is Token.Text:
       continue
 
-    #devide into several functions
+    #divide into several functions
     if(token[1] != ';;'):
       tokens[function].append(token[1])
     else:
       function = function + 1
       tokens.append([])
+
+
 
   for i in range(1,len(tokens)):
     print(tokens[i])
