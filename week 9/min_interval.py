@@ -42,8 +42,9 @@ def find_min_interval(directory, filename):
 
   ans['in'] = text
 
-  length = len(res)-1
-  for i in (0,length):
+
+  length = len(res)
+  for i in range(0,length):
 
     print(res[i][0])
     ans['fixed'].append(res[i][0])
@@ -143,7 +144,7 @@ def min_size_and_fixed_code(tokenList):
 
           print(spansize)
           print(code)
-
+          spansize+=1
           #sent the program to check whether it contains any error
           value = check_err(code)
 

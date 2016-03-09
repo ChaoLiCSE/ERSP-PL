@@ -1,19 +1,20 @@
 file no.: 0
 original code: 
 
-let rec at a b = match a with | [] -> [b] | head::tail -> head :: (at tail b);;
+let rec wwhile (f,b) =
+  let y = f b in match y with | (b',c') -> if c' then wwhile (f, b') else b';;
 
-let rec listReverse l =
-  match l with | [] -> [] | head::tail -> at (listReverse tail) head;;
+let collatz n =
+  match n with | 1 -> 1 | _ when (n mod 2) = 0 -> n / 2 | _ -> (3 * n) + 1;;
 
-let palindrome w = w = (listReverse w);;
+let fixpoint (f,b) = wwhile (f, b);;
 
-let _ = palindrome "myxomatosis";;
+let _ = fixpoint (collatz, 1);;
  
 fixed code: 
-['let rec at a b = match (failwith "") with | [] -> [ b ] | head :: tail -> head :: ( at tail b );;', 'let _ = (failwith "") " myxomatosis ";;'] 
+['let rec wwhile ( f , b ) = let y = f b in match y with | ( b\' , c\' ) -> (failwith "") ;;', 'let collatz n = match n with | 1 -> 1 | _ when ( n mod 2 ) = 0 -> (failwith "") ;;', 'let fixpoint ( f , b ) = (failwith "") ;;'] 
 span size: 
-[0, 0] 
+[26, 23, 9] 
 span fraction: 
-[0.0, 0.0] 
+[5.2, 4.6, 1.8] 
 
