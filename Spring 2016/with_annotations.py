@@ -1,4 +1,5 @@
 import os
+import re
 import subprocess
 from pygments.token import Token
 from pygments.lexers import get_lexer_by_name
@@ -67,7 +68,7 @@ dict_one = build_dict(hw1,annotation_hw1)
 dict_two = build_dict(hw2,annotation_hw2_1)
 dict_three = build_dict(hw3,annotation_hw3)
 
-
+list_of_errors = []
 
 #suppose I got a string of code, I will run the string as a piece
 #of ocaml code, and return 1 if I capture an error, 0 if no error
@@ -81,57 +82,95 @@ def check_err(string_of_code):
 
 
 def find_label(problem_set, code):
-	if code != []:
+	if code != "":
 		split = code.split()
 		for i in problem_set:
 			if i in code.split():
-				return i
+				return re.sub("[^a-zA-Z ]+","", i)
+
 	return '???'
 
+def add_annotation(hw_dic, prob_name, code):
+
+	if code != "":
+		code += ("\n" + hw_dic[prob_name])
+		error_output = subprocess.run(["ocaml"], input = code, 
+	                                stdout=subprocess.PIPE,universal_newlines = True)
+		if "rror" in error_output.stdout:
+			print(error_output.stdout)
+			#list_of_errors.append(error_output.stdout)
+			return error_output.stdout
+		else:
+			return ""
+	else:
+		return ""
 
 #######################################################
 
 dir = os.path.abspath(__file__ + '/../')
 target = os.path.join(dir, 'sp14')
-outputFile = os.path.join(dir, 'new_errors.txt')
+output_folder = os.path.join(dir, 'error_messages')
+
+if not os.path.exists(output_folder):
+	os.makedirs(output_folder)
 
 
 for i in os.listdir(target):
 
+	error_output = ""
 	if i == '.DS_Store':
 		continue
 		
 	with open (os.path.join(target,i), 'r') as myfile:
+
 		name = str.split(i, '.')
 
 		student = name[0]
 		hw_num = name[1]
-		
 
+		print(student, hw_num)
+
+		# weird UnicodeDecodeError
+		if(student == "heqin"):
+			continue
+		
+		#print(student, hw_num)
 		for line in myfile:
 			# str -> dict
 			item = eval(line)
+			# prints the list in "ocaml" field
+			# print(item['ocaml'])
 
 			# only process the ones with "in" field
-			if item["ocaml"] != []:
+			if 'ocaml' in item:
+				if item['ocaml'] != []:				
+					if(hw_num == "hw1"):
+						for p in item['ocaml']:
+							#print (type(p['in']))
+							problem_name = find_label(hw1, p['in'])
+							#print(p['in'])
+							#print(problem_name)
+							error_output += add_annotation(dict_one, problem_name, p['in'])
+							
+					elif(hw_num == "hw2"):
+						for p in item['ocaml']:
+							problem_name = find_label(hw2, p['in'])	
+							error_output += add_annotation(dict_two, problem_name, p['in'])
 
-				if(hw_num == "hw1"):
-					for p in item["ocaml"]:
-						problem_name = find_label(hw1, p['in'])
+					elif(hw_num == "hw3"):
+						for p in item["ocaml"]:
+							problem_name = find_label(hw3, p['in'])
+							error_output += add_annotation(dict_three, problem_name, p['in'])
 
-				elif(hw_num == "hw2"):
-					for p in item["ocaml"]:
-						problem_name = find_label(hw2, p['in'])	
-
-				elif(hw_num == "hw3"):
-					for p in item["ocaml"]:
-						problem_name = find_label(hw3, p['in'])
-		
-			# with problem name, find which annotation to append in the 'in' field
-			# call function that evaluates the code with subprocess and get the new error message
 
 		myfile.close() 
 
+		output = os.path.join(output_folder, (student+"."+hw_num)) 
+
+		with open(output, 'a') as of1:
+			of1.write(error_output)
+
+		of1.close()
 
 
 
