@@ -2,7 +2,10 @@ import os
 from difflib import SequenceMatcher
 
 def err_judge(bad, fix, pos):
-	
+    print (type (bad))
+    print (type (fix))
+    print (type(pos))
+
 	#get the key word to judge whether it is changed
     to_judge = bad[pos[0]: pos[1]]
 
@@ -30,6 +33,7 @@ def err_judge(bad, fix, pos):
 
 fix = "let rec sum n = if n < 0 then failwith\"TBD\" else (n mod 10) + digitalRoot n/10"
 bad = "let rec digitalRoot n = let temp = (sum n) in if temp > 10 then digitalRoot temp"
+
 pos = [37,40]
 retVal = err_judge(bad, fix, pos)
 print (retVal)

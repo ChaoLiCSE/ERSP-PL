@@ -31,6 +31,7 @@ def check_err(string_of_code):
   error_output = subprocess.run(["ocaml"], input = string_of_code, 
                                 stdout=subprocess.PIPE,universal_newlines = True)
   if "rror" in error_output.stdout:
+    print (error_output.stdout)
     return 1
   return 0
 
@@ -75,7 +76,7 @@ counter1 = 0
 with open (os.path.join(target), 'r') as myfile:
     for line in myfile:
 
-      if counter1 > 100:
+      if counter1 > 1:
         break
       counter1= counter1+1
 
