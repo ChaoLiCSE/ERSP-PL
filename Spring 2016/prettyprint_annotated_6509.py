@@ -27,6 +27,12 @@ with open(target) as inf, open(output, 'w') as of:
     of.write('\n')
     of.write('\n')
 
+    of.write('annotated_fix:')
+    of.write('\n')
+    of.write(item['annotated_fix'])
+    of.write('\n')
+    of.write('\n')
+
     of.write('\n')
 
   inf.close()

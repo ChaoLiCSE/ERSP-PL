@@ -84,6 +84,7 @@ with open(target, 'r') as myfile, open(output, 'w') as of:
 			dic['bad'] = bad
 			dic['annotated'] = add_annotation(annotation, item['problem'], bad)
 			dic['fix'] = item['fix'][0]
+			dic['annotated_fix'] = add_annotation(annotation, item['problem'], dic['fix'])
 			json.dump(dic, of)
 			of.write('\n')
 
