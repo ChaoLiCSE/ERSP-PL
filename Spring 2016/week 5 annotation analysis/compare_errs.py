@@ -54,7 +54,7 @@ def err_judge(bad, fix, pos):
 
 dir = os.path.abspath(__file__ + '/../../')
 target = os.path.join(dir, 'annotated_6507.json')
-target2 = os.path.join(dir, 'problems.txt')
+target2 = os.path.join(dir, 'problems_json_style.txt')
 '''
 prog = "let rec digitsOfInt n = match n with | ( n mod 10 ) + digitsOfInt ( (failwith "") 10 );;"
 for i in get_pos (prog):
@@ -118,13 +118,13 @@ with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w
       elif(retVal_a == 1 and retVal == 0):
             only_anno_corr = only_anno_corr + 1
             print('anno correct')
-            out.write('only_anno_corr')
+            out.write('only_anno_corr \n')
             out.write(line)
             out.write('\n')
       elif(retVal_a == 0 and retVal == 1):
             only_pre_corr = only_pre_corr + 1
             print('pre correct')
-            out.write('only_pre_corr')
+            out.write('only_pre_corr\n')
             out.write(line)
             out.write('\n')
       else:

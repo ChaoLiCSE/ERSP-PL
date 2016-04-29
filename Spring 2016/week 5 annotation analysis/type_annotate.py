@@ -53,7 +53,7 @@ def replace(match, variables, annotation):
 	return replacement
 
 ###
-dir = os.path.abspath(__file__ + '/../../')
+dir = os.path.abspath(__file__ + '/../../../')
 target = os.path.join(dir, 'Win 2016\week 7 list_of_errors\list_of_errors.json')
 output = os.path.join(dir, r'Spring 2016\annotated_6507.json')
 
