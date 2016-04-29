@@ -31,9 +31,14 @@ def err_judge(bad, fix, pos):
     return -1
 
 
-fix = "let rec sum n = if n < 0 then failwith\"TBD\" else (n mod 10) + digitalRoot n/10"
-bad = "let rec digitalRoot n = let temp = (sum n) in if temp > 10 then digitalRoot temp"
-
-pos = [37,40]
+bad = "let bigAdd l1 l2 = \nlet add (l1, l2) = \nlet f a x = in\nlet base = ([],[]) in\nlet args = f l1 l2 in\nlet (_, res) = List.fold_left f base args in\nres\nin \nremoveZero (add (padZero l1 l2))"
+fix = "let bigAdd l1 l2 = \nlet add (l1, l2) = \nlet f a x = () in\nlet base = ([],[]) in\nlet args = f l1 l2 in\nlet (_, res) = List.fold_left f base args in\nres\nin \nremoveZero (add (padZero l1 l2))"
+annotated_bad = "let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  \nlet add (l1, l2) = \nlet f a x = in\nlet base = ([],[]) in\nlet args = f l1 l2 in\nlet (_, res) = List.fold_left f base args in\nres\nin \nremoveZero (add (padZero l1 l2))"
+annotated_fix = "let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  \nlet add (l1, l2) = \nlet f a x = () in\nlet base = ([],[]) in\nlet args = f l1 l2 in\nlet (_, res) = List.fold_left f base args in\nres\nin \nremoveZero (add (padZero l1 l2))"
+pos = [52, 54]
 retVal = err_judge(bad, fix, pos)
+print (retVal)
+
+pos = [97, 99]
+retVal = err_judge(annotated_bad, annotated_fix, pos)
 print (retVal)
