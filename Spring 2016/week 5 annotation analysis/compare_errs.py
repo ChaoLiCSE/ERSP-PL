@@ -167,22 +167,24 @@ def get_pos(prog):
     start = int(m.group(0))
     end = int(n.group(0))
     
-    start_pos = len(str.split(prog[0:start]))
-    end_pos = len(str.split(prog[0:end]))
+    start_pos = len(str.split(prog[0:start]))-1
+    end_pos = len(str.split(prog[0:end]))-1
     
-    #print(prog[0:start])
-    #print(prog[0:end])
+    #print(str.split(prog[0:start]))
+    #print(str.split(prog[0:end]))
     #print([start_pos,end_pos])
     return([start_pos,end_pos])
 
 
 def err_judge(bad, fix, pos):
     
+    
     print('bad:')
     print (bad)
     print('fix:')
     print (fix)
     print (pos)
+    
     
 
     #print(pos)
@@ -203,10 +205,9 @@ def err_judge(bad, fix, pos):
         #print('correct location')
         #print(i)
         return 1
-      
-      if(pos[0] <= i[2][1]):
-        return 0
 
+      if(i[2][0] > pos[1] and i[2][1] > pos[1]):
+        return 0
     #print('incorrect location')
     return 0
 
@@ -293,9 +294,3 @@ s = 'in the total of ' + str(total) + ' programs, both correct is: ' + str(both_
 
 print (s)
 
-'''
-bad = 'let bigAdd l1 l2 = \nlet add (l1, l2) = \nlet f a x = a + x in\nlet base = 0 in\nlet args = l1 l2 in\nlet (_, res) = List.fold_left f base args in\nres\nin \nremoveZero (add (padZero l1 l2));;'
-fix = 'let bigAdd l1 l2 = \nlet add (l1, l2) = \nlet f a x = a + x in\nlet base = [0] in\nlet args = l1 l2 in\nlet (_, res) = List.fold_left f base args in\nres\nin \nremoveZero (add (padZero l1 l2));;'
-s = get_pos(bad)
-err_judge(bad, fix, s)
-'''
