@@ -97,7 +97,13 @@ def diff(old, new, opos, npos):
     if sub_length == 0:
         # If no common substring is found, we return an insert and delete...
 
-        return (old and [('-', old, [opos+sub_start_old, opos+sub_start_old+len(old)-1])] or []) + (new and [('+', new, [npos+sub_start_new,npos+sub_start_new+len(new)-1] )] or [])
+        #return (old and [('-', old, [opos+sub_start_old, opos+sub_start_old+len(old)-1])] or []) + (new and [('+', new, [opos+sub_start_old,opos+sub_start_old+len(new)-1] )] or [])
+        if(len(old) != 0):
+            return (old and [('-', old, [opos+sub_start_old, opos+sub_start_old+len(old)-1])] or []) + (new and [('+', new, [opos+sub_start_old,opos+sub_start_old+len(old)-1] )] or [])
+        
+        return (old and [('-', old, [opos+sub_start_old, opos+sub_start_old+len(old)-1])] or []) + (new and [('+', new, [opos+sub_start_old,opos+sub_start_old+len(old)] )] or [])
+   
+
     else:
         # ...otherwise, the common substring is unchanged and we recursively
         # diff the text before and after that substring
@@ -111,6 +117,8 @@ def diff(old, new, opos, npos):
                 new[sub_start_new + sub_length : ],
                 opos+ sub_start_old+sub_length,
                 npos+sub_length+sub_start_new)
+
+
 
 
 def string_diff(old, new):
@@ -142,5 +150,5 @@ def string_diff(old, new):
     return diff(old.split(), new.split(),0,0)
 
 
-print(string_diff('The quick brown fox', 'The fast blue fox'))          
+print(string_diff('The me quick red', 'Hi quick fox head paint red'))          
 
