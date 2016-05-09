@@ -1,0 +1,15 @@
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) =\nmatch l with\n[] -> d\n|front::back ->\nmatch front with\n(x,y) ->\nif (x=k)\nthen y\nelse assoc (d,k,back)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) =\nmatch l with\n[] -> d\n|front::back ->\nmatch front with\n(x,y) ->\nif (x=k)\nthen y\nelse assoc (d,k,back)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) =\nmatch l with\n[] -> d\n|front::back ->\nmatch front with\n(x,y) ->\nif (x=k)\nthen y\nelse assoc (d,k,back)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) =\nmatch l with\n[] -> d\n|front::back ->\nmatch front with\n(x,y) ->\nif (x=k)\nthen y\nelse assoc (d,k,back)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) =\nmatch l with\n[] -> d\n|front::back ->\nmatch front with\n(x,y) ->\nif (x=k)\nthen y\nelse assoc (d,k,back)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) =\nmatch l with\n[] -> d\n|front::back ->\nmatch front with\n(x,y) ->\nif (x=k)\nthen y\nelse assoc (d,k,back)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) =\nmatch l with\n[] -> d\n|front::back ->\nmatch front with\n(x,y) ->\nif (x=k)\nthen y\nelse assoc (d,k,back)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) =\nmatch l with\n[] -> d\n|front::back ->\nmatch front with\n(x,y) ->\nif (x=k)\nthen y\nelse assoc (d,k,back)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) =\nmatch l with\n[] -> d\n|front::back ->\nmatch front with\n(x,y) ->\nif (x=k)\nthen y\nelse assoc (d,k,back)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) =\nmatch l with\n[] -> d\n|front::back ->\nmatch front with\n(x,y) ->\nif (x=k)\nthen y\nelse assoc (d,k,back)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) =\nmatch l with\n[] -> d\n|front::back ->\nmatch front with\n(x,y) ->\nif (x=k)\nthen y\nelse assoc (d,k,back)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) =\nmatch l with\n[] -> d\n|front::back ->\nmatch front with\n(x,y) ->\nif (x=k)\nthen y\nelse assoc (d,k,back)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) =\nmatch l with\n[] -> d\n|front::back ->\nmatch front with\n(x,y) ->\nif (x=k)\nthen y\nelse assoc (d,k,back)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) =\nmatch l with\n[] -> d\n|front::back ->\nmatch front with\n(x,y) ->\nif (x=k)\nthen y\nelse assoc (d,k,back)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) =\nmatch l with\n[] -> d\n|front::back ->\nmatch front with\n(x,y) ->\nif (x=k)\nthen y\nelse assoc (d,k,back)", "type": "", "out": ""}], "event": "eval"}

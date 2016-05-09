@@ -1,0 +1,7 @@
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) = match l with\n| [] -> d\n| h::t -> let (x, y) = h in\nif x = k then y\nelse assoc (d, k, t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) = match l with\n| [] -> d\n| h::t -> let (x, y) = h in\nif x = k then y\nelse assoc (d, k, t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) = match l with\n| [] -> d\n| h::t -> let (x, y) = h in\nif x = k then y\nelse assoc (d, k, t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) = match l with\n| [] -> d\n| h::t -> let (x, y) = h in\nif x = k then y\nelse assoc (d, k, t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) = match l with\n| [] -> d\n| h::t -> let (x, y) = h in\nif x = k then y\nelse assoc (d, k, t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) = match l with\n| [] -> d\n| h::t -> let (x, y) = h in\nif x = k then y\nelse assoc (d, k, t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) = match l with\n| [] -> d\n| h::t -> let (x, y) = h in\nif x = k then y\nelse assoc (d, k, t)", "type": "", "out": ""}], "event": "eval"}

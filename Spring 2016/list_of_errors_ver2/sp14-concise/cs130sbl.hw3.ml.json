@@ -1,0 +1,12 @@
+{"ocaml": [{"min": "", "in": "let sqsum xs = \nlet f a x = a + (x * x) in\nlet base = 0 in\nList.fold_left f base xs", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet pipe fs = let f a x = [fs a] in let base = 0 in List.fold_left f base fs;;\n", "in": "let pipe fs = \nlet f a x = [fs a] in\nlet base = 0 in\nList.fold_left f base fs", "type": "type", "out": "Error: This expression has type int but an expression was expected of type\n         'a list\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let pipe fs = \nlet f a x = x (a+1) in\nlet base = 0 in\nList.fold_left f base fs", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let pipe fs = \nlet f a x = fun y -> x (a y) in\nlet base = fun y -> y in\nList.fold_left f base fs", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let bigAdd l1 l2 = \nlet add (l1, l2) = \nlet f a x = failwith \"to be implemented\" in\nlet base = failwith \"to be implemented\" in\nlet args = failwith \"to be implemented\" in\nlet (_, res) = List.fold_left f base args in\nres\nin \nremoveZero (add (padZero l1 l2))", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let sqsum xs = \nlet f a x = a + (x * x) in\nlet base = 0 in\nList.fold_left f base xs", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let sqsum xs = \nlet f a x = a + (x * x) in\nlet base = 0 in\nList.fold_left f base xs", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let sqsum xs = \nlet f a x = a + (x * x) in\nlet base = 0 in\nList.fold_left f base xs", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let sqsum xs = \nlet f a x = a + (x * x) in\nlet base = 0 in\nList.fold_left f base xs", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let sqsum xs = \nlet f a x = a + (x * x) in\nlet base = 0 in\nList.fold_left f base xs", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let bigAdd l1 l2 = \nlet add (l1, l2) = \nlet f a x = failwith \"to be implemented\" in\nlet base = failwith \"to be implemented\" in\nlet args = failwith \"to be implemented\" in\nlet (_, res) = List.fold_left f base args in\nres\nin \nremoveZero (add (padZero l1 l2))", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let sqsum xs = \nlet f a x = a + (x * x) in\nlet base = 0 in\nList.fold_left f base xs", "type": "", "out": ""}], "event": "eval"}

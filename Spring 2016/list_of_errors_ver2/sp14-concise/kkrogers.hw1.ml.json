@@ -1,0 +1,4 @@
+{"ocaml": [{"min": "", "in": "let rec sumList xs = \nmatch xs with\n[] -> 0\n| front::back -> front+(sumList back)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = \nmatch xs with\n[] -> 0\n| front::back -> front+(sumList back)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = \nmatch xs with\n[] -> 0\n| front::back -> front+(sumList back)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = \nmatch xs with\n[] -> 0\n| front::back -> front+(sumList back)", "type": "", "out": ""}], "event": "eval"}

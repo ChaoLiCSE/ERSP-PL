@@ -1,0 +1,2 @@
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) = match l with\n[]                     -> d\n| (k', v)::t when k' = k -> v\n| h::t                   -> assoc (d,k,t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec assoc (d,k,l) = match l with\n[]                     -> d\n| (k', v)::t when k' = k -> v\n| h::t                   -> assoc (d,k,t)", "type": "", "out": ""}], "event": "eval"}

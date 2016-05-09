@@ -1,0 +1,10 @@
+{"ocaml": [{"min": "", "in": "let rec sumList xs =\nmatch xs with\n[] -> 0\n| h::t -> h + sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs =\nmatch xs with\n[] -> 0\n| h::t -> h + sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitalRoot n = \nif n / 10 = 0 then n else\ndigitalRoot ( sumList ( digits n ) )", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n =\nif n / 10 = 0 then 0 else\n1 + additivePersistence ( sumList ( digits ( n ) ) )", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n =\nif n / 10 = 0 then 0 else\n1 + additivePersistence ( sumList ( digits ( n ) ) )", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let listReverse l = \nlet rec rev l2 l3 =\nmatch l3 with\n| [] -> l2\n| h::t -> rev ( h::l2 ) t in\nrev [] l", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs =\nmatch xs with\n[] -> 0\n| h::t -> h + sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs =\nmatch xs with\n[] -> 0\n| h::t -> h + sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let listReverse l = \nlet rec rev l2 l3 =\nmatch l3 with\n| [] -> l2\n| h::t -> rev ( h::l2 ) t in\nrev [] l", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs =\nmatch xs with\n[] -> 0\n| h::t -> h + sumList t", "type": "", "out": ""}], "event": "eval"}

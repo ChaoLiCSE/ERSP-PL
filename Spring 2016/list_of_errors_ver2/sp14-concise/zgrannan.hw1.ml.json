@@ -1,0 +1,5 @@
+{"ocaml": [{"min": "", "in": "let rec sumList = List.fold_left (+) 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList = foldl (+) 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList = foldl (+) 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList = foldl (+) 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList = foldl (+) 0", "type": "", "out": ""}], "event": "eval"}

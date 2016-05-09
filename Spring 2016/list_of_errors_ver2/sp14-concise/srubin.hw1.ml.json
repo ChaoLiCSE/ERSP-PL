@@ -1,0 +1,15 @@
+{"ocaml": [{"min": "", "in": "let rec sumList xs = failwith \"TBD:sumList\"", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = failwith \"TBD:sumList\"", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = failwith \"TBD:sumList\"", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = failwith \"TBD:sumList\"", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = failwith \"TBD:sumList\"", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = failwith \"TBD:digitsOfInt\"", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = failwith \"TBD:sumList\"", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = failwith \"TBD:sumList\"", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = failwith \"TBD:sumList\"", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs =\nif List.length xs == 1 then List.hd xs else\nList.hd xs + sumList (List.tl (xs))", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs =\nmatch xs with\n| [] -> 0\n| head::tail -> head + sumList tail", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l =\nmatch l with\n| [] -> []\n| head::tail -> at (listReverse tail)  head", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let palindrome w = \nw = listReverse w", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let palindrome w = \nexplode w = listReverse (explode w)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitalRoot n =\nif n < 10 then n\nelse\ndigitalRoot (sumList (digitsOfInt n))", "type": "", "out": ""}], "event": "eval"}
