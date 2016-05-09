@@ -1,0 +1,3070 @@
+fix:
+let rec digitsOfInt n = 
+if (n<=0) 
+then []
+else
+(n mod 10) :: digitsOfInt  (n/10)
+
+bad: 
+let rec digitsOfInt n = 
+if (n<=0) 
+then []
+else
+(digitsOfInt (n/10) ):: (n mod 10)
+
+annotated: 
+let rec digitsOfInt : int -> int list = fun  n  ->  
+if (n<=0) 
+then []
+else
+(digitsOfInt (n/10) ):: (n mod 10)
+
+annotated_fix:
+let rec digitsOfInt : int -> int list = fun  n  ->  
+if (n<=0) 
+then []
+else
+(n mod 10) :: digitsOfInt  (n/10)
+
+************** PROGRAM #1 ENDS HERE **************
+fix:
+let removeDuplicates l = 
+let rec helper (seen,rest) = 
+match rest with 
+[] -> seen
+| h::t -> 
+let seen' = if (List.mem h seen)
+then 
+seen
+else 
+h :: seen in
+let rest' = t in 
+helper (seen',rest') 
+in
+List.rev (helper ([],l))
+
+bad: 
+et _ = removeDuplicates [1;6;2;4;12;2;13;6;9]
+
+annotated: 
+et _ = removeDuplicates [1;6;2;4;12;2;13;6;9]
+
+annotated_fix:
+let removeDuplicates : 'a list -> 'a list = fun  l  ->  
+let rec helper (seen,rest) = 
+match rest with 
+[] -> seen
+| h::t -> 
+let seen' = if (List.mem h seen)
+then 
+seen
+else 
+h :: seen in
+let rest' = t in 
+helper (seen',rest') 
+in
+List.rev (helper ([],l))
+
+************** PROGRAM #2 ENDS HERE **************
+fix:
+let stringOfList f l = "[" ^ ( sepConcat ";" (List.map f l) ) ^ "]"
+
+bad: 
+let stringOfList f l = List.map f (sepConcat l)
+
+annotated: 
+let stringOfList : ('a -> string) -> 'a list -> string = fun  f l  ->  List.map f (sepConcat l)
+
+annotated_fix:
+let stringOfList : ('a -> string) -> 'a list -> string = fun  f l  ->  "[" ^ ( sepConcat ";" (List.map f l) ) ^ "]"
+
+************** PROGRAM #3 ENDS HERE **************
+fix:
+let rec mulByDigit i l = match (List.rev l) with
+| []   -> []
+| h::t -> (mulByDigit i (List.rev t) @ [0])  @  h*i :: []
+
+bad: 
+let rec mulByDigit i l = match (List.rev l) with
+| []   -> []
+| h::t -> (mulByDigit i (List.rev t) ) :: 0 @  h*i :: []
+
+annotated: 
+let rec mulByDigit : int -> int list -> int list  = fun  i l  ->  match (List.rev l) with
+| []   -> []
+| h::t -> (mulByDigit i (List.rev t) ) :: 0 @  h*i :: []
+
+annotated_fix:
+let rec mulByDigit : int -> int list -> int list  = fun  i l  ->  match (List.rev l) with
+| []   -> []
+| h::t -> (mulByDigit i (List.rev t) @ [0])  @  h*i :: []
+
+************** PROGRAM #4 ENDS HERE **************
+fix:
+
+
+bad: 
+let bigMul l1 l2 = 
+let f a x = match x with
+(k,v) -> (k,v) in 
+let base = ([], [0]) in
+let args = let rec helper acc l1 l2 = 
+match l1 with 
+| [] -> acc
+| h::t -> helper ((h, l2) :: acc) (List.map (fun x->x*10) t) l2
+in helper [] (List.rev l1) l2
+in
+let (_, res) = List.fold_left f base args in
+res
+
+annotated: 
+let bigMul : int list -> int list -> int list = fun  l1 l2  ->  
+let f a x = match x with
+(k,v) -> (k,v) in 
+let base = ([], [0]) in
+let args = let rec helper acc l1 l2 = 
+match l1 with 
+| [] -> acc
+| h::t -> helper ((h, l2) :: acc) (List.map (fun x->x*10) t) l2
+in helper [] (List.rev l1) l2
+in
+let (_, res) = List.fold_left f base args in
+res
+
+annotated_fix:
+
+
+************** PROGRAM #5 ENDS HERE **************
+fix:
+
+
+bad: 
+let f x = let xx = x*x*x in (xx, xx < 100) in
+wwhile (f, 2)
+
+annotated: 
+let f x = let xx = x*x*x in (xx, xx < 100) in
+wwhile (f, 2)
+
+annotated_fix:
+
+
+************** PROGRAM #6 ENDS HERE **************
+fix:
+
+
+bad: 
+let rec eval (e,x,y) = match e with
+| VarX			-> x
+| VarY			-> y
+| Sine     e'		-> sin (pi *. eval(e', x, y))
+| Cosine   e'		-> cos (pi *. eval(e', x, y))
+| Average (e1, e2)      -> (eval(e1,x,y) +. eval(e2,x,y)) /. 2.0
+| Times   (e1, e2)	-> eval (e1,x,y) *. eval (e2,x,y)
+| Thresh  (e1,e2,e3,e4) -> 
+if eval (e1,x,y) < eval (e2,x,y)
+then eval (e3,x,y)
+else eval (e4,x,y)
+| SquareRoot e'		-> sqrt (eval(e',x,y))
+| FunckyRoot (e1,e2,e3) -> (sqrt (eval(e1,x,x))) *.  (sqrt (eval(e2,x,y))) *. (sqrt (eval(e3,y,y)))
+
+annotated: 
+let rec eval : expr * float * float -> float = fun  (e,x,y)  ->  match e with
+| VarX			-> x
+| VarY			-> y
+| Sine     e'		-> sin (pi *. eval(e', x, y))
+| Cosine   e'		-> cos (pi *. eval(e', x, y))
+| Average (e1, e2)      -> (eval(e1,x,y) +. eval(e2,x,y)) /. 2.0
+| Times   (e1, e2)	-> eval (e1,x,y) *. eval (e2,x,y)
+| Thresh  (e1,e2,e3,e4) -> 
+if eval (e1,x,y) < eval (e2,x,y)
+then eval (e3,x,y)
+else eval (e4,x,y)
+| SquareRoot e'		-> sqrt (eval(e',x,y))
+| FunckyRoot (e1,e2,e3) -> (sqrt (eval(e1,x,x))) *.  (sqrt (eval(e2,x,y))) *. (sqrt (eval(e3,y,y)))
+
+annotated_fix:
+
+
+************** PROGRAM #7 ENDS HERE **************
+fix:
+let rec build (rand, depth) = 
+if depth = 0
+then 
+buildSine(buildX())
+else
+buildX()
+
+bad: 
+let rec build (rand, depth) = (*failwith "to be implemented" *) if depth > (-1)
+then 
+let randNum = rand(1,2) in
+let randNum2 = rand(3,4) in
+match (randNum, randNum2) with
+| (1,3) -> failwith "bahh"
+| (1,4) -> buildSine(buildOp2(  build(rand, depth - 1), 
+build(rand, depth - 1),
+build(rand, depth - 1))  )
+| (2,3) -> buildCosine(buildOp1(buildX()))
+| (2,4) -> buildCosine(buildOp2(build(rand, depth - 1), 
+build(rand, depth - 1),
+build(rand, depth - 1))  )
+| _ -> failwith "didnt work"
+
+annotated: 
+let rec build: ((int * int -> int) * int) -> expr = fun  (rand, depth)  ->  (*failwith "to be implemented" *) if depth > (-1)
+then 
+let randNum = rand(1,2) in
+let randNum2 = rand(3,4) in
+match (randNum, randNum2) with
+| (1,3) -> failwith "bahh"
+| (1,4) -> buildSine(buildOp2(  build(rand, depth - 1), 
+build(rand, depth - 1),
+build(rand, depth - 1))  )
+| (2,3) -> buildCosine(buildOp1(buildX()))
+| (2,4) -> buildCosine(buildOp2(build(rand, depth - 1), 
+build(rand, depth - 1),
+build(rand, depth - 1))  )
+| _ -> failwith "didnt work"
+
+annotated_fix:
+let rec build: ((int * int -> int) * int) -> expr = fun  (rand, depth)  ->  
+if depth = 0
+then 
+buildSine(buildX())
+else
+buildX()
+
+************** PROGRAM #8 ENDS HERE **************
+fix:
+
+
+bad: 
+let g x = truncate (1e6 *. cos (1e-6 *. float x)) in fixpoint (g, 0)
+
+annotated: 
+let g x = truncate (1e6 *. cos (1e-6 *. float x)) in fixpoint (g, 0)
+
+annotated_fix:
+
+
+************** PROGRAM #9 ENDS HERE **************
+fix:
+let rec digitsOfInt n = 
+if n <= 0 then []
+else (digitsOfInt (n / 10)) @ [n mod 10]
+
+bad: 
+let rec digitsOfInt n = 
+if n <= 0 then []
+else (digitsOfInt div(n, 10)) @ [n]
+
+annotated: 
+let rec digitsOfInt : int -> int list = fun  n  ->  
+if n <= 0 then []
+else (digitsOfInt div(n, 10)) @ [n]
+
+annotated_fix:
+let rec digitsOfInt : int -> int list = fun  n  ->  
+if n <= 0 then []
+else (digitsOfInt (n / 10)) @ [n mod 10]
+
+************** PROGRAM #10 ENDS HERE **************
+fix:
+
+
+bad: 
+let rec additivePersistence n = 
+let (l, r) = additivePersAndRoot(abs(n)) in
+l
+
+annotated: 
+let rec additivePersistence : int -> int = fun  n  ->  
+let (l, r) = additivePersAndRoot(abs(n)) in
+l
+
+annotated_fix:
+
+
+************** PROGRAM #11 ENDS HERE **************
+fix:
+
+
+bad: 
+let rec digitsOfInt n = 
+if n <= 0 then []
+else digitsOfInt(n/10) :: []
+
+annotated: 
+let rec digitsOfInt : int -> int list = fun  n  ->  
+if n <= 0 then []
+else digitsOfInt(n/10) :: []
+
+annotated_fix:
+
+
+************** PROGRAM #12 ENDS HERE **************
+fix:
+
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = (a + x) mod 10 in
+let base = [] in
+let args = [] in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = (a + x) mod 10 in
+let base = [] in
+let args = [] in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated_fix:
+
+
+************** PROGRAM #13 ENDS HERE **************
+fix:
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = failwith "TBD" in
+let base = failwith "TBD" in
+let args =  failwith "TBD" in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = match x with
+| (w,y)::t -> ((w+y)/10)::((w+y) mod 10)::a
+| _ -> a  in
+let base = [] in
+let args =  List.rev ((List.combine l1 l2)) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = match x with
+| (w,y)::t -> ((w+y)/10)::((w+y) mod 10)::a
+| _ -> a  in
+let base = [] in
+let args =  List.rev ((List.combine l1 l2)) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated_fix:
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = failwith "TBD" in
+let base = failwith "TBD" in
+let args =  failwith "TBD" in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+************** PROGRAM #14 ENDS HERE **************
+fix:
+
+
+bad: 
+let digits n = digitsOfInt (abs n)
+
+annotated: 
+let digits n = digitsOfInt (abs n)
+
+annotated_fix:
+
+
+************** PROGRAM #15 ENDS HERE **************
+fix:
+
+
+bad: 
+let rec additivePersistence n =
+let rec aPHelper n i =
+if (n < 10) then i
+else aPHelper (sumList (digits n)) (i+1)
+
+annotated: 
+let rec additivePersistence : int -> int = fun  n  -> 
+let rec aPHelper n i =
+if (n < 10) then i
+else aPHelper (sumList (digits n)) (i+1)
+
+annotated_fix:
+
+
+************** PROGRAM #16 ENDS HERE **************
+fix:
+let removeDuplicates l = 
+let rec helper (seen,rest) = 
+match rest with 
+[] -> seen
+| hd::tl -> 
+let seen' = 
+if (List.mem hd seen = true) then seen
+else hd::seen in
+let rest' = tl in 
+helper (seen',rest') 
+in
+List.rev (helper ([],l))
+
+bad: 
+let removeDuplicates l = 
+let rec helper (seen,rest) = 
+match rest with 
+[] -> seen
+| hd::tl -> 
+let seen' = 
+if (List.mem tl hd = true) then seen
+else hd::seen in
+let rest' = tl in 
+helper (seen',rest') 
+in
+List.rev (helper ([],l))
+
+annotated: 
+let removeDuplicates : 'a list -> 'a list = fun  l  ->  
+let rec helper (seen,rest) = 
+match rest with 
+[] -> seen
+| hd::tl -> 
+let seen' = 
+if (List.mem tl hd = true) then seen
+else hd::seen in
+let rest' = tl in 
+helper (seen',rest') 
+in
+List.rev (helper ([],l))
+
+annotated_fix:
+let removeDuplicates : 'a list -> 'a list = fun  l  ->  
+let rec helper (seen,rest) = 
+match rest with 
+[] -> seen
+| hd::tl -> 
+let seen' = 
+if (List.mem hd seen = true) then seen
+else hd::seen in
+let rest' = tl in 
+helper (seen',rest') 
+in
+List.rev (helper ([],l))
+
+************** PROGRAM #17 ENDS HERE **************
+fix:
+let fixpoint (f,b) = wwhile((let g b = let xx = f x in (xx, xx!=b) in g), b)
+
+bad: 
+let g x = truncate (1e6 *. cos (1e-6 *. float x)) in fixpoint (g, 0)
+
+annotated: 
+let g x = truncate (1e6 *. cos (1e-6 *. float x)) in fixpoint (g, 0)
+
+annotated_fix:
+let fixpoint: ('a -> 'a) * 'a -> 'a = fun  (f,b)  ->  wwhile((let g b = let xx = f x in (xx, xx!=b) in g), b)
+
+************** PROGRAM #18 ENDS HERE **************
+fix:
+let fixpoint (f,b) = 
+wwhile((let helper x = (f b, (f x)=(f b)) in helper), b)
+
+bad: 
+let fixpoint (f,b) = 
+wwhile((let helper x = (f x, (f x)=(f b)) in helper b), b)
+
+annotated: 
+let fixpoint: ('a -> 'a) * 'a -> 'a = fun  (f,b)  ->  
+wwhile((let helper x = (f x, (f x)=(f b)) in helper b), b)
+
+annotated_fix:
+let fixpoint: ('a -> 'a) * 'a -> 'a = fun  (f,b)  ->  
+wwhile((let helper x = (f b, (f x)=(f b)) in helper), b)
+
+************** PROGRAM #19 ENDS HERE **************
+fix:
+let sqsum xs = 
+let f a x = a + x*x in
+let base = 
+match xs with
+| [] -> f 0 0
+| hd::tl -> f 0 hd
+in
+List.fold_left f base xs
+
+bad: 
+let sqsum xs = 
+let f a x = a + x*x in
+let base = 
+match xs with
+| [] -> f 0 []
+| hd::tl -> f 0 hd
+in
+List.fold_left f base xs
+
+annotated: 
+let sqsum : int list -> int  = fun  xs  ->  
+let f a x = a + x*x in
+let base = 
+match xs with
+| [] -> f 0 []
+| hd::tl -> f 0 hd
+in
+List.fold_left f base xs
+
+annotated_fix:
+let sqsum : int list -> int  = fun  xs  ->  
+let f a x = a + x*x in
+let base = 
+match xs with
+| [] -> f 0 0
+| hd::tl -> f 0 hd
+in
+List.fold_left f base xs
+
+************** PROGRAM #20 ENDS HERE **************
+fix:
+
+
+bad: 
+let bigMul l1 l2 = 
+let f a x = a::x in
+let base = (0, []) in
+let args =
+let rec argmaker x y =
+match y with
+| hd::tl -> 
+if (tl=[]) then [(x,hd)]
+else (x,hd)::(argmaker x tl)
+in
+argmaker l1 l2
+in
+let (_, res) = List.fold_left f base args in
+res
+
+annotated: 
+let bigMul : int list -> int list -> int list = fun  l1 l2  ->  
+let f a x = a::x in
+let base = (0, []) in
+let args =
+let rec argmaker x y =
+match y with
+| hd::tl -> 
+if (tl=[]) then [(x,hd)]
+else (x,hd)::(argmaker x tl)
+in
+argmaker l1 l2
+in
+let (_, res) = List.fold_left f base args in
+res
+
+annotated_fix:
+
+
+************** PROGRAM #21 ENDS HERE **************
+fix:
+
+
+bad: 
+let bigMul l1 l2 = 
+let f a x =
+match x with
+| (l2digit,templ1) ->
+let multres = 
+mulByDigit l2digit templ1
+in
+(0,bigAdd (a@[0]) multres) in
+let base = (0, []) in
+let args =
+let rec argmaker x y =
+match y with
+| [] -> []
+| hd::tl -> 
+if (tl=[]) then [hd,x]
+else (hd,x)::(argmaker x tl)
+in
+argmaker l1 l2
+in
+let (_, res) = List.fold_left f base args in
+res
+
+annotated: 
+let bigMul : int list -> int list -> int list = fun  l1 l2  ->  
+let f a x =
+match x with
+| (l2digit,templ1) ->
+let multres = 
+mulByDigit l2digit templ1
+in
+(0,bigAdd (a@[0]) multres) in
+let base = (0, []) in
+let args =
+let rec argmaker x y =
+match y with
+| [] -> []
+| hd::tl -> 
+if (tl=[]) then [hd,x]
+else (hd,x)::(argmaker x tl)
+in
+argmaker l1 l2
+in
+let (_, res) = List.fold_left f base args in
+res
+
+annotated_fix:
+
+
+************** PROGRAM #22 ENDS HERE **************
+fix:
+let padZero l1 l2 = 
+if List.length l1 = List.length l2
+then (l1, l2)
+else if (List.length l1) > (List.length l2)
+then let y = clone (List.hd l1) (List.length l1 - List.length l2) in
+(y, l2)
+else let z = clone (List.hd l2) (List.length l2 - List.length l1) in
+(z, l1)
+
+bad: 
+let padZero l1 l2 = 
+if List.length l1 = List.length l2
+then (l1, l2)
+else if (List.length l1) > (List.length l2)
+then let y =clone List.hd l1 (List.length l1 - List.length l2) in
+(y, l2)
+else let z = clone List.hd l2 (List.length l2 - List.length l1) in
+(z, l1)
+
+annotated: 
+let padZero : int list -> int list -> int list  * int list = fun  l1 l2  ->  
+if List.length l1 = List.length l2
+then (l1, l2)
+else if (List.length l1) > (List.length l2)
+then let y =clone List.hd l1 (List.length l1 - List.length l2) in
+(y, l2)
+else let z = clone List.hd l2 (List.length l2 - List.length l1) in
+(z, l1)
+
+annotated_fix:
+let padZero : int list -> int list -> int list  * int list = fun  l1 l2  ->  
+if List.length l1 = List.length l2
+then (l1, l2)
+else if (List.length l1) > (List.length l2)
+then let y = clone (List.hd l1) (List.length l1 - List.length l2) in
+(y, l2)
+else let z = clone (List.hd l2) (List.length l2 - List.length l1) in
+(z, l1)
+
+************** PROGRAM #23 ENDS HERE **************
+fix:
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = match x with 
+| (d1, d2) -> 
+match a with
+| ( carry, result) -> 
+if (d1 + d2 + carry  > 9) then (1, (d1+d2+1) - 10 :: result)
+else (0,(d1+d2)::result) in
+let base = (0,[]) in
+let args = List.combine(List.rev l1)(List.rev l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = match x with 
+| (d1, d2) -> 
+match a with
+| ( carry, result) -> 
+if (d1 + d2 + carry  > 9) then (1, (d1+d2+1) - 10 :: result)
+else (0,(d1+d2)::result) in
+let base = (0,[]) in
+let args = List.combine(List.rev l1, List.rev l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = match x with 
+| (d1, d2) -> 
+match a with
+| ( carry, result) -> 
+if (d1 + d2 + carry  > 9) then (1, (d1+d2+1) - 10 :: result)
+else (0,(d1+d2)::result) in
+let base = (0,[]) in
+let args = List.combine(List.rev l1, List.rev l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated_fix:
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = match x with 
+| (d1, d2) -> 
+match a with
+| ( carry, result) -> 
+if (d1 + d2 + carry  > 9) then (1, (d1+d2+1) - 10 :: result)
+else (0,(d1+d2)::result) in
+let base = (0,[]) in
+let args = List.combine(List.rev l1)(List.rev l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+************** PROGRAM #24 ENDS HERE **************
+fix:
+let pipe fs = 
+let f a x = x a in
+let base = fun a->a in
+List.fold_left f base fs
+
+bad: 
+let pipe fs = 
+let f a x = x a in
+let base = x in
+List.fold_left f base fs
+
+annotated: 
+let pipe : ('a -> 'a) list -> ('a -> 'a) = fun  fs  ->  
+let f a x = x a in
+let base = x in
+List.fold_left f base fs
+
+annotated_fix:
+let pipe : ('a -> 'a) list -> ('a -> 'a) = fun  fs  ->  
+let f a x = x a in
+let base = fun a->a in
+List.fold_left f base fs
+
+************** PROGRAM #25 ENDS HERE **************
+fix:
+let rec sumList xs = match xs with
+| [] -> 0
+| h::t -> h + sumList t
+
+bad: 
+let rec sumList xs = match xs with
+| [] -> []
+| h::t -> h+sumList t
+
+annotated: 
+let rec sumList : int list -> int = fun  xs  ->  match xs with
+| [] -> []
+| h::t -> h+sumList t
+
+annotated_fix:
+let rec sumList : int list -> int = fun  xs  ->  match xs with
+| [] -> 0
+| h::t -> h + sumList t
+
+************** PROGRAM #26 ENDS HERE **************
+fix:
+let rec build (rand, depth) = 
+
+failwith "to be implemented"
+
+bad: 
+let doRandomGray (depth,seed1,seed2) =
+(* Initialize random-number generator g *)
+let g = makeRand(seed1,seed2) in
+(* Generate a random expression, and turn it into an ML function *)
+let e = build (g,depth) in
+let _ = print_string (exprToString e) in
+let f = eval_fn e in
+(* 301 x 301 pixels *)
+let n = 150 in
+(* Emit the picture *)
+let name = Format.sprintf "%d_%d_%d" depth seed1 seed2 in
+emitGrayscale (f,n,name)
+
+annotated: 
+let doRandomGray (depth,seed1,seed2) =
+(* Initialize random-number generator g *)
+let g = makeRand(seed1,seed2) in
+(* Generate a random expression, and turn it into an ML function *)
+let e = build (g,depth) in
+let _ = print_string (exprToString e) in
+let f = eval_fn e in
+(* 301 x 301 pixels *)
+let n = 150 in
+(* Emit the picture *)
+let name = Format.sprintf "%d_%d_%d" depth seed1 seed2 in
+emitGrayscale (f,n,name)
+
+annotated_fix:
+let rec build: ((int * int -> int) * int) -> expr = fun  (rand, depth)  ->  
+
+failwith "to be implemented"
+
+************** PROGRAM #27 ENDS HERE **************
+fix:
+let rec sepConcat sep sl = match sl with 
+| [] -> ""
+| h :: t -> 
+let f a x = x^a in
+let base =  sepConcat sep t in
+let l =  t in
+List.fold_left f base l
+
+bad: 
+let rec sepConcat sep sl = match sl with 
+| [] -> ""
+| h :: t -> 
+let f a x = "" in
+let base =  sepConcat sep t in
+let l =  "" in
+List.fold_left f base l
+
+annotated: 
+let rec sepConcat : string -> string list -> string = fun  sep sl  ->  match sl with 
+| [] -> ""
+| h :: t -> 
+let f a x = "" in
+let base =  sepConcat sep t in
+let l =  "" in
+List.fold_left f base l
+
+annotated_fix:
+let rec sepConcat : string -> string list -> string = fun  sep sl  ->  match sl with 
+| [] -> ""
+| h :: t -> 
+let f a x = x^a in
+let base =  sepConcat sep t in
+let l =  t in
+List.fold_left f base l
+
+************** PROGRAM #28 ENDS HERE **************
+fix:
+let stringOfList f l = List.map (sepConcat "") l
+
+bad: 
+let stringOfList f l = failwith List.map (fun x-> "") l
+
+annotated: 
+let stringOfList : ('a -> string) -> 'a list -> string = fun  f l  ->  failwith List.map (fun x-> "") l
+
+annotated_fix:
+let stringOfList : ('a -> string) -> 'a list -> string = fun  f l  ->  List.map (sepConcat "") l
+
+************** PROGRAM #29 ENDS HERE **************
+fix:
+let stringOfList f l = List.map (sepConcat "") l
+
+bad: 
+let stringOfList f l = List.map (sepConcat " ") l.string
+
+annotated: 
+let stringOfList : ('a -> string) -> 'a list -> string = fun  f l  ->  List.map (sepConcat " ") l.string
+
+annotated_fix:
+let stringOfList : ('a -> string) -> 'a list -> string = fun  f l  ->  List.map (sepConcat "") l
+
+************** PROGRAM #30 ENDS HERE **************
+fix:
+
+
+bad: 
+let rec clone x n =
+let acc = [] in
+if n=0
+then acc
+else clone x::acc n-1
+
+annotated: 
+let rec clone : 'a -> int -> 'a list = fun  x n  -> 
+let acc = [] in
+if n=0
+then acc
+else clone x::acc n-1
+
+annotated_fix:
+
+
+************** PROGRAM #31 ENDS HERE **************
+fix:
+
+
+bad: 
+let rec additivePersistence n = 
+let rec helper count x =
+if (x < 10) then count
+else  helper (count + 1) (sumList (digits n))
+in helper 0 n
+
+annotated: 
+let rec additivePersistence : int -> int = fun  n  ->  
+let rec helper count x =
+if (x < 10) then count
+else  helper (count + 1) (sumList (digits n))
+in helper 0 n
+
+annotated_fix:
+
+
+************** PROGRAM #32 ENDS HERE **************
+fix:
+
+
+bad: 
+let rec eval (e,x,y) = 
+match e with 
+| VarX -> x
+| VarY -> y
+| Sine(e') -> sin(pi*.eval(e', x, y))
+| Cosine(e') -> cos(pi*.eval(e', x, y))
+| Average(e1, e2) -> (eval(e1, x, y) +. eval(e2, x, y))/.2.0
+| Times (e1, e2) -> (eval(e1, x, y) *. eval(e2, x, y))
+| Thresh (e1, e2, e3, e4) -> 
+if eval(e1, x, y) < eval (e2, x, y)
+then eval(e3, x, y)
+else eval(e4, x, y)
+| Sqrt (e) -> sqrt (abs_float (eval (e, x, y)))
+| Gauss (e1, e2, e3) -> 
+2.0 *.exp (
+-(eval (e1, x, y) -. 
+eval (e2, x, y))** 2.0 
+/. eval (e3, x,y))
+
+annotated: 
+let rec eval : expr * float * float -> float = fun  (e,x,y)  ->  
+match e with 
+| VarX -> x
+| VarY -> y
+| Sine(e') -> sin(pi*.eval(e', x, y))
+| Cosine(e') -> cos(pi*.eval(e', x, y))
+| Average(e1, e2) -> (eval(e1, x, y) +. eval(e2, x, y))/.2.0
+| Times (e1, e2) -> (eval(e1, x, y) *. eval(e2, x, y))
+| Thresh (e1, e2, e3, e4) -> 
+if eval(e1, x, y) < eval (e2, x, y)
+then eval(e3, x, y)
+else eval(e4, x, y)
+| Sqrt (e) -> sqrt (abs_float (eval (e, x, y)))
+| Gauss (e1, e2, e3) -> 
+2.0 *.exp (
+-(eval (e1, x, y) -. 
+eval (e2, x, y))** 2.0 
+/. eval (e3, x,y))
+
+annotated_fix:
+
+
+************** PROGRAM #33 ENDS HERE **************
+fix:
+let bigAdd l1 l2 = failwith "moo"
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = (x / 10, 1 ) in
+let base = (0 , 0) in
+let args = (l1, l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = (x / 10, 1 ) in
+let base = (0 , 0) in
+let args = (l1, l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated_fix:
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  failwith "moo"
+
+************** PROGRAM #34 ENDS HERE **************
+fix:
+
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) =
+let f a x = 
+let (carry, num) = a in
+match x with 
+| ([], []) ->  (0, if carry > 0 then carry :: num else num)
+| (l1', l2') -> 
+let addit = List.hd l1' + List.hd l2' + carry in
+((if (addit > 10) then (addit mod 10) else 0), 
+(addit / 10) :: num)	  in
+let base = (0 , []) in
+let args = List.combine l1 l2 in
+let (_, res) = List.fold_left f base args in res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) =
+let f a x = 
+let (carry, num) = a in
+match x with 
+| ([], []) ->  (0, if carry > 0 then carry :: num else num)
+| (l1', l2') -> 
+let addit = List.hd l1' + List.hd l2' + carry in
+((if (addit > 10) then (addit mod 10) else 0), 
+(addit / 10) :: num)	  in
+let base = (0 , []) in
+let args = List.combine l1 l2 in
+let (_, res) = List.fold_left f base args in res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated_fix:
+
+
+************** PROGRAM #35 ENDS HERE **************
+fix:
+
+
+bad: 
+let rec mulByDigit i l = if (i = 0) then []
+else if (i = 1) then l 
+else if (i mod 2 = 0) then mulByDigit (i/2) (bigAdd l l)
+else bigAdd l (mulByDigit (i - 1) l)
+
+annotated: 
+let rec mulByDigit : int -> int list -> int list  = fun  i l  ->  if (i = 0) then []
+else if (i = 1) then l 
+else if (i mod 2 = 0) then mulByDigit (i/2) (bigAdd l l)
+else bigAdd l (mulByDigit (i - 1) l)
+
+annotated_fix:
+
+
+************** PROGRAM #36 ENDS HERE **************
+fix:
+let stringOfList f l = match l with
+[] -> ""
+| h::t -> 
+let f' a x = x ^ a in
+let base = f h in
+let l = t in
+List.fold_left f' base l
+
+bad: 
+let stringOfList f l = match l with
+[] -> ""
+| h::t -> f h ^ stringOfList f t
+
+annotated: 
+let stringOfList : ('a -> string) -> 'a list -> string = fun  f l  ->  match l with
+[] -> ""
+| h::t -> f h ^ stringOfList f t
+
+annotated_fix:
+let stringOfList : ('a -> string) -> 'a list -> string = fun  f l  ->  match l with
+[] -> ""
+| h::t -> 
+let f' a x = x ^ a in
+let base = f h in
+let l = t in
+List.fold_left f' base l
+
+************** PROGRAM #37 ENDS HERE **************
+fix:
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = match x with
+| (h1, h2) -> ((h1 + h2) / 10 )::(( h1 + h2) mod 10 )::a
+| _ -> a 
+in
+let base = [] in
+let args = List.combine l1 l2 in
+let res = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = match x with
+| (h1, h2) -> removeZero (((h1 + h2) / 10 )::(( h1 + h2) mod 10 ))::a
+| _ -> a 
+in
+let base = [] in
+let args = List.combine l1 l2 in
+let res = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = match x with
+| (h1, h2) -> removeZero (((h1 + h2) / 10 )::(( h1 + h2) mod 10 ))::a
+| _ -> a 
+in
+let base = [] in
+let args = List.combine l1 l2 in
+let res = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated_fix:
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = match x with
+| (h1, h2) -> ((h1 + h2) / 10 )::(( h1 + h2) mod 10 )::a
+| _ -> a 
+in
+let base = [] in
+let args = List.combine l1 l2 in
+let res = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+************** PROGRAM #38 ENDS HERE **************
+fix:
+let fixpoint (f,b) = let fx b' = (f b', f b' = b') in
+wwhile(fx,b)
+
+bad: 
+let fixpoint (f,b) = 
+wwhile(if f b = b then (f b, true) else (f b, false),b)
+
+annotated: 
+let fixpoint: ('a -> 'a) * 'a -> 'a = fun  (f,b)  ->  
+wwhile(if f b = b then (f b, true) else (f b, false),b)
+
+annotated_fix:
+let fixpoint: ('a -> 'a) * 'a -> 'a = fun  (f,b)  ->  let fx b' = (f b', f b' = b') in
+wwhile(fx,b)
+
+************** PROGRAM #39 ENDS HERE **************
+fix:
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = let sum = fst a + (fst x + snd x) in
+(sum/10, (sum mod 10)::snd a) in
+let base = (0,[]) in
+let args = List.combine (List.rev l1) (List.rev l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero (0::l1) (0::l2)))
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = let sum = fst a + (fst x + snd x) in
+(sum/10, (sum mod 10)::snd a) in
+let base = (0,[]) in
+let args = List.combine (List.rev l1) (List.rev l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero (0:l1) (0:l2)))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = let sum = fst a + (fst x + snd x) in
+(sum/10, (sum mod 10)::snd a) in
+let base = (0,[]) in
+let args = List.combine (List.rev l1) (List.rev l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero (0:l1) (0:l2)))
+
+annotated_fix:
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = let sum = fst a + (fst x + snd x) in
+(sum/10, (sum mod 10)::snd a) in
+let base = (0,[]) in
+let args = List.combine (List.rev l1) (List.rev l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero (0::l1) (0::l2)))
+
+************** PROGRAM #40 ENDS HERE **************
+fix:
+let sqsum xs = 
+let rec f a x = match x with
+| []     -> a
+| (h::t) -> f (a+(h*h)) t in
+let base = 0 in
+List.fold_left f base xs
+
+bad: 
+let sqsum xs = 
+let f a x = match x with
+| []     -> a
+| (h::t) -> f (a+(h*h)) t in
+let base = 0 in
+List.fold_left f base xs
+
+annotated: 
+let sqsum : int list -> int  = fun  xs  ->  
+let f a x = match x with
+| []     -> a
+| (h::t) -> f (a+(h*h)) t in
+let base = 0 in
+List.fold_left f base xs
+
+annotated_fix:
+let sqsum : int list -> int  = fun  xs  ->  
+let rec f a x = match x with
+| []     -> a
+| (h::t) -> f (a+(h*h)) t in
+let base = 0 in
+List.fold_left f base xs
+
+************** PROGRAM #41 ENDS HERE **************
+fix:
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = 
+let prevN (n1, n2) = n1 in
+let prev = prevN a in
+let sumlist (p1, p2) = p2 in
+let sum = sumlist a in
+let add (m,n) = m + n in
+let digit = (add x) + prev in
+if digit > 10 then (1, (digit-10)::sum) else (0, (digit)::sum) in
+let base = (0, []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = let add (m,n) = [m + n] in (add x)::a in
+let base = [] in
+let args = match (List.rev (List.combine l1 l2)) with 
+| [] -> (0,0)
+| (h::t) -> h in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = let add (m,n) = [m + n] in (add x)::a in
+let base = [] in
+let args = match (List.rev (List.combine l1 l2)) with 
+| [] -> (0,0)
+| (h::t) -> h in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated_fix:
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = 
+let prevN (n1, n2) = n1 in
+let prev = prevN a in
+let sumlist (p1, p2) = p2 in
+let sum = sumlist a in
+let add (m,n) = m + n in
+let digit = (add x) + prev in
+if digit > 10 then (1, (digit-10)::sum) else (0, (digit)::sum) in
+let base = (0, []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+************** PROGRAM #42 ENDS HERE **************
+fix:
+let rec digitsOfInt n =
+if n < 0 then []
+else digitsOfInt (n/10)
+
+bad: 
+let rec digitsOfInt n =
+if n < 0 then []
+else digitsOfInt n mod 10
+
+annotated: 
+let rec digitsOfInt : int -> int list = fun  n  -> 
+if n < 0 then []
+else digitsOfInt n mod 10
+
+annotated_fix:
+let rec digitsOfInt : int -> int list = fun  n  -> 
+if n < 0 then []
+else digitsOfInt (n/10)
+
+************** PROGRAM #43 ENDS HERE **************
+fix:
+let digitalRoot n =
+if n < 10 then 0
+else 
+let rec addTimes n =
+let rec digits n = 
+if n <= 0 then 0
+else ((n mod 10) + digits (n/10)) in
+let x = digits n in
+if x > 9 then 1 + addTimes x
+else 1 in
+addTimes n
+
+bad: 
+let rec digitalRoot n = 
+let rec digits n = 
+if n <= 0 then 0
+else ((n mod 10) + digits (n/10)) in
+let x = digits n in 
+if x > 9 then digitalRoot x
+else 1 in digitalRoot x
+
+annotated: 
+let rec digitalRoot : int -> int = fun  n  ->  
+let rec digits n = 
+if n <= 0 then 0
+else ((n mod 10) + digits (n/10)) in
+let x = digits n in 
+if x > 9 then digitalRoot x
+else 1 in digitalRoot x
+
+annotated_fix:
+let digitalRoot : int -> int = fun  n  -> 
+if n < 10 then 0
+else 
+let rec addTimes n =
+let rec digits n = 
+if n <= 0 then 0
+else ((n mod 10) + digits (n/10)) in
+let x = digits n in
+if x > 9 then 1 + addTimes x
+else 1 in
+addTimes n
+
+************** PROGRAM #44 ENDS HERE **************
+fix:
+
+
+bad: 
+let listReverse l = 
+let rec reverseHelper acc = function
+| [] -> acc
+| h::t -> reverseHelper (h::acc) t in
+reverseHelper [] l
+
+annotated: 
+let listReverse : 'a list -> 'a list = fun  l  ->  
+let rec reverseHelper acc = function
+| [] -> acc
+| h::t -> reverseHelper (h::acc) t in
+reverseHelper [] l
+
+annotated_fix:
+
+
+************** PROGRAM #45 ENDS HERE **************
+fix:
+let rec eval (e,x,y) = match e with VarX -> x
+| VarY -> y
+| Sine ex -> sin(pi*.eval (ex,x,y) )
+| Cosine ex -> "cos(pi*"^ exprToString ex ^")"
+| Average (ex1,ex2) -> "(("^exprToString ex1^"+"^exprToString ex2^")/2)"
+| Times (ex1,ex2) -> exprToString ex1^"*"^exprToString ex2
+| Thresh (ex1,ex2,ex3,ex4) -> "("^exprToString ex1^"<"^exprToString ex2^"?"^exprToString ex3^":"^ exprToString ex4^")"
+
+bad: 
+let rec eval (e,x,y) = match e with VarX -> x
+| VarY -> y
+| Sine ex -> sin(pi*.eval ex x y )
+| Cosine ex -> "cos(pi*"^ exprToString ex ^")"
+| Average (ex1,ex2) -> "(("^exprToString ex1^"+"^exprToString ex2^")/2)"
+| Times (ex1,ex2) -> exprToString ex1^"*"^exprToString ex2
+| Thresh (ex1,ex2,ex3,ex4) -> "("^exprToString ex1^"<"^exprToString ex2^"?"^exprToString ex3^":"^ exprToString ex4^")"
+
+annotated: 
+let rec eval : expr * float * float -> float = fun  (e,x,y)  ->  match e with VarX -> x
+| VarY -> y
+| Sine ex -> sin(pi*.eval ex x y )
+| Cosine ex -> "cos(pi*"^ exprToString ex ^")"
+| Average (ex1,ex2) -> "(("^exprToString ex1^"+"^exprToString ex2^")/2)"
+| Times (ex1,ex2) -> exprToString ex1^"*"^exprToString ex2
+| Thresh (ex1,ex2,ex3,ex4) -> "("^exprToString ex1^"<"^exprToString ex2^"?"^exprToString ex3^":"^ exprToString ex4^")"
+
+annotated_fix:
+let rec eval : expr * float * float -> float = fun  (e,x,y)  ->  match e with VarX -> x
+| VarY -> y
+| Sine ex -> sin(pi*.eval (ex,x,y) )
+| Cosine ex -> "cos(pi*"^ exprToString ex ^")"
+| Average (ex1,ex2) -> "(("^exprToString ex1^"+"^exprToString ex2^")/2)"
+| Times (ex1,ex2) -> exprToString ex1^"*"^exprToString ex2
+| Thresh (ex1,ex2,ex3,ex4) -> "("^exprToString ex1^"<"^exprToString ex2^"?"^exprToString ex3^":"^ exprToString ex4^")"
+
+************** PROGRAM #46 ENDS HERE **************
+fix:
+let fixpoint (f,b) = wwhile ( (f b),b)
+
+bad: 
+let g x = truncate (1e6 *. cos (1e-6 *. float x)) in fixpoint (g, 0)
+
+annotated: 
+let g x = truncate (1e6 *. cos (1e-6 *. float x)) in fixpoint (g, 0)
+
+annotated_fix:
+let fixpoint: ('a -> 'a) * 'a -> 'a = fun  (f,b)  ->  wwhile ( (f b),b)
+
+************** PROGRAM #47 ENDS HERE **************
+fix:
+let rec build (rand, depth) = match depth with 
+| 0 -> buildX() 
+| 1 ->  buildSine( build(rand, depth - 1) )
+| _ -> buildCosine( build(rand, depth - 1) )
+
+bad: 
+let rec build (rand, depth) = match depth with 
+| 0 -> buildX() 
+| 1 ->  if(rand > 1) then buildSine( build(rand, depth - 1) )
+| _ -> buildCosine( build(rand, depth - 1) )
+
+annotated: 
+let rec build: ((int * int -> int) * int) -> expr = fun  (rand, depth)  ->  match depth with 
+| 0 -> buildX() 
+| 1 ->  if(rand > 1) then buildSine( build(rand, depth - 1) )
+| _ -> buildCosine( build(rand, depth - 1) )
+
+annotated_fix:
+let rec build: ((int * int -> int) * int) -> expr = fun  (rand, depth)  ->  match depth with 
+| 0 -> buildX() 
+| 1 ->  buildSine( build(rand, depth - 1) )
+| _ -> buildCosine( build(rand, depth - 1) )
+
+************** PROGRAM #48 ENDS HERE **************
+fix:
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = match x with
+(x1, x2) -> 
+match a with
+(o , z) -> if o + x1 + x2 > 9 
+then (1, ((o + x1 + x2) mod 10)::z )
+else (0, (o + x1 + x2)::z)
+in
+let base = (0, []) in
+let args = 
+let rec pair list1 list2 = 
+match (List.rev list1, List.rev list2) with
+| (h1::t1, h2::t2) -> (h1,h2)::pair t1 t2
+| (_ , _) -> []
+in pair l1 l2
+in
+let (_, res) = List.fold_left f base args in
+args
+in 
+removeZero (add (padZero l1 l2))
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = failwith "to be implemented" in
+let base = 0 in
+let args = 
+let rec pair list1 list2 = match (list1, list2) with
+| (h1::t1, h2::t2) -> (h1,h2)::pair t1 t2
+| (_ , _) -> []
+in pair l1 l2
+in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = failwith "to be implemented" in
+let base = 0 in
+let args = 
+let rec pair list1 list2 = match (list1, list2) with
+| (h1::t1, h2::t2) -> (h1,h2)::pair t1 t2
+| (_ , _) -> []
+in pair l1 l2
+in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated_fix:
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = match x with
+(x1, x2) -> 
+match a with
+(o , z) -> if o + x1 + x2 > 9 
+then (1, ((o + x1 + x2) mod 10)::z )
+else (0, (o + x1 + x2)::z)
+in
+let base = (0, []) in
+let args = 
+let rec pair list1 list2 = 
+match (List.rev list1, List.rev list2) with
+| (h1::t1, h2::t2) -> (h1,h2)::pair t1 t2
+| (_ , _) -> []
+in pair l1 l2
+in
+let (_, res) = List.fold_left f base args in
+args
+in 
+removeZero (add (padZero l1 l2))
+
+************** PROGRAM #49 ENDS HERE **************
+fix:
+let pipe fs = 
+let f a x = x in
+let base = fun x y -> x y in
+List.fold_left f base fs
+
+bad: 
+let pipe fs = 
+let f a x = a x in
+let base = fun x y -> x y in
+List.fold_left f base fs
+
+annotated: 
+let pipe : ('a -> 'a) list -> ('a -> 'a) = fun  fs  ->  
+let f a x = a x in
+let base = fun x y -> x y in
+List.fold_left f base fs
+
+annotated_fix:
+let pipe : ('a -> 'a) list -> ('a -> 'a) = fun  fs  ->  
+let f a x = x in
+let base = fun x y -> x y in
+List.fold_left f base fs
+
+************** PROGRAM #50 ENDS HERE **************
+fix:
+let rec digitsOfInt n = 
+let ns = [] in 
+match n with
+| 0 -> 0::ns
+| n -> ((digitsOfInt (n / 10))::(n mod 10)::ns)
+
+bad: 
+let rec digitsOfInt n = 
+let ns = [] in 
+match n with
+| 0 -> 0
+| n -> ((n mod 10)::(digitsOfInt (n / 10)))
+
+annotated: 
+let rec digitsOfInt : int -> int list = fun  n  ->  
+let ns = [] in 
+match n with
+| 0 -> 0
+| n -> ((n mod 10)::(digitsOfInt (n / 10)))
+
+annotated_fix:
+let rec digitsOfInt : int -> int list = fun  n  ->  
+let ns = [] in 
+match n with
+| 0 -> 0::ns
+| n -> ((digitsOfInt (n / 10))::(n mod 10)::ns)
+
+************** PROGRAM #51 ENDS HERE **************
+fix:
+eval (Times (VarX,VarY), 1, 2)
+
+bad: 
+eval (Times(VarX,VarY), 1, 2)
+
+annotated: 
+eval (Times(VarX,VarY), 1, 2)
+
+annotated_fix:
+eval (Times (VarX,VarY), 1, 2)
+
+************** PROGRAM #52 ENDS HERE **************
+fix:
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = failwith "to be implemented" in
+let base =  [0], [0]in
+let args = failwith "to be implemented" in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = failwith "to be implemented" in
+let base = [0, 0] in
+let args = failwith "to be implemented" in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = failwith "to be implemented" in
+let base = [0, 0] in
+let args = failwith "to be implemented" in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated_fix:
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = failwith "to be implemented" in
+let base =  [0], [0]in
+let args = failwith "to be implemented" in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+************** PROGRAM #53 ENDS HERE **************
+fix:
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = let (x', x'') = x in 
+let (c, s) = a in
+match (c, s) with
+| (c, []) -> c, (c :: s)
+| _ -> ((c + x' + x'') / 10), ((c + x' + x'') mod 10) :: s
+in
+let base = (0, []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = let (x', x'') = x in 
+let (c, s) = a in
+if (List.length a = 5)
+then c :: s
+else 
+((c + x' + x'') / 10), ((c + x' + x'') mod 10) :: s
+in
+let base = (0, []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = let (x', x'') = x in 
+let (c, s) = a in
+if (List.length a = 5)
+then c :: s
+else 
+((c + x' + x'') / 10), ((c + x' + x'') mod 10) :: s
+in
+let base = (0, []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated_fix:
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = let (x', x'') = x in 
+let (c, s) = a in
+match (c, s) with
+| (c, []) -> c, (c :: s)
+| _ -> ((c + x' + x'') / 10), ((c + x' + x'') mod 10) :: s
+in
+let base = (0, []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+************** PROGRAM #54 ENDS HERE **************
+fix:
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = let (x', x'') = x in 
+let (c, s) = a in
+match (c, s) with
+| (c, []) -> c, (c :: s)
+| _ -> ((c + x' + x'') / 10), ((c + x' + x'') mod 10) :: s
+in
+let base = (0, []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = let (x', x'') = x in 
+let (c, s) = a in
+if (s = [])
+then c :: s
+else 
+((c + x' + x'') / 10), ((c + x' + x'') mod 10) :: s
+in
+let base = (0, []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = let (x', x'') = x in 
+let (c, s) = a in
+if (s = [])
+then c :: s
+else 
+((c + x' + x'') / 10), ((c + x' + x'') mod 10) :: s
+in
+let base = (0, []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated_fix:
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = let (x', x'') = x in 
+let (c, s) = a in
+match (c, s) with
+| (c, []) -> c, (c :: s)
+| _ -> ((c + x' + x'') / 10), ((c + x' + x'') mod 10) :: s
+in
+let base = (0, []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+************** PROGRAM #55 ENDS HERE **************
+fix:
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = let (x', x'') = x in 
+let (c, s) = a in
+if ( (List.length s) = (List.length s) )
+then c, c::s
+else ((c + x' + x'') / 10), ((c + x' + x'') mod 10) :: s
+
+in
+let base = (0, []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = let (x', x'') = x in 
+let (c, s) = a in
+if ( (List.length s) = (List.length x) )
+then c, c::s
+else ((c + x' + x'') / 10), ((c + x' + x'') mod 10) :: s
+
+in
+let base = (0, []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = let (x', x'') = x in 
+let (c, s) = a in
+if ( (List.length s) = (List.length x) )
+then c, c::s
+else ((c + x' + x'') / 10), ((c + x' + x'') mod 10) :: s
+
+in
+let base = (0, []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated_fix:
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = let (x', x'') = x in 
+let (c, s) = a in
+if ( (List.length s) = (List.length s) )
+then c, c::s
+else ((c + x' + x'') / 10), ((c + x' + x'') mod 10) :: s
+
+in
+let base = (0, []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+************** PROGRAM #56 ENDS HERE **************
+fix:
+let fixpoint (f,b) = wwhile ((let g x = (f x, x = f x) in g),b)
+
+bad: 
+let fixpoint (f,b) = wwhile ((let g x = let d = (f x) in (d, x = d) in g),b)
+
+annotated: 
+let fixpoint: ('a -> 'a) * 'a -> 'a = fun  (f,b)  ->  wwhile ((let g x = let d = (f x) in (d, x = d) in g),b)
+
+annotated_fix:
+let fixpoint: ('a -> 'a) * 'a -> 'a = fun  (f,b)  ->  wwhile ((let g x = (f x, x = f x) in g),b)
+
+************** PROGRAM #57 ENDS HERE **************
+fix:
+let pipe fs = 
+let f a x = fun x -> x  in
+let base = fun x -> x in
+List.fold_left f base fs
+
+bad: 
+let pipe fs = 
+let f a x = pipe a x in
+let base = 3 in
+List.fold_left f base fs
+
+annotated: 
+let pipe : ('a -> 'a) list -> ('a -> 'a) = fun  fs  ->  
+let f a x = pipe a x in
+let base = 3 in
+List.fold_left f base fs
+
+annotated_fix:
+let pipe : ('a -> 'a) list -> ('a -> 'a) = fun  fs  ->  
+let f a x = fun x -> x  in
+let base = fun x -> x in
+List.fold_left f base fs
+
+************** PROGRAM #58 ENDS HERE **************
+fix:
+
+
+bad: 
+let pipe fs = 
+let f a x = fun x -> x a in
+let base = fun x1->x1 in
+List.fold_left f base fs
+
+annotated: 
+let pipe : ('a -> 'a) list -> ('a -> 'a) = fun  fs  ->  
+let f a x = fun x -> x a in
+let base = fun x1->x1 in
+List.fold_left f base fs
+
+annotated_fix:
+
+
+************** PROGRAM #59 ENDS HERE **************
+fix:
+
+
+bad: 
+let rec digitsOfInt n = 
+if( head mod 2) = 0 
+then [] 
+else tail
+
+annotated: 
+let rec digitsOfInt : int -> int list = fun  n  ->  
+if( head mod 2) = 0 
+then [] 
+else tail
+
+annotated_fix:
+
+
+************** PROGRAM #60 ENDS HERE **************
+fix:
+
+
+bad: 
+let rec wwhile (f,b) = 
+let (b', c') = f b in
+if c' = true
+then wwhile (f, b')
+else b'
+
+annotated: 
+let rec wwhile : ('a -> 'a * bool) * 'a -> 'a = fun  (f,b)  ->  
+let (b', c') = f b in
+if c' = true
+then wwhile (f, b')
+else b'
+
+annotated_fix:
+
+
+************** PROGRAM #61 ENDS HERE **************
+fix:
+let pipe fs = 
+let f a x = function g -> g in
+let base = function x -> x in
+List.fold_left f base fs
+
+bad: 
+let pipe fs = 
+let f a x = function g -> g x a in
+let base = function x -> x in
+List.fold_left f base fs
+
+annotated: 
+let pipe : ('a -> 'a) list -> ('a -> 'a) = fun  fs  ->  
+let f a x = function g -> g x a in
+let base = function x -> x in
+List.fold_left f base fs
+
+annotated_fix:
+let pipe : ('a -> 'a) list -> ('a -> 'a) = fun  fs  ->  
+let f a x = function g -> g in
+let base = function x -> x in
+List.fold_left f base fs
+
+************** PROGRAM #62 ENDS HERE **************
+fix:
+let rec sepConcat sep sl = match sl with 
+| [] -> ""
+| h :: t -> 
+let f a x = 
+if List.length(t) < 2
+then a ^ x 
+else a ^ x ^ sep in
+let base = "" in
+let l = sl in
+List.fold_left f base l
+
+bad: 
+let rec sepConcat sep sl = match sl with 
+| [] -> ""
+| h :: t -> 
+let f a x = 
+if List.length(t) = 2
+then a ^ x in
+let base = "" in
+let l = sl in
+List.fold_left f base l
+
+annotated: 
+let rec sepConcat : string -> string list -> string = fun  sep sl  ->  match sl with 
+| [] -> ""
+| h :: t -> 
+let f a x = 
+if List.length(t) = 2
+then a ^ x in
+let base = "" in
+let l = sl in
+List.fold_left f base l
+
+annotated_fix:
+let rec sepConcat : string -> string list -> string = fun  sep sl  ->  match sl with 
+| [] -> ""
+| h :: t -> 
+let f a x = 
+if List.length(t) < 2
+then a ^ x 
+else a ^ x ^ sep in
+let base = "" in
+let l = sl in
+List.fold_left f base l
+
+************** PROGRAM #63 ENDS HERE **************
+fix:
+let padZero l1 l2 = 
+let a = List.length(l1) - List.length(l2) in
+if a > 0
+then (l1,(clone 0 a))
+else (l1,l2)
+
+bad: 
+let padZero l1 l2 = 
+let a = List.length(l1) - List.length(l2) in
+if a > 0
+then (l1 * (clone 0 a))
+else l1 * l2
+
+annotated: 
+let padZero : int list -> int list -> int list  * int list = fun  l1 l2  ->  
+let a = List.length(l1) - List.length(l2) in
+if a > 0
+then (l1 * (clone 0 a))
+else l1 * l2
+
+annotated_fix:
+let padZero : int list -> int list -> int list  * int list = fun  l1 l2  ->  
+let a = List.length(l1) - List.length(l2) in
+if a > 0
+then (l1,(clone 0 a))
+else (l1,l2)
+
+************** PROGRAM #64 ENDS HERE **************
+fix:
+
+
+bad: 
+let rec removeZero l = match l with
+|[] -> []
+|h::t -> 
+if h = 0
+then removeZero t
+else l
+
+annotated: 
+let rec removeZero : int list -> int list = fun  l  ->  match l with
+|[] -> []
+|h::t -> 
+if h = 0
+then removeZero t
+else l
+
+annotated_fix:
+
+
+************** PROGRAM #65 ENDS HERE **************
+fix:
+
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x =  a + x in
+let base = (0, 0) in
+let args = List.combine l1 l2 in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x =  a + x in
+let base = (0, 0) in
+let args = List.combine l1 l2 in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated_fix:
+
+
+************** PROGRAM #66 ENDS HERE **************
+fix:
+
+
+bad: 
+let fixpoint (f,b) =
+wwhile (fixpoint(f,f b),b)
+
+annotated: 
+let fixpoint: ('a -> 'a) * 'a -> 'a = fun  (f,b)  -> 
+wwhile (fixpoint(f,f b),b)
+
+annotated_fix:
+
+
+************** PROGRAM #67 ENDS HERE **************
+fix:
+let pipe fs =
+let f a x = let y = a in x y in
+let base = fun b -> b in
+List.fold_left f base fs
+
+bad: 
+let pipe fs =
+let f a x = let y z = fun xn -> xn a in y in
+let base = fun b -> b in
+List.fold_left f base fs
+
+annotated: 
+let pipe : ('a -> 'a) list -> ('a -> 'a) = fun  fs  -> 
+let f a x = let y z = fun xn -> xn a in y in
+let base = fun b -> b in
+List.fold_left f base fs
+
+annotated_fix:
+let pipe : ('a -> 'a) list -> ('a -> 'a) = fun  fs  -> 
+let f a x = let y = a in x y in
+let base = fun b -> b in
+List.fold_left f base fs
+
+************** PROGRAM #68 ENDS HERE **************
+fix:
+
+
+bad: 
+let rec eval (e,x,y) = match e with
+| VarX -> x
+| VarY -> y
+| Sine a -> sin(pi *. eval(a,x,y))
+| Cosine a -> cos(pi *. eval(a,x,y))
+| Average (a,b) -> (eval(a,x,y) +. eval(b,x,y)) /. 2.
+| Times (a,b) -> eval(a,x,y) *. eval(b,x,y)
+| Thresh (a,b,c,d) -> if (eval(a,x,y) < eval(b,x,y)) then eval(c,x,y) else eval(d,x,y)
+
+annotated: 
+let rec eval : expr * float * float -> float = fun  (e,x,y)  ->  match e with
+| VarX -> x
+| VarY -> y
+| Sine a -> sin(pi *. eval(a,x,y))
+| Cosine a -> cos(pi *. eval(a,x,y))
+| Average (a,b) -> (eval(a,x,y) +. eval(b,x,y)) /. 2.
+| Times (a,b) -> eval(a,x,y) *. eval(b,x,y)
+| Thresh (a,b,c,d) -> if (eval(a,x,y) < eval(b,x,y)) then eval(c,x,y) else eval(d,x,y)
+
+annotated_fix:
+
+
+************** PROGRAM #69 ENDS HERE **************
+fix:
+
+
+bad: 
+let rec digitsOfInt n = 
+if (n <= 0) 
+then []
+else 
+(n mod 10) :: digitsOfInt n :: []
+
+annotated: 
+let rec digitsOfInt : int -> int list = fun  n  ->  
+if (n <= 0) 
+then []
+else 
+(n mod 10) :: digitsOfInt n :: []
+
+annotated_fix:
+
+
+************** PROGRAM #70 ENDS HERE **************
+fix:
+let rec additivePersistence n = 
+match (digitsOfInt n) with
+| [] -> 0
+| _ -> sumList (digitsOfInt n)
+
+bad: 
+let rec additivePersistence n = 
+match (digitsOfInt n) with
+| [] -> 0
+| _ -> sumList digitsOfInt n
+
+annotated: 
+let rec additivePersistence : int -> int = fun  n  ->  
+match (digitsOfInt n) with
+| [] -> 0
+| _ -> sumList digitsOfInt n
+
+annotated_fix:
+let rec additivePersistence : int -> int = fun  n  ->  
+match (digitsOfInt n) with
+| [] -> 0
+| _ -> sumList (digitsOfInt n)
+
+************** PROGRAM #71 ENDS HERE **************
+fix:
+let fixpoint (f,b) = b
+
+bad: 
+let fixpoint (f,b) = wwhile (b,b)
+
+annotated: 
+let fixpoint: ('a -> 'a) * 'a -> 'a = fun  (f,b)  ->  wwhile (b,b)
+
+annotated_fix:
+let fixpoint: ('a -> 'a) * 'a -> 'a = fun  (f,b)  ->  b
+
+************** PROGRAM #72 ENDS HERE **************
+fix:
+let fixpoint (f,b) = 
+let h b = (b, b != f b)  in
+wwhile (h, b)
+
+bad: 
+let g x = truncate (1e6 *. cos (1e-6 *. float x)) in fixpoint (g, 0)
+
+annotated: 
+let g x = truncate (1e6 *. cos (1e-6 *. float x)) in fixpoint (g, 0)
+
+annotated_fix:
+let fixpoint: ('a -> 'a) * 'a -> 'a = fun  (f,b)  ->  
+let h b = (b, b != f b)  in
+wwhile (h, b)
+
+************** PROGRAM #73 ENDS HERE **************
+fix:
+let removeDuplicates l = 
+let rec helper (seen,rest) = 
+match rest with 
+| [] -> seen
+| h::t -> 
+(* Seen' should hold only the unique ones *)
+let seen' = seen in
+if List.mem h seen' then h::seen 
+else 
+(* If the head is NOT in the list, put it there, else recurse on rest of it *)
+(* Rest' holds the duplicates *)
+let rest' = t in 
+helper (seen',rest') 
+in
+List.rev (helper ([],l))
+
+bad: 
+let removeDuplicates l = 
+let rec helper (seen,rest) = 
+match rest with 
+| [] -> seen
+| h::t -> 
+(* Seen' should hold only the unique ones *)
+let seen' = h in
+if List.mem h l then h::seen' 
+else 
+(* If the head is NOT in the list, put it there, else recurse on rest of it *)
+(* Rest' holds the duplicates *)
+let rest' = t in 
+helper (seen',rest') 
+in
+List.rev (helper ([],l))
+
+annotated: 
+let removeDuplicates : 'a list -> 'a list = fun  l  ->  
+let rec helper (seen,rest) = 
+match rest with 
+| [] -> seen
+| h::t -> 
+(* Seen' should hold only the unique ones *)
+let seen' = h in
+if List.mem h l then h::seen' 
+else 
+(* If the head is NOT in the list, put it there, else recurse on rest of it *)
+(* Rest' holds the duplicates *)
+let rest' = t in 
+helper (seen',rest') 
+in
+List.rev (helper ([],l))
+
+annotated_fix:
+let removeDuplicates : 'a list -> 'a list = fun  l  ->  
+let rec helper (seen,rest) = 
+match rest with 
+| [] -> seen
+| h::t -> 
+(* Seen' should hold only the unique ones *)
+let seen' = seen in
+if List.mem h seen' then h::seen 
+else 
+(* If the head is NOT in the list, put it there, else recurse on rest of it *)
+(* Rest' holds the duplicates *)
+let rest' = t in 
+helper (seen',rest') 
+in
+List.rev (helper ([],l))
+
+************** PROGRAM #74 ENDS HERE **************
+fix:
+let padZero l1 l2 = 
+if List.length l1 > List.length l2 then
+let l1G = List.length l1 - List.length l2 in 
+(* L1 is greater, so append 0's to l2 *)
+(l1, List.append (clone 0 l1G) l2) 
+else if List.length l1 < List.length l2 then
+let l2G = List.length l2 - List.length l1 in 
+(List.append (clone 0 l2G) l1, l2)
+else (l1, l2)
+
+bad: 
+let padZero l1 l2 = 
+if List.length l1 > List.length l2 then
+let l1G = List.length l1 - List.length l2 in 
+List.append(l1, clone(0  l1G) l2 )
+else if List.length l1 < List.length l2 then
+let l2G = List.length l2 - List.length l1 in 
+List.append (clone (0 l2G) l1) l2
+else (l1, l2)
+
+annotated: 
+let padZero : int list -> int list -> int list  * int list = fun  l1 l2  ->  
+if List.length l1 > List.length l2 then
+let l1G = List.length l1 - List.length l2 in 
+List.append(l1, clone(0  l1G) l2 )
+else if List.length l1 < List.length l2 then
+let l2G = List.length l2 - List.length l1 in 
+List.append (clone (0 l2G) l1) l2
+else (l1, l2)
+
+annotated_fix:
+let padZero : int list -> int list -> int list  * int list = fun  l1 l2  ->  
+if List.length l1 > List.length l2 then
+let l1G = List.length l1 - List.length l2 in 
+(* L1 is greater, so append 0's to l2 *)
+(l1, List.append (clone 0 l1G) l2) 
+else if List.length l1 < List.length l2 then
+let l2G = List.length l2 - List.length l1 in 
+(List.append (clone 0 l2G) l1, l2)
+else (l1, l2)
+
+************** PROGRAM #75 ENDS HERE **************
+fix:
+
+
+bad: 
+let rec digitsOfInt n = 
+n mod 10 :: if n <> [] then digitsOfInt (n / 10)
+
+annotated: 
+let rec digitsOfInt : int -> int list = fun  n  ->  
+n mod 10 :: if n <> [] then digitsOfInt (n / 10)
+
+annotated_fix:
+
+
+************** PROGRAM #76 ENDS HERE **************
+fix:
+let rec exprToString e = match e with
+| VarX -> "x"
+| VarY -> "y"
+| Sine(expr) -> "sin(pi*"^exprToString(expr)^")"
+| Cosine(expr) -> "cos(pi"^ exprToString(expr)^")"
+| Average(expr, expr2) -> "(("^exprToString(expr)^"+"^exprToString(expr2)^"/2)"
+| Times(expr, expr2) -> exprToString(expr)^"*"^exprToString(expr2)
+| Thresh(expr, expr2, expr3, expr4) -> "("^exprToString(expr)^"<"^exprToString(expr2)^"?"^exprToString(expr3)^":"^exprToString(expr4)^")"
+
+bad: 
+let rec exprToString e = match e with
+| VarX -> "x"
+| VarY -> "y"
+| Sine(expr) -> "sin(pi*"^exprToString(expr)^")"
+| Cosine(expr) -> "cos(pi"^ exprToString(expr)^")"
+| Average(expr, expr2) -> "(("^exprToString(expr)^"+"^exprToString(expr2)^"/2)"
+| Times(expr, expr2) -> exprToString(expr)^"*"^exprToString(expr2)
+| Thresh(expr, expr2, expr3, expr4) -> "("^exprToString(expr)^"<"^exprToString(expr2)^"?"^exprToString(expr3)^":"^exprToString(expr4)")"
+
+annotated: 
+let rec exprToString : expr -> string = fun  e  ->  match e with
+| VarX -> "x"
+| VarY -> "y"
+| Sine(expr) -> "sin(pi*"^exprToString(expr)^")"
+| Cosine(expr) -> "cos(pi"^ exprToString(expr)^")"
+| Average(expr, expr2) -> "(("^exprToString(expr)^"+"^exprToString(expr2)^"/2)"
+| Times(expr, expr2) -> exprToString(expr)^"*"^exprToString(expr2)
+| Thresh(expr, expr2, expr3, expr4) -> "("^exprToString(expr)^"<"^exprToString(expr2)^"?"^exprToString(expr3)^":"^exprToString(expr4)")"
+
+annotated_fix:
+let rec exprToString : expr -> string = fun  e  ->  match e with
+| VarX -> "x"
+| VarY -> "y"
+| Sine(expr) -> "sin(pi*"^exprToString(expr)^")"
+| Cosine(expr) -> "cos(pi"^ exprToString(expr)^")"
+| Average(expr, expr2) -> "(("^exprToString(expr)^"+"^exprToString(expr2)^"/2)"
+| Times(expr, expr2) -> exprToString(expr)^"*"^exprToString(expr2)
+| Thresh(expr, expr2, expr3, expr4) -> "("^exprToString(expr)^"<"^exprToString(expr2)^"?"^exprToString(expr3)^":"^exprToString(expr4)^")"
+
+************** PROGRAM #77 ENDS HERE **************
+fix:
+
+
+bad: 
+let rec exprToString e = match e with
+| VarX -> "x"
+| VarY -> "y"
+| Sine(expr) -> "sin(pi*"^exprToString(expr)^")"
+| Cosine(expr) -> "cos(pi"^ exprToString(expr)^")"
+| Average(expr, expr2) -> "(("^exprToString(expr)^"+"^exprToString(expr2)^")/2)"
+| Times(expr, expr2) -> exprToString(expr)^"*"^exprToString(expr2)
+| Thresh(expr, expr2, expr3, expr4) -> "("^exprToString(expr)^"<"^exprToString(expr2)^"?"^exprToString(expr3)^":"^exprToString(expr4)^")"
+| Chunky(expr, expr2, expr3) -> "(("^exprToString(expr)^"^"^exprToString(expr2)^")^"^exprToString(expr3)^")"
+| Monkey(expr, expr2) -> "("^exprToString(expr)^"<"^exprToString(expr2)^"?-1.0:1.0)"
+
+annotated: 
+let rec exprToString : expr -> string = fun  e  ->  match e with
+| VarX -> "x"
+| VarY -> "y"
+| Sine(expr) -> "sin(pi*"^exprToString(expr)^")"
+| Cosine(expr) -> "cos(pi"^ exprToString(expr)^")"
+| Average(expr, expr2) -> "(("^exprToString(expr)^"+"^exprToString(expr2)^")/2)"
+| Times(expr, expr2) -> exprToString(expr)^"*"^exprToString(expr2)
+| Thresh(expr, expr2, expr3, expr4) -> "("^exprToString(expr)^"<"^exprToString(expr2)^"?"^exprToString(expr3)^":"^exprToString(expr4)^")"
+| Chunky(expr, expr2, expr3) -> "(("^exprToString(expr)^"^"^exprToString(expr2)^")^"^exprToString(expr3)^")"
+| Monkey(expr, expr2) -> "("^exprToString(expr)^"<"^exprToString(expr2)^"?-1.0:1.0)"
+
+annotated_fix:
+
+
+************** PROGRAM #78 ENDS HERE **************
+fix:
+let pipe fs = 
+let f a x = x a in
+let base = (+) in
+List.fold_left f base fs
+
+bad: 
+let pipe fs = 
+let f a x = x a in
+let base = f g in
+List.fold_left f base fs
+
+annotated: 
+let pipe : ('a -> 'a) list -> ('a -> 'a) = fun  fs  ->  
+let f a x = x a in
+let base = f g in
+List.fold_left f base fs
+
+annotated_fix:
+let pipe : ('a -> 'a) list -> ('a -> 'a) = fun  fs  ->  
+let f a x = x a in
+let base = (+) in
+List.fold_left f base fs
+
+************** PROGRAM #79 ENDS HERE **************
+fix:
+let pipe fs = 
+let f a x = x a in
+let base = fun x -> x in
+List.fold_left f base fs
+
+bad: 
+let pipe fs = 
+let f a x = a x in
+let base = fun x -> x in
+List.fold_left f base fs
+
+annotated: 
+let pipe : ('a -> 'a) list -> ('a -> 'a) = fun  fs  ->  
+let f a x = a x in
+let base = fun x -> x in
+List.fold_left f base fs
+
+annotated_fix:
+let pipe : ('a -> 'a) list -> ('a -> 'a) = fun  fs  ->  
+let f a x = x a in
+let base = fun x -> x in
+List.fold_left f base fs
+
+************** PROGRAM #80 ENDS HERE **************
+fix:
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = 
+let (x1, x2) = x in
+let (a1, a2) = a in
+let h :: _ = a1 in
+let tens = x1 + x2 + h / 10 in
+let ones = x1 + x2 + h mod 10 in
+(tens :: a1, ones :: a2)
+in
+let base = ([], []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = 
+let (x1, x2) = x in
+let ha :: _ = a in
+let (a1, a2) = ha in
+let tens = x1 + x2 + a1 / 10 in
+let ones = x1 + x2 + a1 mod 10 in
+(tens, ones) :: a 
+in
+let base = [(0 , 0)] in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = 
+let (x1, x2) = x in
+let ha :: _ = a in
+let (a1, a2) = ha in
+let tens = x1 + x2 + a1 / 10 in
+let ones = x1 + x2 + a1 mod 10 in
+(tens, ones) :: a 
+in
+let base = [(0 , 0)] in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated_fix:
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = 
+let (x1, x2) = x in
+let (a1, a2) = a in
+let h :: _ = a1 in
+let tens = x1 + x2 + h / 10 in
+let ones = x1 + x2 + h mod 10 in
+(tens :: a1, ones :: a2)
+in
+let base = ([], []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+************** PROGRAM #81 ENDS HERE **************
+fix:
+let rec digitalRoot n = 
+if sumList (digits n) > 9
+then digitalRoot (sumList (digits n))
+else sumList (digits n)
+
+bad: 
+let digitalRoot n = 
+let x = sumList (digits n) in
+if x > 9
+then digitalRoot x
+else sumList x
+
+annotated: 
+let digitalRoot : int -> int = fun  n  ->  
+let x = sumList (digits n) in
+if x > 9
+then digitalRoot x
+else sumList x
+
+annotated_fix:
+let rec digitalRoot : int -> int = fun  n  ->  
+if sumList (digits n) > 9
+then digitalRoot (sumList (digits n))
+else sumList (digits n)
+
+************** PROGRAM #82 ENDS HERE **************
+fix:
+let rec sumList xs = 
+match xs with
+| [] -> 0
+| x :: xs' -> x + sumList xs'
+
+bad: 
+let rec sumList xs = 
+match xs with
+| [] -> 0
+| x :: xs' -> x + sum xs'
+
+annotated: 
+let rec sumList : int list -> int = fun  xs  ->  
+match xs with
+| [] -> 0
+| x :: xs' -> x + sum xs'
+
+annotated_fix:
+let rec sumList : int list -> int = fun  xs  ->  
+match xs with
+| [] -> 0
+| x :: xs' -> x + sumList xs'
+
+************** PROGRAM #83 ENDS HERE **************
+fix:
+let rec listReverse l = 
+match l with
+| [] -> 0
+| x :: l' -> listReverse l'
+
+bad: 
+let rec listReverse l = 
+match l with
+| [] -> 0
+| x :: l' -> listReverse l' @ [x]
+
+annotated: 
+let rec listReverse : 'a list -> 'a list = fun  l  ->  
+match l with
+| [] -> 0
+| x :: l' -> listReverse l' @ [x]
+
+annotated_fix:
+let rec listReverse : 'a list -> 'a list = fun  l  ->  
+match l with
+| [] -> 0
+| x :: l' -> listReverse l'
+
+************** PROGRAM #84 ENDS HERE **************
+fix:
+let fixpoint (f,b) = wwhile ((f b),b)
+
+bad: 
+let fixpoint (f,b) = wwhile (b,b)
+
+annotated: 
+let fixpoint: ('a -> 'a) * 'a -> 'a = fun  (f,b)  ->  wwhile (b,b)
+
+annotated_fix:
+let fixpoint: ('a -> 'a) * 'a -> 'a = fun  (f,b)  ->  wwhile ((f b),b)
+
+************** PROGRAM #85 ENDS HERE **************
+fix:
+let rec digitsOfInt n = 
+if n>0 then
+[2]
+else
+[1]
+
+bad: 
+let rec digitsOfInt n = 
+if n>0 then
+digitOfInt n/10 @ ( n mod 10 ::[])
+else
+[]
+
+annotated: 
+let rec digitsOfInt : int -> int list = fun  n  ->  
+if n>0 then
+digitOfInt n/10 @ ( n mod 10 ::[])
+else
+[]
+
+annotated_fix:
+let rec digitsOfInt : int -> int list = fun  n  ->  
+if n>0 then
+[2]
+else
+[1]
+
+************** PROGRAM #86 ENDS HERE **************
+fix:
+let buildNom(e,e1,e2)		   = Nom(e,e1,e2)
+
+bad: 
+let buildNom(e,e1,e2)		   = Nom(e,e1,e2)
+
+annotated: 
+let build: ((int * int -> int) * int) -> expr = fun Nom(e,e1,e2)		    ->  Nom(e,e1,e2)
+
+annotated_fix:
+let build: ((int * int -> int) * int) -> expr = fun Nom(e,e1,e2)		    ->  Nom(e,e1,e2)
+
+************** PROGRAM #87 ENDS HERE **************
+fix:
+
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = a + x in
+let base = List.combine (List.rev l1) (List.rev l2) in
+let args = 
+List.split base in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = a + x in
+let base = List.combine (List.rev l1) (List.rev l2) in
+let args = 
+List.split base in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated_fix:
+
+
+************** PROGRAM #88 ENDS HERE **************
+fix:
+let rec eval (e,x,y) = match e with 
+| VarX -> x
+| VarY -> y
+| Sine u -> pi *. eval (u,x,y) 
+| Cosine u ->  cos (pi *. eval (u,x,y))
+| Average (u,v) -> ((eval (u,x,y)) +. (eval (v,x,y))) /. 2.0
+| Times (u,v) -> ((eval (u,x,y)) *. (eval (v,x,y)))
+| Thresh (s,t,u,v) -> if (eval (s,x,y)) < (eval (t,x,y)) then eval (u,x,y) else eval (v,x,y)
+
+bad: 
+let rec eval (e,x,y) = match e with 
+| VarX -> x
+| VarY -> y
+| Sine u -> sin (pi *. (eval u))
+| Cosine u ->  cos (pi *. (eval u))
+| Average (u,v) -> ((eval u) +. (eval v)) /. 2
+| Times (u,v) -> ((eval u) *. (eval v))
+| Thresh (s,t,u,v) -> if (eval s) < (eval t) then eval u else eval v
+
+annotated: 
+let rec eval : expr * float * float -> float = fun  (e,x,y)  ->  match e with 
+| VarX -> x
+| VarY -> y
+| Sine u -> sin (pi *. (eval u))
+| Cosine u ->  cos (pi *. (eval u))
+| Average (u,v) -> ((eval u) +. (eval v)) /. 2
+| Times (u,v) -> ((eval u) *. (eval v))
+| Thresh (s,t,u,v) -> if (eval s) < (eval t) then eval u else eval v
+
+annotated_fix:
+let rec eval : expr * float * float -> float = fun  (e,x,y)  ->  match e with 
+| VarX -> x
+| VarY -> y
+| Sine u -> pi *. eval (u,x,y) 
+| Cosine u ->  cos (pi *. eval (u,x,y))
+| Average (u,v) -> ((eval (u,x,y)) +. (eval (v,x,y))) /. 2.0
+| Times (u,v) -> ((eval (u,x,y)) *. (eval (v,x,y)))
+| Thresh (s,t,u,v) -> if (eval (s,x,y)) < (eval (t,x,y)) then eval (u,x,y) else eval (v,x,y)
+
+************** PROGRAM #89 ENDS HERE **************
+fix:
+
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x =  a in
+let base = ([], []) in
+let args = 0 in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x =  a in
+let base = ([], []) in
+let args = 0 in
+let (_, res) = List.fold_left f base args in
+res
+in 
+removeZero (add (padZero l1 l2))
+
+annotated_fix:
+
+
+************** PROGRAM #90 ENDS HERE **************
+fix:
+let rec digitalRoot n = 
+if n < 10 then n
+else digitalRoot (sumList (digitsOfInt n))
+
+bad: 
+let rec digitalRoot n = 
+if n < 10 then n
+else digitalRoot (sumList (digitalOfInt n))
+
+annotated: 
+let rec digitalRoot : int -> int = fun  n  ->  
+if n < 10 then n
+else digitalRoot (sumList (digitalOfInt n))
+
+annotated_fix:
+let rec digitalRoot : int -> int = fun  n  ->  
+if n < 10 then n
+else digitalRoot (sumList (digitsOfInt n))
+
+************** PROGRAM #91 ENDS HERE **************
+fix:
+let rec eval (e,x,y) = match e with 
+| VarX -> buildX
+| VarY -> buildY
+
+bad: 
+let rec eval (e,x,y) = match e with 
+| VarX -> buildX
+| VarY -> buildY
+| Sine e-> build(pi*e)
+
+annotated: 
+let rec eval (e,x,y) = match e with 
+| VarX -> buildX
+| VarY -> buildY
+| Sine e-> build(pi*e)
+
+annotated_fix:
+let rec eval (e,x,y) = match e with 
+| VarX -> buildX
+| VarY -> buildY
+
+************** PROGRAM #92 ENDS HERE **************
+fix:
+
+
+bad: 
+let rec eval (e,x,y) = match e with 
+| VarX -> buildX * 1.0
+| VarY -> buildY * 1.0
+
+annotated: 
+let rec eval (e,x,y) = match e with 
+| VarX -> buildX * 1.0
+| VarY -> buildY * 1.0
+
+annotated_fix:
+
+
+************** PROGRAM #93 ENDS HERE **************
+fix:
+
+
+bad: 
+let rec eval (e,x,y) =
+match e with
+| VarX -> x
+| VarY -> y
+| Sine e -> sin(pi*.eval(e,x,y))
+| Cosine e-> sin(pi*.eval(e,x,y))
+| Average (e1,e2) -> (eval(e1,x,y)+.eval(e2,x,y))/.2.0
+| Times (e1,e2) ->eval(e1,x,y)*.eval(e2,x,y)
+| Thresh (e1, e2, e3, e4) -> if eval(e1, x, y) < eval(e2, x, y) then eval(e3, x, y) else eval(e4, x, y)
+
+annotated: 
+let rec eval : expr * float * float -> float = fun  (e,x,y)  -> 
+match e with
+| VarX -> x
+| VarY -> y
+| Sine e -> sin(pi*.eval(e,x,y))
+| Cosine e-> sin(pi*.eval(e,x,y))
+| Average (e1,e2) -> (eval(e1,x,y)+.eval(e2,x,y))/.2.0
+| Times (e1,e2) ->eval(e1,x,y)*.eval(e2,x,y)
+| Thresh (e1, e2, e3, e4) -> if eval(e1, x, y) < eval(e2, x, y) then eval(e3, x, y) else eval(e4, x, y)
+
+annotated_fix:
+
+
+************** PROGRAM #94 ENDS HERE **************
+fix:
+
+
+bad: 
+let rec build (rand, depth) = match build with
+| buildX()
+| buildY()
+
+annotated: 
+let rec build: ((int * int -> int) * int) -> expr = fun  (rand, depth)  ->  match build with
+| buildX()
+| buildY()
+
+annotated_fix:
+
+
+************** PROGRAM #95 ENDS HERE **************
+fix:
+let digits n = digitsOfInt (abs n)
+
+bad: 
+let digitsOfInt n = 
+let rec lastDigit n accu = 
+if n <= 0 then accu
+else lastDigit (n/10) (n mod 10::accu) in
+match n with
+| _ -> lastDigit n []
+
+annotated: 
+let digitsOfInt : int -> int list = fun  n  ->  
+let rec lastDigit n accu = 
+if n <= 0 then accu
+else lastDigit (n/10) (n mod 10::accu) in
+match n with
+| _ -> lastDigit n []
+
+annotated_fix:
+let digits n = digitsOfInt (abs n)
+
+************** PROGRAM #96 ENDS HERE **************
+fix:
+let g x = truncate (1e6 *. cos (1e-6 *. float x)) in fixpoint (g, 0)
+
+bad: 
+let fixpoint (f,b) =
+if b != f b then
+wwhile(f, f b)
+else
+b
+
+annotated: 
+let fixpoint: ('a -> 'a) * 'a -> 'a = fun  (f,b)  -> 
+if b != f b then
+wwhile(f, f b)
+else
+b
+
+annotated_fix:
+let g x = truncate (1e6 *. cos (1e-6 *. float x)) in fixpoint (g, 0)
+
+************** PROGRAM #97 ENDS HERE **************
+fix:
+let stringOfList f l = List.map (sepConcat) (f l)
+
+bad: 
+let stringOfList f l = List.map (sepConcat "" l)
+
+annotated: 
+let stringOfList : ('a -> string) -> 'a list -> string = fun  f l  ->  List.map (sepConcat "" l)
+
+annotated_fix:
+let stringOfList : ('a -> string) -> 'a list -> string = fun  f l  ->  List.map (sepConcat) (f l)
+
+************** PROGRAM #98 ENDS HERE **************
+fix:
+
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = match x with 
+| (c,d::t) -> (c,a::t) in
+let base = (0, []) in
+let args =  match l1 with
+| h::t -> [ (h, List.rev l2 ) ] in
+let (_, res) = List.fold_left f base args in
+res
+in
+removeZero (add (padZero l1 l2))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = match x with 
+| (c,d::t) -> (c,a::t) in
+let base = (0, []) in
+let args =  match l1 with
+| h::t -> [ (h, List.rev l2 ) ] in
+let (_, res) = List.fold_left f base args in
+res
+in
+removeZero (add (padZero l1 l2))
+
+annotated_fix:
+
+
+************** PROGRAM #99 ENDS HERE **************
+fix:
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = match x with 
+| (d1,d2) -> (d1+d2, d1+d2::
+match a with 
+| (a1,a2)->a2) in
+let base = (0, []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in
+removeZero (add (padZero l1 l2))
+
+bad: 
+let bigAdd l1 l2 = 
+let add (l1, l2) = 
+let f a x = match x with 
+| (d1,d2)::ds -> d1+d2 in
+let base = (0, []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in
+removeZero (add (padZero l1 l2))
+
+annotated: 
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = match x with 
+| (d1,d2)::ds -> d1+d2 in
+let base = (0, []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in
+removeZero (add (padZero l1 l2))
+
+annotated_fix:
+let bigAdd : int list -> int list -> int list = fun  l1 l2  ->  
+let add (l1, l2) = 
+let f a x = match x with 
+| (d1,d2) -> (d1+d2, d1+d2::
+match a with 
+| (a1,a2)->a2) in
+let base = (0, []) in
+let args = List.rev (List.combine l1 l2) in
+let (_, res) = List.fold_left f base args in
+res
+in
+removeZero (add (padZero l1 l2))
+
+************** PROGRAM #100 ENDS HERE **************
