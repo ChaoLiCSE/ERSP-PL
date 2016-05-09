@@ -3,14 +3,8 @@ import os
 import json
 
 """
-1. loop through all files from sp14
-2. build dict for each file {hw: #, problem: p, bad: [], message: [], fix: f}
-3. flag_end to look for a 'fix': False for evals, True for timer
-"""
-
-"""
 updates from list_of_errors:
-1. use 'min' field instead of 'in'
+1. use 'min' field as well as 'in'
 2. fix wierd pairing
 
 NOTE: used 'in' for fix but 'min' for bad!!
@@ -45,6 +39,7 @@ def build_dict(hw_num):
   new_dict['hw'] = hw_num
   new_dict['problem'] = ''
   new_dict['bad'] = []
+  new_dict['bad_in'] = []
   new_dict['fix'] = []
   new_dict['message'] = []
   return new_dict
@@ -85,6 +80,7 @@ for i in os.listdir(target):
         problem = find_label(hw_num, item)
         summary['problem'] = problem
         summary['bad'].append(item['ocaml'][0]['min'])
+        summary['bad_in'].append(item['ocaml'][0]['in'])
         summary['message'].append(item['ocaml'][0]['out'])
         count_bads += 1
         index += 1
@@ -107,6 +103,7 @@ for i in os.listdir(target):
 
         # append bad programs
         summary['bad'].append(item['ocaml'][0]['min'])
+        summary['bad_in'].append(item['ocaml'][0]['in'])
         summary['message'].append(item['ocaml'][0]['out'])
         count_bads += 1
         index += 1
