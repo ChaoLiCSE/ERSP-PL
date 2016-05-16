@@ -1,22 +1,6 @@
-'''
-Modified from:
-Simple Diff for Python version 1.0
-
-Annotate two versions of a list with the values that have been
-changed between the versions, similar to unix's `diff` but with
-a dead-simple Python interface.
-
-(C) Paul Butler 2008-2012 <http://www.paulbutler.org/>
-May be used and distributed under the zlib/libpng license
-<http://www.opensource.org/licenses/zlib-license.php>
-
-Add the function to differ at which index does the 
-words are different from each other.
-'''
-
-__all__ = ['diff', 'string_diff', 'html_diff']
-__version__ = '1.0'
-
+import re
+import subprocess
+import os
 
 def diff(old, new, opos, npos):
 
@@ -98,9 +82,11 @@ def diff(old, new, opos, npos):
         # If no common substring is found, we return an insert and delete...
 
         #return (old and [('-', old, [opos+sub_start_old, opos+sub_start_old+len(old)-1])] or []) + (new and [('+', new, [opos+sub_start_old,opos+sub_start_old+len(new)-1] )] or [])
-        return (old and [('-', old, [opos+sub_start_old, opos+sub_start_old+len(old)-1])] or []) + (new and [('+', new, [npos+sub_start_new,npos+sub_start_new+len(new)-1] )] or [])
- 
-
+        if(len(old) != 0):
+            return (old and [('-', old, [opos+sub_start_old, opos+sub_start_old+len(old)-1])] or []) + (new and [('+', new, [opos+sub_start_old,opos+sub_start_old+len(old)-1] )] or [])
+        
+        return (old and [('-', old, [opos+sub_start_old, opos+sub_start_old+len(old)-1])] or []) + (new and [('+', new, [opos+sub_start_old,opos+sub_start_old+len(old)] )] or [])
+   
 
     else:
         # ...otherwise, the common substring is unchanged and we recursively
@@ -147,38 +133,46 @@ def string_diff(old, new):
     '''
     return diff(old.split(), new.split(),0,0)
 
-#the function to expand the length of the token span
-def expand(end, pos):
 
-    if(pos[0]>0 and (pos[1] == end)):
-        epos = [pos[0]-1, pos[1]]
+dir = os.path.abspath(__file__ + '/../../')
+#target = os.path.join(dir, 'annotated_6509.json')
+target = os.path.join(dir, 'list_of_errors_ver2.json')
+target2 = os.path.join(dir, 'problems.txt')
+count = 0
+no_fix = 0
+
+with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w') as out:
     
-    elif(pos[0]>0 and (pos[1] != end)):
-        epos = [pos[0]-1, pos[1]+1]
-    elif((pos[0] == 0) and (pos[1] == end)):
-        epos = pos
-    else:
-        epos = [0, pos[1]+1]
 
-    print("this is epos:")
-    print(epos)
-    return epos
+    for line in myfile:
 
-def find_new_pos(bad, fix, pos):
+      item = eval(line)
+      #prog = (item["bad"][-1] + item["fix"][-1])
 
-    s = string_diff(bad, fix)
+      if item["fix"]:
 
-    for i in s:
-        if(pos_it == pos[0]):
-            break
+        #prog = (item["bad"][-1] + item["fix"][-1])
+        #print(prog)
+        #error_output = subprocess.run(["ocaml"], input = prog + ';;', 
+        #           stdout=subprocess.PIPE,universal_newlines = True)
+        #print(error_output)
+        print("fix")
+        print(item["fix"][-1])
 
-        if(i[0] == '+'):
-            new_pos_start = new_pos_start + (i[2][1] - i[2][0] + 1)
+      else:
+        no_fix = no_fix+1
+        print ("not exist fix")
 
-        if(i[0] == '='):
-            new_pos_start = new_pos_start + (i[2][1] - i[2][0] + 1)
+      
+      for i,mi in zip(item["bad_in"],item["bad"]):
+      	print('in:')
+      	print(i)
 
-#print(string_diff('the quick red fox', 'the brown fox and the dog'))          
-#print(string_diff('the quick red fox', 'quick red fox and the dog'))          
-#print(string_diff('world quick red ', 'Hi hello world quick red'))          
-print(expand(5,[0,5]))
+      	print('min:')
+      	print(mi)
+      	#print(string_diff(i+';;',mi))
+      
+      count = count +1
+      
+      if(count > 20):
+      	break

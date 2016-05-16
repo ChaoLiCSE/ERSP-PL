@@ -102,7 +102,10 @@ def diff(old, new, opos, npos):
     if sub_length == 0:
         # If no common substring is found, we return an insert and delete...
 
+        #return (old and [('-', old, [opos+sub_start_old, opos+sub_start_old+len(old)-1])] or []) + (new and [('+', new, [opos+sub_start_old,opos+sub_start_old+len(new)-1] )] or [])
         return (old and [('-', old, [opos+sub_start_old, opos+sub_start_old+len(old)-1])] or []) + (new and [('+', new, [npos+sub_start_new,npos+sub_start_new+len(new)-1] )] or [])
+
+
     else:
         # ...otherwise, the common substring is unchanged and we recursively
         # diff the text before and after that substring
@@ -116,6 +119,8 @@ def diff(old, new, opos, npos):
                 new[sub_start_new + sub_length : ],
                 opos+ sub_start_old+sub_length,
                 npos+sub_length+sub_start_new)
+
+
 
 
 def string_diff(old, new):
@@ -144,7 +149,6 @@ def string_diff(old, new):
         ('=', ['fox'], [3, 3])]
 
     '''
-    #print(diff(old.split(), new.split(),0,0))
     return diff(old.split(), new.split(),0,0)
 
        
@@ -178,44 +182,64 @@ def get_pos(prog):
 
 def err_judge(bad, fix, pos):
     
-    
+    '''
     print('bad:')
     print (bad)
     print('fix:')
     print (fix)
     print (pos)
-    
-    
+    '''
+    end = len(bad.split())-1
+    new_pos_start = 0
+    pos_it = 0
 
     #print(pos)
 	#get the key word to judge whether it is changed
-    to_judge = bad[pos[0]: pos[1]]
+    to_judge = bad[(pos[0]): (pos[1])]
 
     s = string_diff(bad, fix)
+
+    #find out the new string position
+    for i in s:
+        if(pos_it == pos[0]):
+            break
+
+        if(i[0] == '+'):
+            new_pos_start = new_pos_start + (i[2][1] - i[2][0] + 1)
+
+        if(i[0] == '='):
+            new_pos_start = new_pos_start + (i[2][1] - i[2][0] + 1)
+
+    #the expanded position maped to the old position
     print(s)
+
+
+
+
+    
     for i in s:
       
-      
+      if (i[0] == '=' and epos[0] >= i[2][0] and epos[1] <= i[2][1] and (epos[1]-epos[0] >=2)):
+        print('incorrect location1')
+        return 0
 
       if (i[0] == '-' and 
-        ((pos[0] <= i[2][0] and pos[1] >= i[2][0] ) or 
-          (pos[0] <= i[2][1] and pos[1] >= i[2][1]) or
-          (pos[0] >= i[2][0] and pos[1] <= i[2][1]))):
+        ((epos[0] <= i[2][0] and epos[1] >= i[2][0] ) or 
+          (epos[0] <= i[2][1] and epos[1] >= i[2][1]) or
+          (epos[0] >= i[2][0] and epos[1] <= i[2][1]))):
         
-        #print('correct location')
+        print('correct location2')
         #print(i)
         return 1
 
-      if(i[2][0] > pos[1] and i[2][1] > pos[1]):
-        return 0
-    #print('incorrect location')
+    print('incorrect location4')
     return 0
 
 
 
-dir = os.path.abspath(__file__ + '/../../../')
-#target = os.path.join(dir, 'annotated_6509.json')
-target = os.path.join(dir, 'check.json')
+dir = os.path.abspath(__file__ + '/../../')
+target = os.path.join(dir, 'annotated_6507.json')
+#target = os.path.join(dir, 'check.json')
 
 target2 = os.path.join(dir, 'problems.txt')
 
@@ -225,7 +249,7 @@ prog = "let rec digitsOfInt n = match n with | ( n mod 10 ) + digitsOfInt ( (fai
 for i in get_pos (prog):
     print (i)
 '''
-
+'''
 total = 0
 prev_corr = 0
 anno_corr = 0
@@ -238,6 +262,7 @@ only_pre_corr = 0
 
 with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w') as out:
     for line in myfile:
+    
 
       item = eval(line)
       #for i in range(len(item["bad"])):
@@ -245,7 +270,7 @@ with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w
 
       pos = get_pos(item["bad"])
       retVal = err_judge(item["bad"],item["fix"],pos)
-        
+      #print(retVal)
 
       if(retVal == -1):
           print('cannot judge at 1')
@@ -293,4 +318,19 @@ myfile.close()
 s = 'in the total of ' + str(total) + ' programs, both correct is: ' + str(both_correct) + 'only annotated correct is: ' + str(only_anno_corr) + 'only pre correct is: ' + str(only_pre_corr) + 'both wrong is: '+str(both_wrong)
 
 print (s)
+'''
+
+'''
+
+print(err_judge('quick red ', 'Hi hello world quick red', [1,1]))    
+print(err_judge('world quick red ', 'Hi hello world quick red', [1,1]))     --> 0
+
+
+[-2,2]
+'''
+#print(err_judge('quick red ', 'Hi hello world quick red', [1,1]))    
+#print(err_judge(' quick red fox dog', 'Hi quick fox head paint red', [1,1]))          
+#print(err_judge('a b c d e', 'p m n p d e q', [1,1]))
+print(err_judge('quick red ', 'Hi hello world quick red', [1,1])) 
+
 
