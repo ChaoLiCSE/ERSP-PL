@@ -14,7 +14,7 @@ NOTE: used 'in' for fix but 'min' for bad!!
 
 dir = os.path.abspath(__file__ + '/../')
 target = os.path.join(dir, 'sp14-concise')
-output3 = os.path.join(dir, 'list_of_errors_ver2.json')
+output3 = os.path.join(dir, 'list_of_errors_ver3.json')
 
 problems_hw1 = ['palindrome', 'listReverse', 'digitalRoot', 'additivePersistence', 'digitsOfInt', 'sumList']
 problems_hw2 = ['build', 'eval', 'exprToString', 'expr', 'fixpoint', 'wwhile', 'removeDuplicates', 'assoc']
@@ -55,7 +55,6 @@ def build_dict(hw_num, problem):
   new_dict['problem'] = problem
   new_dict['bad'] = []
   new_dict['fix'] = []
-  new_dict['message'] = []
   return new_dict
 
 ### MAIN
@@ -85,53 +84,49 @@ for i in os.listdir(target):
 
       index = 0
 
+      # find the first bad program
+      while index < len(events) and not events[index]['ocaml'][0]['out']:
+        index += 1
+        continue
+
+      # find all trailing bad programs until a fix
       while index < len(events):
 
-        # find the first bad program
-        while index < len(events) and not events[index]['ocaml'][0]['min']:
+        # bad programs
+        if events[index]['ocaml'][0]['out']:
+          summary['bad'].append(events[index]['ocaml'][0]['min'])
+          count_bads += 1
           index += 1
           continue
 
-        while index < len(events):
-          # find all trailing bad programs until a fix
-          while index < len(events):
+        # true fix, write to file
+        elif not type_annotate.annotate_and_compile(events[index], label, hw_num):
+          summary['fix'].append(events[index]['ocaml'][0]['min'])
+          index += 1
 
-            # bad programs
-            if events[index]['ocaml'][0]['out']:
-              summary['bad'].append(events[index]['ocaml'][0]['min'])
-              summary['message'].append(events[index]['ocaml'][0]['out'])
-              count_bads += 1
-              index += 1
+          # write to file, ignore empty dicts
+          json.dump(summary, of3)
+          of3.write('\n')
+          count_groups += 1
 
-            # true fix, write to file
-            elif not type_annotate.annotate_and_compile(events[index], label, hw_num):
-              summary['fix'].append(events[index]['ocaml'][0]['min'])
-              index += 1
+        # skip false fix
+        else:
+          index += 1
+          continue
 
-              # write to file, ignore empty dicts
-              json.dump(summary, of3)
-              of3.write('\n')
-              count_groups += 1
+      # reach end of the list but finds no fix
+      if index >= len(events) and not summary['fix']:
+        summary['fix'].append('')
+        count_no_fix += 1
 
-              break
+        # write to file
+        json.dump(summary, of3)
+        of3.write('\n')
+        count_groups += 1
+        break
 
-            # skip false fix
-            else:
-              continue
-
-          # reach end of the list but finds no fix
-          if index >= len(events) and not summary['fix']:
-            summary['fix'].append('')
-            count_no_fix += 1
-
-            # write to file
-            json.dump(summary, of3)
-            of3.write('\n')
-            count_groups += 1
-            break
-
-          # list is not end, continue
-          summary = build_dict(hw_num, label)
+      # list is not end, continue
+      summary = build_dict(hw_num, label)
 
 
 of3.close()
