@@ -87,7 +87,7 @@ def find_annotation_with_label(hw_num, label):
 def annotate_and_compile(indice, label, hw_num):
   annotation = find_annotation_with_label(indice, hw_num)
   annotated_prog = add_annotation(annotation, label, indice['ocaml'][0]['min'])
-  error_output = subprocess.run(["ocaml"], input = indice['ocaml'][0]['min'], 
+  error_output = subprocess.run(["ocaml"], input = annotated_prog, 
                                 stdout=subprocess.PIPE,universal_newlines = True)
   if "rror" in error_output.stdout:
     print(error_output.stdout)
