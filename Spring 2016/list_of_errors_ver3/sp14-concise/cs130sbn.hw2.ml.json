@@ -1,0 +1,1 @@
+{"event": "eval", "ocaml": [{"in": "let rec assoc (d,k,l) = match l with\n| (ki, vi)::t -> if ki = k then vi else assoc (d,k,t)\n| _ -> d", "out": "", "min": "\nlet rec assoc (d,k,l) =\n  match l with\n  | (ki,vi)::t -> if ki = k then vi else assoc (d, k, t)\n  | _ -> d;;\n", "type": ""}]}

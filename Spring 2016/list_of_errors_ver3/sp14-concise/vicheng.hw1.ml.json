@@ -1,0 +1,1 @@
+{"event": "eval", "ocaml": [{"in": "let rec sumList xs = match xs with \n| [] -> 0\n| h::t -> h + sumList t", "out": "", "min": "\nlet rec sumList xs = match xs with | [] -> 0 | h::t -> h + (sumList t);;\n", "type": ""}]}
