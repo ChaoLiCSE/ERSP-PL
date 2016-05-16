@@ -1,5 +1,5 @@
-{"event": "eval", "ocaml": [{"in": "let rec sumList xs = \nmatch xs with \n| [] -> 0\n| x :: tail -> x + sumList tail", "out": "", "min": "\nlet rec sumList xs = match xs with | [] -> 0 | x::tail -> x + (sumList tail);;\n", "type": ""}]}
-{"event": "eval", "ocaml": [{"in": "let rec sumList xs = \nmatch xs with \n| [] -> 0\n| x :: tail -> x + sumList tail", "out": "", "min": "\nlet rec sumList xs = match xs with | [] -> 0 | x::tail -> x + (sumList tail);;\n", "type": ""}]}
-{"event": "eval", "ocaml": [{"in": "let rec sumList xs = \nmatch xs with \n| [] -> 0\n| x :: tail -> x + sumList tail", "out": "", "min": "\nlet rec sumList xs = match xs with | [] -> 0 | x::tail -> x + (sumList tail);;\n", "type": ""}]}
-{"event": "eval", "ocaml": [{"in": "let rec sumList xs = \nmatch xs with \n| [] -> 0\n| x :: tail -> x + sumList tail", "out": "", "min": "\nlet rec sumList xs = match xs with | [] -> 0 | x::tail -> x + (sumList tail);;\n", "type": ""}]}
-{"event": "eval", "ocaml": [{"in": "let rec sumList xs = \nmatch xs with \n| [] -> 0\n| x :: tail -> x + sumList tail", "out": "", "min": "\nlet rec sumList xs = match xs with | [] -> 0 | x::tail -> x + (sumList tail);;\n", "type": ""}]}
+{"event": "eval", "ocaml": [{"type": "", "out": "", "min": "", "in": "let rec sumList xs = \nmatch xs with \n| [] -> 0\n| x :: tail -> x + sumList tail"}]}
+{"event": "eval", "ocaml": [{"type": "", "out": "", "min": "", "in": "let rec sumList xs = \nmatch xs with \n| [] -> 0\n| x :: tail -> x + sumList tail"}]}
+{"event": "eval", "ocaml": [{"type": "", "out": "", "min": "", "in": "let rec sumList xs = \nmatch xs with \n| [] -> 0\n| x :: tail -> x + sumList tail"}]}
+{"event": "eval", "ocaml": [{"type": "", "out": "", "min": "", "in": "let rec sumList xs = \nmatch xs with \n| [] -> 0\n| x :: tail -> x + sumList tail"}]}
+{"event": "eval", "ocaml": [{"type": "", "out": "", "min": "", "in": "let rec sumList xs = \nmatch xs with \n| [] -> 0\n| x :: tail -> x + sumList tail"}]}

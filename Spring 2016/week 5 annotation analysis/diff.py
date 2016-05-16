@@ -98,11 +98,9 @@ def diff(old, new, opos, npos):
         # If no common substring is found, we return an insert and delete...
 
         #return (old and [('-', old, [opos+sub_start_old, opos+sub_start_old+len(old)-1])] or []) + (new and [('+', new, [opos+sub_start_old,opos+sub_start_old+len(new)-1] )] or [])
-        if(len(old) != 0):
-            return (old and [('-', old, [opos+sub_start_old, opos+sub_start_old+len(old)-1])] or []) + (new and [('+', new, [opos+sub_start_old,opos+sub_start_old+len(old)-1] )] or [])
-        
-        return (old and [('-', old, [opos+sub_start_old, opos+sub_start_old+len(old)-1])] or []) + (new and [('+', new, [opos+sub_start_old,opos+sub_start_old+len(old)] )] or [])
-   
+        return (old and [('-', old, [opos+sub_start_old, opos+sub_start_old+len(old)-1])] or []) + (new and [('+', new, [npos+sub_start_new,npos+sub_start_new+len(new)-1] )] or [])
+ 
+
 
     else:
         # ...otherwise, the common substring is unchanged and we recursively
@@ -149,6 +147,38 @@ def string_diff(old, new):
     '''
     return diff(old.split(), new.split(),0,0)
 
+#the function to expand the length of the token span
+def expand(end, pos):
 
-print(string_diff('The me quick red', 'Hi quick fox head paint red'))          
+    if(pos[0]>0 and (pos[1] == end)):
+        epos = [pos[0]-1, pos[1]]
+    
+    elif(pos[0]>0 and (pos[1] != end)):
+        epos = [pos[0]-1, pos[1]+1]
+    elif((pos[0] == 0) and (pos[1] == end)):
+        epos = pos
+    else:
+        epos = [0, pos[1]+1]
 
+    print("this is epos:")
+    print(epos)
+    return epos
+
+def find_new_pos(bad, fix, pos):
+
+    s = string_diff(bad, fix)
+
+    for i in s:
+        if(pos_it == pos[0]):
+            break
+
+        if(i[0] == '+'):
+            new_pos_start = new_pos_start + (i[2][1] - i[2][0] + 1)
+
+        if(i[0] == '='):
+            new_pos_start = new_pos_start + (i[2][1] - i[2][0] + 1)
+
+#print(string_diff('the quick red fox', 'the brown fox and the dog'))          
+#print(string_diff('the quick red fox', 'quick red fox and the dog'))          
+#print(string_diff('world quick red ', 'Hi hello world quick red'))          
+print(expand(5,[0,5]))
