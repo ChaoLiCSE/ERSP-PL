@@ -167,18 +167,47 @@ def expand(end, pos):
 def find_new_pos(bad, fix, pos):
 
     s = string_diff(bad, fix)
-
+    new_pos_start = 0
+    old_pos_start = 0
     for i in s:
-        if(pos_it == pos[0]):
-            break
+
 
         if(i[0] == '+'):
+
             new_pos_start = new_pos_start + (i[2][1] - i[2][0] + 1)
+            if(old_pos_start >= pos[0]):
+
+                new_pos_start = new_pos_start-(old_pos_start- pos[0])
+                #new_pos_start = pos[0]-old_pos_start+new_pos_start
+                break
+
 
         if(i[0] == '='):
             new_pos_start = new_pos_start + (i[2][1] - i[2][0] + 1)
+            old_pos_start = old_pos_start + (i[2][1] - i[2][0] + 1)
+
+            if(old_pos_start >= pos[0]):
+                new_pos_start = new_pos_start -1
+                old_pos_start = old_pos_start -1
+                new_pos_start = new_pos_start-(old_pos_start- pos[0])
+                break
+
+
+        if(i[0] == '-'):
+
+            new_pos_start = new_pos_start - (i[2][1] - i[2][0] + 1)
+            if(old_pos_start >= pos[0]):
+                new_pos_start = new_pos_start-(old_pos_start- pos[0])
+                #new_pos_start = pos[0]-old_pos_start+new_pos_start
+                break
+      
+    return [new_pos_start, new_pos_start+pos[1] - pos[0]]
+
 
 #print(string_diff('the quick red fox', 'the brown fox and the dog'))          
 #print(string_diff('the quick red fox', 'quick red fox and the dog'))          
 #print(string_diff('world quick red ', 'Hi hello world quick red'))          
-print(expand(5,[0,5]))
+#print(expand(5,[0,5]))
+#print(find_new_pos('world quick red ', 'Hi hello world quick red',[1,1]))
+#print(find_new_pos('the quick red fox', 'quick red fox and the dog',[1,1]))
+print(find_new_pos('world quick red ', 'Hi hello world quick BLUE red',[1,2]))
