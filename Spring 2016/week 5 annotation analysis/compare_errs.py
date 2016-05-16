@@ -179,6 +179,61 @@ def get_pos(prog):
     #print([start_pos,end_pos])
     return([start_pos,end_pos])
 
+#the function to expand the length of the token span
+def expand(end, pos):
+
+    if(pos[0]>0 and (pos[1] == end)):
+        epos = [pos[0]-1, pos[1]]
+    
+    elif(pos[0]>0 and (pos[1] != end)):
+        epos = [pos[0]-1, pos[1]+1]
+    elif((pos[0] == 0) and (pos[1] == end)):
+        epos = pos
+    else:
+        epos = [0, pos[1]+1]
+
+    print("this is epos:")
+    print(epos)
+    return epos
+
+def find_new_pos(bad, fix, pos):
+
+    s = string_diff(bad, fix)
+    new_pos_start = 0
+    old_pos_start = 0
+    for i in s:
+
+
+        if(i[0] == '+'):
+
+            new_pos_start = new_pos_start + (i[2][1] - i[2][0] + 1)
+            if(old_pos_start >= pos[0]):
+
+                new_pos_start = new_pos_start-(old_pos_start- pos[0])
+                #new_pos_start = pos[0]-old_pos_start+new_pos_start
+                break
+
+
+        if(i[0] == '='):
+            new_pos_start = new_pos_start + (i[2][1] - i[2][0] + 1)
+            old_pos_start = old_pos_start + (i[2][1] - i[2][0] + 1)
+
+            if(old_pos_start >= pos[0]):
+                new_pos_start = new_pos_start -1
+                old_pos_start = old_pos_start -1
+                new_pos_start = new_pos_start-(old_pos_start- pos[0])
+                break
+
+
+        if(i[0] == '-'):
+
+            new_pos_start = new_pos_start - (i[2][1] - i[2][0] + 1)
+            if(old_pos_start >= pos[0]):
+                new_pos_start = new_pos_start-(old_pos_start- pos[0])
+                #new_pos_start = pos[0]-old_pos_start+new_pos_start
+                break
+      
+    return [new_pos_start, new_pos_start+pos[1] - pos[0]]
 
 def err_judge(bad, fix, pos):
     
@@ -195,40 +250,34 @@ def err_judge(bad, fix, pos):
 
     #print(pos)
 	#get the key word to judge whether it is changed
-    to_judge = bad[(pos[0]): (pos[1])]
+    ex_pos = expand(len(bad), pos)
+    new_pos = find_new_pos(bad, fix, pos)
+    ex_new_pos = expand(len(bad),new_pos)
 
-    s = string_diff(bad, fix)
-
-    #find out the new string position
-    for i in s:
-        if(pos_it == pos[0]):
-            break
-
-        if(i[0] == '+'):
-            new_pos_start = new_pos_start + (i[2][1] - i[2][0] + 1)
-
-        if(i[0] == '='):
-            new_pos_start = new_pos_start + (i[2][1] - i[2][0] + 1)
-
-    #the expanded position maped to the old position
-    print(s)
-
-
-
+    s= string_diff(bad,fix)
 
     
     for i in s:
       
-      if (i[0] == '=' and epos[0] >= i[2][0] and epos[1] <= i[2][1] and (epos[1]-epos[0] >=2)):
+      if (i[0] == '=' and ex_pos[0] >= i[2][0] and ex_pos[1] <= i[2][1] and (ex_pos[1]-ex_pos[0] >=2)):
         print('incorrect location1')
         return 0
 
       if (i[0] == '-' and 
-        ((epos[0] <= i[2][0] and epos[1] >= i[2][0] ) or 
-          (epos[0] <= i[2][1] and epos[1] >= i[2][1]) or
-          (epos[0] >= i[2][0] and epos[1] <= i[2][1]))):
+        ((ex_pos[0] <= i[2][0] and ex_pos[1] >= i[2][0] ) or 
+          (ex_pos[0] <= i[2][1] and ex_pos[1] >= i[2][1]) or
+          (ex_pos[0] >= i[2][0] and ex_pos[1] <= i[2][1]))):
         
         print('correct location2')
+        #print(i)
+        return 1
+
+      if(i[0] == '+' and
+        ((ex_new_pos[0] <= i[2][0] and ex_new_pos[1] >= i[2][0] ) or 
+          (ex_new_pos[0] <= i[2][1] and ex_new_pos[1] >= i[2][1]) or
+          (ex_new_pos[0] >= i[2][0] and ex_new_pos[1] <= i[2][1]))):
+        
+        print('correct location3')
         #print(i)
         return 1
 
@@ -320,17 +369,26 @@ s = 'in the total of ' + str(total) + ' programs, both correct is: ' + str(both_
 print (s)
 '''
 
+
 '''
+#print(err_judge('quick red ', 'Hi hello world quick red', [0,0]))
+#--->1
 
-print(err_judge('quick red ', 'Hi hello world quick red', [1,1]))    
-print(err_judge('world quick red ', 'Hi hello world quick red', [1,1]))     --> 0
+#print(err_judge('world quick red ', 'Hi hello world quick red', [1,1]))
+#--->0
 
+#print(err_judge('quick red ', 'Hi hello world quick red', [1,1]))
+#--->0    
 
-[-2,2]
-'''
-#print(err_judge('quick red ', 'Hi hello world quick red', [1,1]))    
 #print(err_judge(' quick red fox dog', 'Hi quick fox head paint red', [1,1]))          
-#print(err_judge('a b c d e', 'p m n p d e q', [1,1]))
-print(err_judge('quick red ', 'Hi hello world quick red', [1,1])) 
+#--->1
 
+#print(err_judge('a b c m d e', 'p m n c m d e q', [3,4]))
+#--->0
 
+#print(err_judge('quick red ', 'Hi hello world quick red', [1,1])) 
+#--->0
+
+#print(err_judge('world quick red ', 'Hi hello world quick red', [1,1]))
+#--->0
+'''

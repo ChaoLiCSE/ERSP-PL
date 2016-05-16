@@ -14,7 +14,7 @@ NOTE: used 'in' for fix but 'min' for bad!!
 
 dir = os.path.abspath(__file__ + '/../')
 target = os.path.join(dir, 'sp14-concise')
-output3 = os.path.join(dir, 'list_of_errors_ver2.json')
+output3 = os.path.join(dir, 'list_of_errors_ver3.json')
 
 problems_hw1 = ['palindrome', 'listReverse', 'digitalRoot', 'additivePersistence', 'digitsOfInt', 'sumList']
 problems_hw2 = ['build', 'eval', 'exprToString', 'expr', 'fixpoint', 'wwhile', 'removeDuplicates', 'assoc']
