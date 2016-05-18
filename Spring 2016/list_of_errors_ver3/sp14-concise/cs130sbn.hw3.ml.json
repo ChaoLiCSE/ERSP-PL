@@ -1,2 +1,2 @@
-{"event": "eval", "ocaml": [{"type": "", "out": "", "min": "", "in": "let sqsum xs = \nlet f a x = a + x * x in\nlet base = 0 in\nList.fold_left f base xs"}]}
-{"event": "eval", "ocaml": [{"type": "", "out": "", "min": "", "in": "let sqsum xs = \nlet f a x = a + x * x in\nlet base = 0 in\nList.fold_left f base xs"}]}
+{"event": "eval", "ocaml": [{"type": "", "in": "let sqsum xs = \nlet f a x = a + x * x in\nlet base = 0 in\nList.fold_left f base xs", "min": "\nlet sqsum xs =\n  let f a x = a + (x * x) in let base = 0 in List.fold_left f base xs;;\n", "out": ""}]}
+{"event": "eval", "ocaml": [{"type": "", "in": "let sqsum xs = \nlet f a x = a + x * x in\nlet base = 0 in\nList.fold_left f base xs", "min": "\nlet sqsum xs =\n  let f a x = a + (x * x) in let base = 0 in List.fold_left f base xs;;\n", "out": ""}]}

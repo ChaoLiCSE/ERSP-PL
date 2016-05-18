@@ -1,0 +1,1 @@
+{"annotated": "let rec additivePersistence : int -> int = fun  n  ->  \nlet (l, r) = additivePersAndRoot(abs(n)) in\nl", "fix": "", "annotated_fix": "", "bad": "let rec additivePersistence n = \nlet (l, r) = additivePersAndRoot(abs(n)) in\nl"}

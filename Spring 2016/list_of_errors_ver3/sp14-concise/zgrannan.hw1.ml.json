@@ -1,5 +1,5 @@
-{"event": "eval", "ocaml": [{"type": "", "out": "", "min": "", "in": "let rec sumList = List.fold_left (+) 0"}]}
-{"event": "eval", "ocaml": [{"type": "", "out": "", "min": "", "in": "let rec sumList = foldl (+) 0"}]}
-{"event": "eval", "ocaml": [{"type": "", "out": "", "min": "", "in": "let rec sumList = foldl (+) 0"}]}
-{"event": "eval", "ocaml": [{"type": "", "out": "", "min": "", "in": "let rec sumList = foldl (+) 0"}]}
-{"event": "eval", "ocaml": [{"type": "", "out": "", "min": "", "in": "let rec sumList = foldl (+) 0"}]}
+{"event": "eval", "ocaml": [{"type": "", "in": "let rec sumList = List.fold_left (+) 0", "min": "\nlet rec sumList = List.fold_left (+) 0;;\n", "out": ""}]}
+{"event": "eval", "ocaml": [{"type": "", "in": "let rec sumList = foldl (+) 0", "min": "\nlet rec foldl f s l =\n  match l with | [] -> s | head::tail -> foldl f (f head s) tail;;\n\nlet rec sumList = foldl (+) 0;;\n", "out": ""}]}
+{"event": "eval", "ocaml": [{"type": "", "in": "let rec sumList = foldl (+) 0", "min": "\nlet rec foldl f s l =\n  match l with | [] -> s | head::tail -> foldl f (f head s) tail;;\n\nlet rec sumList = foldl (+) 0;;\n", "out": ""}]}
+{"event": "eval", "ocaml": [{"type": "", "in": "let rec sumList = foldl (+) 0", "min": "\nlet rec foldl f s l =\n  match l with | [] -> s | head::tail -> foldl f (f head s) tail;;\n\nlet rec sumList = foldl (+) 0;;\n", "out": ""}]}
+{"event": "eval", "ocaml": [{"type": "", "in": "let rec sumList = foldl (+) 0", "min": "\nlet rec foldl f s l =\n  match l with | [] -> s | head::tail -> foldl f (f head s) tail;;\n\nlet rec sumList = foldl (+) 0;;\n", "out": ""}]}

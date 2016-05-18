@@ -181,7 +181,8 @@ def get_pos(prog):
 
 #the function to expand the length of the token span
 def expand(end, pos):
-
+    #print('this is pos')
+    #print (pos)
     if(pos[0]>0 and (pos[1] == end)):
         epos = [pos[0]-1, pos[1]]
     
@@ -192,8 +193,8 @@ def expand(end, pos):
     else:
         epos = [0, pos[1]+1]
 
-    print("this is epos:")
-    print(epos)
+    #print("this is epos:")
+    #print(epos)
     return epos
 
 def find_new_pos(bad, fix, pos):
@@ -226,13 +227,22 @@ def find_new_pos(bad, fix, pos):
 
 
         if(i[0] == '-'):
+            
+            if((pos[0] <= i[2][0] and pos[1] >= i[2][0] ) or 
+          (pos[0] <= i[2][1] and pos[1] >= i[2][1]) or
+          (pos[0] >= i[2][0] and pos[1] <= i[2][1])):
+               return [-1,-1]
 
-            new_pos_start = new_pos_start - (i[2][1] - i[2][0] + 1)
+            #new_pos_start = new_pos_start - (i[2][1] - i[2][0] + 1)
             if(old_pos_start >= pos[0]):
                 new_pos_start = new_pos_start-(old_pos_start- pos[0])
                 #new_pos_start = pos[0]-old_pos_start+new_pos_start
                 break
-      
+    '''
+    print('old comp')
+    print(pos)
+    print([new_pos_start, new_pos_start+pos[1] - pos[0]])
+    '''
     return [new_pos_start, new_pos_start+pos[1] - pos[0]]
 
 def err_judge(bad, fix, pos):
@@ -244,6 +254,9 @@ def err_judge(bad, fix, pos):
     print (fix)
     print (pos)
     '''
+
+
+
     end = len(bad.split())-1
     new_pos_start = 0
     pos_it = 0
@@ -253,6 +266,18 @@ def err_judge(bad, fix, pos):
     ex_pos = expand(len(bad), pos)
     new_pos = find_new_pos(bad, fix, pos)
     ex_new_pos = expand(len(bad),new_pos)
+
+
+
+    print('poses:')
+    print(pos)
+    print(ex_pos)
+    print(new_pos)
+    print(ex_new_pos)
+
+    if(new_pos == [-1,-1]):
+        print('-1-1 correct')
+        return 1
 
     s= string_diff(bad,fix)
 
@@ -287,18 +312,18 @@ def err_judge(bad, fix, pos):
 
 
 dir = os.path.abspath(__file__ + '/../../')
-target = os.path.join(dir, 'annotated_6507.json')
+target = os.path.join(dir, 'list_of_errors_ver3.json')
 #target = os.path.join(dir, 'check.json')
 
 target2 = os.path.join(dir, 'problems.txt')
 
-
 '''
 prog = "let rec digitsOfInt n = match n with | ( n mod 10 ) + digitsOfInt ( (failwith "") 10 );;"
+
 for i in get_pos (prog):
     print (i)
-'''
-'''
+
+
 total = 0
 prev_corr = 0
 anno_corr = 0
@@ -308,69 +333,80 @@ both_correct = 0
 both_wrong = 0
 only_anno_corr = 0
 only_pre_corr = 0
+no_fix = 0
 
 with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w') as out:
     for line in myfile:
     
-
       item = eval(line)
-      #for i in range(len(item["bad"])):
-      #print(item["bad"])
+      for i in item["bad"]:
+          print(i)
+          print(item["fix"][0])
 
-      pos = get_pos(item["bad"])
-      retVal = err_judge(item["bad"],item["fix"],pos)
-      #print(retVal)
+          if(item["fix"][0] == ""):
+            print('no fix')
+            no_fix = no_fix+1
+            total = total +1
+            continue
+          
+          print(i)
+          pos = get_pos(i)
+          retVal = err_judge(i,item["fix"],pos)
+          #print(retVal)
 
-      if(retVal == -1):
-          print('cannot judge at 1')
-          out.write('error at: ')
-          out.write(item[bad])
-          continue
+          if(retVal == -1):
+              print('cannot judge at 1')
+              out.write('error at: ')
+              out.write(i)
+              continue
 
-      total = total+1
-      if(retVal == 1):
-          prev_corr = prev_corr + 1
-      
-      #deal with annotated
-      pos = get_pos(item["annotated"] )
-      retVal_a = err_judge(item["annotated"], item["annotated_fix"], pos)
+          total = total+1
+          if(retVal == 1):
+              prev_corr = prev_corr + 1
+          
+          #deal with annotated
+          pos = get_pos(item["annotated"] )
+          retVal_a = err_judge(item["annotated"], item["annotated_fix"], pos)
 
-      #check strange errors
-      if(retVal == -1):
-          print('cannot judge at 2')
-          out.write('error at: ')
-          out.write(item[annotated])
-          continue
+          #check strange errors
+          if(retVal == -1):
+              print('cannot judge at 2')
+              out.write('error at: ')
+              out.write(item[annotated])
+              continue
 
-      if(retVal_a == 1):
-          anno_corr = anno_corr+1
-      
-      #put the output to different categories
-      if(retVal_a == 1 and retVal == 1):
-            both_correct = both_correct +1
-      elif(retVal_a == 1 and retVal == 0):
-            only_anno_corr = only_anno_corr + 1
-            print('anno correct')
-            out.write('only_anno_corr \n')
-            out.write(line)
-            out.write('\n')
-      elif(retVal_a == 0 and retVal == 1):
-            only_pre_corr = only_pre_corr + 1
-            print('pre correct')
-            out.write('only_pre_corr\n')
-            out.write(line)
-            out.write('\n')
-      else:
-            both_wrong = both_wrong +1
+          if(retVal_a == 1):
+              anno_corr = anno_corr+1
+          
+          #put the output to different categories
+          if(retVal_a == 1 and retVal == 1):
+                both_correct = both_correct +1
+          elif(retVal_a == 1 and retVal == 0):
+                only_anno_corr = only_anno_corr + 1
+                print('anno correct')
+                out.write('only_anno_corr \n')
+                out.write(line)
+                out.write('\n')
+          elif(retVal_a == 0 and retVal == 1):
+                only_pre_corr = only_pre_corr + 1
+                print('pre correct')
+                out.write('only_pre_corr\n')
+                out.write(line)
+                out.write('\n')
+          else:
+                both_wrong = both_wrong +1
 
 myfile.close() 
-s = 'in the total of ' + str(total) + ' programs, both correct is: ' + str(both_correct) + 'only annotated correct is: ' + str(only_anno_corr) + 'only pre correct is: ' + str(only_pre_corr) + 'both wrong is: '+str(both_wrong)
+s = 'in the total of ' + str(total) + ' programs, both correct is: ' + str(both_correct) + 'only annotated correct is: ' \
+     + str(only_anno_corr) + 'only pre correct is: ' + str(only_pre_corr) + 'both wrong is: '+str(both_wrong) +\
+     ' no fix: ' + str(no_fix)
 
 print (s)
 '''
 
 
-'''
+#print(find_new_pos('red fox pop', 'Hi hello world quick red',[2,2]))
+
 #print(err_judge('quick red ', 'Hi hello world quick red', [0,0]))
 #--->1
 
@@ -386,9 +422,8 @@ print (s)
 #print(err_judge('a b c m d e', 'p m n c m d e q', [3,4]))
 #--->0
 
-#print(err_judge('quick red ', 'Hi hello world quick red', [1,1])) 
+#print(err_judge('quick red ', 'Hi hello world quck red', [0,0])) 
 #--->0
 
 #print(err_judge('world quick red ', 'Hi hello world quick red', [1,1]))
 #--->0
-'''

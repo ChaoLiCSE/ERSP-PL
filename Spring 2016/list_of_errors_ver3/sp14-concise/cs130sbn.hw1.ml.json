@@ -1,1 +1,1 @@
-{"event": "eval", "ocaml": [{"type": "", "out": "", "min": "", "in": "let rec sumList = function\n| [] -> 0\n| h::t -> h + (sumList t)"}]}
+{"event": "eval", "ocaml": [{"type": "", "in": "let rec sumList = function\n| [] -> 0\n| h::t -> h + (sumList t)", "min": "\nlet rec sumList = function | [] -> 0 | h::t -> h + (sumList t);;\n", "out": ""}]}
