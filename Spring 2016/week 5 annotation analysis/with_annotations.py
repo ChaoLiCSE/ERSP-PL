@@ -121,7 +121,7 @@ for i in os.listdir(target):
 	if i == '.DS_Store':
 		continue
 		
-	with open (os.path.join(target,i), 'r') as myfile, :
+	with open (os.path.join(target,i), 'r') as myfile :
 
 		name = str.split(i, '.')
 

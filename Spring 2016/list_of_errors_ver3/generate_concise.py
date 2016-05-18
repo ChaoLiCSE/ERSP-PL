@@ -9,7 +9,7 @@ import json
 """
 
 dir = os.path.abspath(__file__ + '/../')
-target = os.path.join(dir, '../../../sp14')
+target = os.path.join(dir, '../../../sp14 (1)')
 output3 = os.path.join(dir, 'sp14-concise')
 
 problems_hw1 = ['???','palindrome', 'listReverse', 'digitalRoot', 'additivePersistence', 'digitsOfInt', 'sumList']

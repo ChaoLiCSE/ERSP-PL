@@ -79,8 +79,10 @@ for i in os.listdir(target):
     problem_set = find_problem_set(hw_num)
 
     for label in problem_set:
+      if label != 'wwhile': continue
       summary = build_dict(hw_num, label)
       events = find_all_prob(label, lines)
+      print(len(events))
 
       index = 0
 
@@ -91,17 +93,23 @@ for i in os.listdir(target):
 
       # find all trailing bad programs until a fix
       while index < len(events):
+        print(student, hw_num, label, index)
+        if label == 'wwhile':
+          print(events[index])
+          print(summary)
 
         # bad programs
         if events[index]['ocaml'][0]['out']:
           summary['bad'].append(events[index]['ocaml'][0]['min'])
           count_bads += 1
           index += 1
+          print('bad')
           continue
 
         # true fix, write to file
-        elif not type_annotate.annotate_and_compile(events[index], label, hw_num):
+        elif summary['bad'] and type_annotate.annotate_and_compile(events[index], label, hw_num):
           summary['fix'].append(events[index]['ocaml'][0]['min'])
+          print('fix')          
           index += 1
 
           # write to file, ignore empty dicts
@@ -112,22 +120,24 @@ for i in os.listdir(target):
         # skip false fix
         else:
           index += 1
+          print('skip')
           continue
 
-      # reach end of the list but finds no fix
-      if index >= len(events) and not summary['fix']:
-        summary['fix'].append('')
-        count_no_fix += 1
+        # reach end of the list but finds no fix
+        if index >= len(events) and summary['bad'] and not summary['fix']:
+          summary['fix'].append('')
+          count_no_fix += 1
+          print('no fix')
 
-        # write to file
-        json.dump(summary, of3)
-        of3.write('\n')
-        count_groups += 1
-        break
+          # write to file
+          json.dump(summary, of3)
+          of3.write('\n')
+          count_groups += 1
 
-      # list is not end, continue
-      summary = build_dict(hw_num, label)
+        # list is not end, continue
+        summary = build_dict(hw_num, label)
 
+    inf.close()
 
 of3.close()
 print(count_bads)
