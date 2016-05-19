@@ -16,9 +16,9 @@ dir = os.path.abspath(__file__ + '/../')
 target = os.path.join(dir, 'sp14-concise')
 output3 = os.path.join(dir, 'list_of_errors_ver3.json')
 
-problems_hw1 = ['palindrome', 'listReverse', 'digitalRoot', 'additivePersistence', 'digitsOfInt', 'sumList']
-problems_hw2 = ['build', 'eval', 'exprToString', 'expr', 'fixpoint', 'wwhile', 'removeDuplicates', 'assoc']
-problems_hw3 = ['bigMul', 'mulByDigit', 'bigAdd', 'removeZero', 'padZero', 'clone', 'stringOfList', 'sepConcat', 'pipe', 'sqsum']
+problems_hw1 = ['palindrome', 'listReverse', 'digitalRoot', 'additivePersistence', 'digitsOfInt', 'sumList','???']
+problems_hw2 = ['build', 'eval', 'exprToString', 'expr', 'fixpoint', 'wwhile', 'removeDuplicates', 'assoc','???']
+problems_hw3 = ['bigMul', 'mulByDigit', 'bigAdd', 'removeZero', 'padZero', 'clone', 'stringOfList', 'sepConcat', 'pipe', 'sqsum','???']
 
 def find_problem_set(hw_num):
   problem_set = list()
@@ -45,6 +45,8 @@ def find_all_prob(problem, lines):
         break
       else:
         continue
+
+      prob_list.append('???')
       break
 
   return prob_list
@@ -70,7 +72,7 @@ for i in os.listdir(target):
   student = filename[0]
   hw_num = filename[1]
 
-  print(i)
+  #print(i)
 
   with open(os.path.join(target, i)) as inf:
 
@@ -79,7 +81,7 @@ for i in os.listdir(target):
     problem_set = find_problem_set(hw_num)
 
     for label in problem_set:
-      if label != 'wwhile': continue
+      #if label != 'wwhile': continue
       summary = build_dict(hw_num, label)
       events = find_all_prob(label, lines)
       print(len(events))
@@ -94,7 +96,8 @@ for i in os.listdir(target):
       # find all trailing bad programs until a fix
       while index < len(events):
         print(student, hw_num, label, index)
-        if label == 'wwhile':
+        if label == '???':
+          print('?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????')
           print(events[index])
           print(summary)
 

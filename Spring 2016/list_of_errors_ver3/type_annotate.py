@@ -55,12 +55,17 @@ def replace(match, variables, annotation):
   return replacement
 
 def find_annotation(indice):
+  
   annotation = ''
-  if indice['hw'] is 'hw1':
+  if(indice['problem'] == '???'):
+    print("helper method here")
+    return(annotation)
+
+  if (indice['hw'] == 'hw1'):
     annotation = annotation_hw1[hw1.index(indice['problem'])]
-  elif indice['hw'] is 'hw2':
+  elif (indice['hw'] == 'hw2'):
     annotation = annotation_hw2[hw2.index(indice['problem'])]
-  elif indice['hw'] is 'hw3':
+  elif (indice['hw'] == 'hw3'):
     annotation = annotation_hw3[hw3.index(indice['problem'])]
   return(annotation)
 
@@ -103,10 +108,11 @@ def annotate_and_compile(indice, label, hw_num):
   #print (annotated_prog)
   #error_output = subprocess.run(["ocaml"], input = annotated_prog, 
   #                             stdout=subprocess.PIPE,universal_newlines = True)
-  error_output =run(["ocmal"], 5)
+  error_output =run(["ocmal"], 50)
   
   if(error_output == None):
-    return ""
+    print()
+    return "logic error"
 
   #print(error_output)
   if "rror" in error_output.stdout:
