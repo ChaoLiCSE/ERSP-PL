@@ -268,15 +268,16 @@ def err_judge(bad, fix, pos):
     ex_new_pos = expand(len(bad),new_pos)
 
 
-
+    '''
     print('poses:')
     print(pos)
     print(ex_pos)
     print(new_pos)
     print(ex_new_pos)
+    '''
 
     if(new_pos == [-1,-1]):
-        print('-1-1 correct')
+        #print('-1-1 correct')
         return 1
 
     s= string_diff(bad,fix)
@@ -285,7 +286,7 @@ def err_judge(bad, fix, pos):
     for i in s:
       
       if (i[0] == '=' and ex_pos[0] >= i[2][0] and ex_pos[1] <= i[2][1] and (ex_pos[1]-ex_pos[0] >=2)):
-        print('incorrect location1')
+        #print('incorrect location1')
         return 0
 
       if (i[0] == '-' and 
@@ -293,7 +294,7 @@ def err_judge(bad, fix, pos):
           (ex_pos[0] <= i[2][1] and ex_pos[1] >= i[2][1]) or
           (ex_pos[0] >= i[2][0] and ex_pos[1] <= i[2][1]))):
         
-        print('correct location2')
+        #print('correct location2')
         #print(i)
         return 1
 
@@ -302,27 +303,21 @@ def err_judge(bad, fix, pos):
           (ex_new_pos[0] <= i[2][1] and ex_new_pos[1] >= i[2][1]) or
           (ex_new_pos[0] >= i[2][0] and ex_new_pos[1] <= i[2][1]))):
         
-        print('correct location3')
+        #print('correct location3')
         #print(i)
         return 1
 
-    print('incorrect location4')
+    #print('incorrect location4')
     return 0
 
 
 
 dir = os.path.abspath(__file__ + '/../../')
-target = os.path.join(dir, 'list_of_errors_ver3.json')
+#target = os.path.join(dir, 'list_of_errors_ver3.json')
+target = os.path.join(dir, 'sample.json')
 #target = os.path.join(dir, 'check.json')
 
 target2 = os.path.join(dir, 'problems.txt')
-
-'''
-prog = "let rec digitsOfInt n = match n with | ( n mod 10 ) + digitsOfInt ( (failwith "") 10 );;"
-
-for i in get_pos (prog):
-    print (i)
-
 
 total = 0
 prev_corr = 0
@@ -339,62 +334,64 @@ with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w
     for line in myfile:
     
       item = eval(line)
-      for i in item["bad"]:
-          print(i)
-          print(item["fix"][0])
+      i=item["bad"]
+      #for i in item["bad"]:
+      '''
+      print(i)
+      print(item["fix"])
+      print(item["annotated"])
+      print(item["annotated_fix"])
+'''
+      if(item["fix"] == ""):
+        print('no fix')
+        no_fix = no_fix+1
+        total = total +1
+        continue
+      
+      #print(i)
+      pos = get_pos(i)
+      retVal = err_judge(i,item["fix"],pos)
+      #print(retVal)
 
-          if(item["fix"][0] == ""):
-            print('no fix')
-            no_fix = no_fix+1
-            total = total +1
-            continue
-          
-          print(i)
-          pos = get_pos(i)
-          retVal = err_judge(i,item["fix"],pos)
-          #print(retVal)
+      if(retVal == -1):
+          print('cannot judge at 1')
+          out.write('error at: ')
+          out.write(i)
+          continue
 
-          if(retVal == -1):
-              print('cannot judge at 1')
-              out.write('error at: ')
-              out.write(i)
-              continue
+      total = total+1
+      if(retVal == 1):
+          prev_corr = prev_corr + 1
+      
+      #deal with annotated
+      pos = get_pos(item["annotated"] )
+      retVal_a = err_judge(item["annotated"], item["annotated_fix"], pos)
 
-          total = total+1
-          if(retVal == 1):
-              prev_corr = prev_corr + 1
-          
-          #deal with annotated
-          pos = get_pos(item["annotated"] )
-          retVal_a = err_judge(item["annotated"], item["annotated_fix"], pos)
+      #check strange errors
+      if(retVal == -1):
+          print('cannot judge at 2')
+          continue
 
-          #check strange errors
-          if(retVal == -1):
-              print('cannot judge at 2')
-              out.write('error at: ')
-              out.write(item[annotated])
-              continue
-
-          if(retVal_a == 1):
-              anno_corr = anno_corr+1
-          
-          #put the output to different categories
-          if(retVal_a == 1 and retVal == 1):
-                both_correct = both_correct +1
-          elif(retVal_a == 1 and retVal == 0):
-                only_anno_corr = only_anno_corr + 1
-                print('anno correct')
-                out.write('only_anno_corr \n')
-                out.write(line)
-                out.write('\n')
-          elif(retVal_a == 0 and retVal == 1):
-                only_pre_corr = only_pre_corr + 1
-                print('pre correct')
-                out.write('only_pre_corr\n')
-                out.write(line)
-                out.write('\n')
-          else:
-                both_wrong = both_wrong +1
+      if(retVal_a == 1):
+          anno_corr = anno_corr+1
+      
+      #put the output to different categories
+      if(retVal_a == 1 and retVal == 1):
+            both_correct = both_correct +1
+      elif(retVal_a == 1 and retVal == 0):
+            only_anno_corr = only_anno_corr + 1
+            print('anno correct')
+            out.write('only_anno_corr \n')
+            out.write(line)
+            out.write('\n')
+      elif(retVal_a == 0 and retVal == 1):
+            only_pre_corr = only_pre_corr + 1
+            print('pre correct')
+            out.write('only_pre_corr\n')
+            out.write(line)
+            out.write('\n')
+      else:
+            both_wrong = both_wrong +1
 
 myfile.close() 
 s = 'in the total of ' + str(total) + ' programs, both correct is: ' + str(both_correct) + 'only annotated correct is: ' \
@@ -402,7 +399,7 @@ s = 'in the total of ' + str(total) + ' programs, both correct is: ' + str(both_
      ' no fix: ' + str(no_fix)
 
 print (s)
-'''
+
 
 
 #print(find_new_pos('red fox pop', 'Hi hello world quick red',[2,2]))

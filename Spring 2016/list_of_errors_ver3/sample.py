@@ -35,9 +35,9 @@ data = list()
 
 for i in lines:
   item = json.loads(i)
-  print(item)
+  print(item['problem'])
   # skip bad dictionaries
-  if item['problem'] is 'expr':
+  if (item['problem'] == 'expr'):
     continue
 
   # find corresponding annotations
@@ -53,7 +53,7 @@ for i in lines:
     dic = ta.build_dict(bad, annotation, item)
     data.append(dic)
 
-sample = sample_without_replacement(data, 100)
+sample = sample_without_replacement(data, 6507)
 for i in sample:
   json.dump(i, of)
   of.write('\n')

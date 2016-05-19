@@ -24,8 +24,8 @@ def diff(old, new, opos, npos):
 
 
     '''
-
-    # Create a map from old values to their indices
+Create
+    #  a map from old values to their indices
     old_index_map = dict()
     for i, val in enumerate(old):
         old_index_map.setdefault(val,list()).append(i)
