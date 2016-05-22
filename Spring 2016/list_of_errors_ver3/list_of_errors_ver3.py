@@ -13,12 +13,12 @@ NOTE: used 'in' for fix but 'min' for bad!!
 """
 
 dir = os.path.abspath(__file__ + '/../')
-#target = os.path.join(dir, 'sp14-concise')
-target = os.path.join(dir, 'check-concise')
+target = os.path.join(dir, 'sp14-concise')
+#target = os.path.join(dir, 'check-concise')
 
 output = os.path.join(dir, 'prob_set')
-#output3 = os.path.join(dir, 'list_of_errors_ver3.json')
-output3 = os.path.join(dir, 'check.json')
+output3 = os.path.join(dir, 'list_of_errors_ver3.json')
+#output3 = os.path.join(dir, 'check.json')
 
 problems_hw1 = ['palindrome', 'listReverse', 'digitalRoot', 'additivePersistence', 'digitsOfInt', 'sumList','???']
 problems_hw2 = ['build', 'eval', 'exprToString', 'expr', 'fixpoint', 'wwhile', 'removeDuplicates', 'assoc','???']
@@ -103,6 +103,7 @@ for i in os.listdir(target):
       while index < len(events):
 
         print(student, hw_num, label, index)
+        #print(summary['bad'])
         '''
         if(student == 'alperez' and label == 'wwhile' and index == '9'):
           index+=1
@@ -123,9 +124,9 @@ for i in os.listdir(target):
           print('?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????')
           print(events[index])
           print(summary)
-
+        
         # bad programs
-        if events[index]['ocaml'][0]['out']:
+        if (events[index]['ocaml'][0]['out'] != ""):
           summary['bad'].append(events[index]['ocaml'][0]['min'])
           count_bads += 1
           index += 1
@@ -133,7 +134,7 @@ for i in os.listdir(target):
           continue
         
         # true fix, write to file
-        elif summary['bad'] and (type_annotate.annotate_and_compile(events[index], label, hw_num) == ""):
+        elif (summary['bad'] != []) and (type_annotate.annotate_and_compile(events[index], label, hw_num) == ""):
           print(type_annotate.annotate_and_compile(events[index], label, hw_num))
           summary['fix'].append(events[index]['ocaml'][0]['min'])
           print('fix')          
@@ -146,9 +147,11 @@ for i in os.listdir(target):
 
         # skip false fix
         else:
-          index += 1
+          #print(events[index])
           summary['bad'].append(events[index]['ocaml'][0]['min'])
           print('skip')
+          index += 1
+
           continue
 
         # reach end of the list but finds no fix

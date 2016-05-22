@@ -186,12 +186,12 @@ def get_pos(prog):
             start = int(m.group(0)) + count
             end = int(n.group(0)) + count
         else:
-            print(to_run)
-            print(error_output)
+            #print(to_run)
+            #print(error_output)
             return [-1,-1]
     except UnboundLocalError:
-        print(to_run)
-        print(error_output)
+        #print(to_run)
+        #print(error_output)
         return([-1,-1])
 
     #print(prog[0:start])
@@ -340,9 +340,9 @@ def err_judge(bad, fix, pos):
 
 
 dir = os.path.abspath(__file__ + '/../../')
-#target = os.path.join(dir, 'list_of_errors_ver3.json')
+target = os.path.join(dir, 'list_of_errors_ver3.json')
 #target = os.path.join(dir, 'sample.json')
-target = os.path.join(dir, 'check.json')
+#target = os.path.join(dir, 'check.json')
 
 target2 = os.path.join(dir, 'problems.txt')
 
@@ -359,7 +359,8 @@ no_fix = 0
 
 with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w') as out:
     for line in myfile:
-    
+      total = total+1
+
       item = eval(line)
       i=item["bad"]
       #for i in item["bad"]:
@@ -372,14 +373,13 @@ with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w
       if(item["fix"] == ""):
         print('no fix')
         no_fix = no_fix+1
-        total = total +1
         continue
       
       #print(i)
       pos = get_pos(i)
-
-      if(pos==[-1,-1]):
-        print (item)
+      
+      #if(pos==[-1,-1]):
+        #print (item)
 
       retVal = err_judge(i,item["fix"],pos)
       #print(retVal)
@@ -390,15 +390,14 @@ with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w
           out.write(i)
           continue
 
-      total = total+1
       if(retVal == 1):
           prev_corr = prev_corr + 1
       
       #deal with annotated
       pos = get_pos(item["annotated"] )
 
-      if(pos==[-1,-1]):
-        print (item)
+      #if(pos==[-1,-1]):
+       # print (item)
 
       retVal_a = err_judge(item["annotated"], item["annotated_fix"], pos)
 
