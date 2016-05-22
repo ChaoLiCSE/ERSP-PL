@@ -22,9 +22,9 @@ def sample_without_replacement(data, num):
 ### MAIN
 
 dir = os.path.abspath(__file__ + '/../')
-#target = os.path.join(dir, 'list_of_errors_ver3.json')
+target = os.path.join(dir, 'list_of_errors_ver3.json')
 
-target = os.path.join(dir, 'check.json')
+#target = os.path.join(dir, 'check.json')
 output = os.path.join(dir, 'sample.json')
 
 random.seed(1)

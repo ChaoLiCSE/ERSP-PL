@@ -5,7 +5,7 @@ import subprocess,shlex
 from threading import Timer
 
 hw1 = ['???','sumList','digitsOfInt', 'additivePersistence', 'digitalRoot', 'listReverse', 'palindrome']
-hw2 = ['???','assoc','removeDuplicates', 'wwhile','fixpoint', 'exprToString', 'eval', 'build']
+hw2 = ['???','assoc','removeDuplicates', 'wwhile','fixpoint','expr', 'exprToString', 'eval', 'build']
 hw3 = ['???','sqsum', 'pipe', 'sepConcat', 'stringOfList', 'clone', 'padZero', 'removeZero', 'bigAdd', 'mulByDigit', 'bigMul']
 
 annotation_hw1 = ["",\
@@ -82,12 +82,15 @@ def build_dict(bad, annotation, indice):
   return dic
 
 def find_annotation_with_label(hw_num, label):
+  #print(hw_num)
+  #print(label)
   annotation = ''
-  if hw_num is 'hw1':
+  if (hw_num == 'hw1'):
     annotation = annotation_hw1[hw1.index(label)]
-  elif hw_num is'hw2':
+  elif (hw_num =='hw2'):
     annotation = annotation_hw2[hw2.index(label)]
-  elif hw_num is 'hw3':
+  elif (hw_num == 'hw3'):
+    #print(hw3.index(label))
     annotation = annotation_hw3[hw3.index(label)]
   return(annotation)
 
@@ -106,9 +109,11 @@ def run(cmd, timeout_sec):
   '''
 
 def annotate_and_compile(indice, label, hw_num):
-  annotation = find_annotation_with_label(indice, hw_num)
+  #print(label)
+  annotation = find_annotation_with_label( hw_num, label)
+  #print(annotation)
   annotated_prog = add_annotation(annotation, label, indice['ocaml'][0]['min'])
-
+  #print (annotated_prog)
   #annotated_prog = add_annotation( ": ('a -> 'a * bool) * 'a -> 'a",'wwhile',"let rec wwhile (f,b) = let (b',c') = f b in if c' then wwhile (f, b') else b';;\n let _ = let f x = let xx = (x * x) * x in (xx, (xx < 100)) in wwhile (f, 1);;")
   #annotated_prog = "let rec wwhile  : ('a -> 'a * bool) * 'a -> 'a = fun (f,b)  ->  let c' = f b in if c' = b then c' else wwhile (f, c');;"
   
