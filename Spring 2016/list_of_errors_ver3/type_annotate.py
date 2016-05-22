@@ -39,10 +39,10 @@ annotation_hw3 = ["",\
 
 def add_annotation(annotation, problem_name, code):
   # match the variables
-  var_regex = '(?<=' + problem_name + ')(.*?)(?=\=)'
+  var_regex = '(?<=' + problem_name + ' )(.*?)(?=\=)'
   var = re.search(var_regex, code)
   # match the string to replace
-  my_regex = '(?<=' + problem_name + ')(.*?)\='
+  my_regex = '(?<=' + problem_name + ' )(.*?)\='
   result = re.sub(my_regex, lambda match: replace(match, var.group(), annotation), code,1)
   #print (result)
   return result
@@ -92,26 +92,46 @@ def find_annotation_with_label(hw_num, label):
   return(annotation)
 
 def run(cmd, timeout_sec):
-  proc = subprocess.Popen(["ocaml"], stdout=subprocess.PIPE, 
-    stderr=subprocess.PIPE)
-  kill_proc = lambda p: p.kill()
-  timer = Timer(timeout_sec, kill_proc, [proc])
-  try:
-    timer.start()
-    stdout,stderr = proc.communicate()
-  finally:
-    timer.cancel()
+  proc = subprocess.Popen(["python"], stdout=subprocess.PIPE, 
+  stderr=subprocess.PIPE,universal_newlines = True)
+  print(cmd)
+  print(proc.communicate("while True: print('hello')\n", timeout = timeout_sec)[0])
+
+  '''
+  stdout = proc.stdout.readline()
+  proc.communicate(timeout = timeout_sec)
+  #stdout = proc.stdout.read()
+  print(stdout)
+  #print(stderr)
+  '''
 
 def annotate_and_compile(indice, label, hw_num):
   annotation = find_annotation_with_label(indice, hw_num)
   annotated_prog = add_annotation(annotation, label, indice['ocaml'][0]['min'])
-  #print (annotated_prog)
-  #error_output = subprocess.run(["ocaml"], input = annotated_prog, 
-  #                             stdout=subprocess.PIPE,universal_newlines = True)
-  error_output =run(["ocmal"], 50)
+
+  #annotated_prog = add_annotation( ": ('a -> 'a * bool) * 'a -> 'a",'wwhile',"let rec wwhile (f,b) = let (b',c') = f b in if c' then wwhile (f, b') else b';;\n let _ = let f x = let xx = (x * x) * x in (xx, (xx < 100)) in wwhile (f, 1);;")
+  #annotated_prog = "let rec wwhile  : ('a -> 'a * bool) * 'a -> 'a = fun (f,b)  ->  let c' = f b in if c' = b then c' else wwhile (f, c');;"
   
-  if(error_output == None):
-    print()
+  try:
+    error_output = subprocess.run(["ocaml"], input = annotated_prog, 
+                             stdout=subprocess.PIPE,universal_newlines = True, timeout=2)
+    #print(error_output)
+  except subprocess.TimeoutExpired:
+    #print('timeout')
+    error_output = 'Expired'
+
+  '''
+  try:
+      error_output =run(annotated_prog, 1)
+  except subprocess.TimeoutExpired:
+      print('timeout')
+  '''
+
+  #print(error_output)
+  
+  if(error_output == 'Expired'):
+    #print()
+    #print("logic")
     return "logic error"
 
   #print(error_output)
@@ -119,3 +139,12 @@ def annotate_and_compile(indice, label, hw_num):
     return error_output.stdout
   else:
     return ""
+
+
+#obj = 'buildob= 1, build = 1'
+#anno = add_annotation('hello', 'build', obj)
+#print (anno)
+
+
+#obj = {"event": "eval", "ocaml": [{"type": "other", "in": "let rec mulByDigit i l = \nmatch (List.rev l) with\n| []   -> 0\n| h::t -> ( (h*i)/10 + List.rev i t )", "min": "\nlet rec mulByDigit i l =\n  match List.rev l with | [] -> 0 | h::t -> ((h * i) / 10) + (List.rev i t);;\n", "out": "Characters 85-93:\n  | h::t -> ( (h*i)/10 + List.rev i t );;\n                         ^^^^^^^^\nError: This function has type 'a list -> 'a list\n       It is applied to too many arguments; maybe you forgot a `;'.\n"}]}
+#print(annotate_and_compile(obj,'mulByDigit','hw3'))
