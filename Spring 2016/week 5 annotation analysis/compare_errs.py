@@ -154,23 +154,48 @@ def string_diff(old, new):
        
 
 def get_pos(prog):
+    
+    to_run = prog.split(';;')
+    to_con = ""
+    #print("printing parts!")
+    count = 0
+    #print(to_run)
+    for part in to_run:
+        #print(count)
+        #print(part)
+        to_con += ';;'
+        to_con += part
 
-    error_output = subprocess.run(["ocaml"], input = prog + ';;', 
+        error_output = subprocess.run(["ocaml"], input = to_con+';;', 
                    stdout=subprocess.PIPE,universal_newlines = True)
+        #print(error_output)
 
-    if "rror" in error_output.stdout:
-    	m = re.search('(?<=Characters )([1-9][0-9][0-9]|[1-9][0-9]|[0-9])', error_output.stdout)
-    	n = re.search('(?<=-)([1-9][0-9][0-9]|[1-9][0-9]|[0-9])', error_output.stdout)
-    else:
-      return([0,0])
+        if "rror" in error_output.stdout:
+            m = re.search('(?<=Characters )([1-9][0-9][0-9]|[1-9][0-9]|[0-9])', error_output.stdout) 
+            n = re.search('(?<=-)([1-9][0-9][0-9]|[1-9][0-9]|[0-9])', error_output.stdout)
+            break
+        else:
+            count+=len(part)
+            continue
     
-    '''
-    print(m.group(0))
-    print(n.group(0))
-    '''
-    start = int(m.group(0))
-    end = int(n.group(0))
-    
+
+    #print(m.group(0))
+    #print(n.group(0))
+    try:
+        if(m != None and n != None):
+            start = int(m.group(0)) + count
+            end = int(n.group(0)) + count
+        else:
+            print(to_run)
+            print(error_output)
+            return [-1,-1]
+    except UnboundLocalError:
+        print(to_run)
+        print(error_output)
+        return([-1,-1])
+
+    #print(prog[0:start])
+    #print(prog[0:end])
     start_pos = len(str.split(prog[0:start]))-1
     end_pos = len(str.split(prog[0:end]))-1
     
@@ -200,6 +225,7 @@ def expand(end, pos):
 def find_new_pos(bad, fix, pos):
 
     s = string_diff(bad, fix)
+    #print(s)
     new_pos_start = 0
     old_pos_start = 0
     for i in s:
@@ -234,6 +260,7 @@ def find_new_pos(bad, fix, pos):
                return [-1,-1]
 
             #new_pos_start = new_pos_start - (i[2][1] - i[2][0] + 1)
+            old_pos_start = old_pos_start + (i[2][1] - i[2][0] + 1)
             if(old_pos_start >= pos[0]):
                 new_pos_start = new_pos_start-(old_pos_start- pos[0])
                 #new_pos_start = pos[0]-old_pos_start+new_pos_start
@@ -314,8 +341,8 @@ def err_judge(bad, fix, pos):
 
 dir = os.path.abspath(__file__ + '/../../')
 #target = os.path.join(dir, 'list_of_errors_ver3.json')
-target = os.path.join(dir, 'sample.json')
-#target = os.path.join(dir, 'check.json')
+#target = os.path.join(dir, 'sample.json')
+target = os.path.join(dir, 'check.json')
 
 target2 = os.path.join(dir, 'problems.txt')
 
@@ -350,6 +377,10 @@ with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w
       
       #print(i)
       pos = get_pos(i)
+
+      if(pos==[-1,-1]):
+        print (item)
+
       retVal = err_judge(i,item["fix"],pos)
       #print(retVal)
 
@@ -365,7 +396,12 @@ with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w
       
       #deal with annotated
       pos = get_pos(item["annotated"] )
+
+      if(pos==[-1,-1]):
+        print (item)
+
       retVal_a = err_judge(item["annotated"], item["annotated_fix"], pos)
+
 
       #check strange errors
       if(retVal == -1):

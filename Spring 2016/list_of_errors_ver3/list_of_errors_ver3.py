@@ -13,8 +13,12 @@ NOTE: used 'in' for fix but 'min' for bad!!
 """
 
 dir = os.path.abspath(__file__ + '/../')
-target = os.path.join(dir, 'sp14-concise')
-output3 = os.path.join(dir, 'list_of_errors_ver3.json')
+#target = os.path.join(dir, 'sp14-concise')
+target = os.path.join(dir, 'check-concise')
+
+output = os.path.join(dir, 'prob_set')
+#output3 = os.path.join(dir, 'list_of_errors_ver3.json')
+output3 = os.path.join(dir, 'check.json')
 
 problems_hw1 = ['palindrome', 'listReverse', 'digitalRoot', 'additivePersistence', 'digitsOfInt', 'sumList','???']
 problems_hw2 = ['build', 'eval', 'exprToString', 'expr', 'fixpoint', 'wwhile', 'removeDuplicates', 'assoc','???']
@@ -77,15 +81,17 @@ for i in os.listdir(target):
   with open(os.path.join(target, i)) as inf:
 
     lines = inf.readlines()
+    print(student)
 
     problem_set = find_problem_set(hw_num)
 
     for label in problem_set:
-      #if label != 'wwhile': continue
+
+      #if student != 'awfong': continue
       summary = build_dict(hw_num, label)
       events = find_all_prob(label, lines)
-      print(len(events))
-
+      #print(len(events))
+      
       index = 0
 
       # find the first bad program
@@ -95,7 +101,24 @@ for i in os.listdir(target):
 
       # find all trailing bad programs until a fix
       while index < len(events):
+
         print(student, hw_num, label, index)
+        '''
+        if(student == 'alperez' and label == 'wwhile' and index == '9'):
+          index+=1
+          continue
+        '''
+
+        #print(student == 'awfong' and label == 'fixpoint' and index == 2)
+        if(student == 'awfong' and label == 'fixpoint' and index == 2):
+          print("here")
+          of = open(output, 'a')
+          #print(lines)
+          of.write(str(lines))
+          of.close
+          index+=1
+          continue
+
         if label == '???':
           print('?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????')
           print(events[index])
@@ -108,9 +131,10 @@ for i in os.listdir(target):
           index += 1
           print('bad')
           continue
-
+        
         # true fix, write to file
-        elif summary['bad'] and type_annotate.annotate_and_compile(events[index], label, hw_num):
+        elif summary['bad'] and (type_annotate.annotate_and_compile(events[index], label, hw_num) == ""):
+          print(type_annotate.annotate_and_compile(events[index], label, hw_num))
           summary['fix'].append(events[index]['ocaml'][0]['min'])
           print('fix')          
           index += 1
@@ -123,6 +147,7 @@ for i in os.listdir(target):
         # skip false fix
         else:
           index += 1
+          summary['bad'].append(events[index]['ocaml'][0]['min'])
           print('skip')
           continue
 
@@ -130,7 +155,7 @@ for i in os.listdir(target):
         if index >= len(events) and summary['bad'] and not summary['fix']:
           summary['fix'].append('')
           count_no_fix += 1
-          print('no fix')
+          #print('no fix')
 
           # write to file
           json.dump(summary, of3)

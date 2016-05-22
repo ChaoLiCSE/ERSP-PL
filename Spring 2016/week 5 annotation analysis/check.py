@@ -1,6 +1,6 @@
 import json
 import os
-dir = os.path.abspath(__file__ + '/../')
+dir = os.path.abspath(__file__ + '/../../')
 target = os.path.join(dir, 'check.json')
 
 with open (os.path.join(target), 'r') as myfile:
