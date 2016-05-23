@@ -5,7 +5,7 @@ import subprocess,shlex
 from threading import Timer
 
 hw1 = ['???','sumList','digitsOfInt', 'additivePersistence', 'digitalRoot', 'listReverse', 'palindrome']
-hw2 = ['???','assoc','removeDuplicates', 'wwhile','fixpoint','expr', 'exprToString', 'eval', 'build']
+hw2 = ['???','assoc','removeDuplicates', 'wwhile','fixpoint', 'exprToString', 'eval', 'build']
 hw3 = ['???','sqsum', 'pipe', 'sepConcat', 'stringOfList', 'clone', 'padZero', 'removeZero', 'bigAdd', 'mulByDigit', 'bigMul']
 
 annotation_hw1 = ["",\
