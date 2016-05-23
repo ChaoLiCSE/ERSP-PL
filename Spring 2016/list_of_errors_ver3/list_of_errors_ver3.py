@@ -21,7 +21,7 @@ output3 = os.path.join(dir, 'list_of_errors_ver3.json')
 #output3 = os.path.join(dir, 'check.json')
 
 problems_hw1 = ['palindrome', 'listReverse', 'digitalRoot', 'additivePersistence', 'digitsOfInt', 'sumList','???']
-problems_hw2 = ['build', 'eval', 'exprToString', 'expr', 'fixpoint', 'wwhile', 'removeDuplicates', 'assoc','???']
+problems_hw2 = ['build', 'eval', 'exprToString', 'fixpoint', 'wwhile', 'removeDuplicates', 'assoc','???']
 problems_hw3 = ['bigMul', 'mulByDigit', 'bigAdd', 'removeZero', 'padZero', 'clone', 'stringOfList', 'sepConcat', 'pipe', 'sqsum','???']
 
 def find_problem_set(hw_num):
@@ -111,7 +111,9 @@ for i in os.listdir(target):
         '''
 
         #print(student == 'awfong' and label == 'fixpoint' and index == 2)
-        if(student == 'awfong' and label == 'fixpoint' and index == 2):
+        if(student == 'awfong' and label == 'fixpoint' and index == 2) or \
+          (student == 'chl218' and label == 'fixpoint' and index == 5)  or \
+          (student == 'cs130saw' and label == 'fixpoint' and index == 21):
           print("here")
           of = open(output, 'a')
           #print(lines)
