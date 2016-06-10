@@ -1,3 +1,6 @@
+#This is a program on randomly choose 100 pairs of bad program 
+#and fix programs
+
 import random
 import os
 import json

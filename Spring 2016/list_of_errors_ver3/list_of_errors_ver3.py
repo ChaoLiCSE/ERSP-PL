@@ -1,3 +1,6 @@
+#This is a program which we are still working on, this program is used
+#to obtain a list of errors that pair a list of bad events to one fix
+
 import re
 import os
 import json
@@ -16,14 +19,16 @@ dir = os.path.abspath(__file__ + '/../')
 target = os.path.join(dir, 'sp14-concise')
 #target = os.path.join(dir, 'check-concise')
 
-output = os.path.join(dir, 'prob_set')
+#concise = os.path.join(dir, 'prob_set')
 output3 = os.path.join(dir, 'list_of_errors_ver3.json')
-#output3 = os.path.join(dir, 'check.json')
+output = os.path.join(dir, 'check.json')
 
+#homework problem list
 problems_hw1 = ['palindrome', 'listReverse', 'digitalRoot', 'additivePersistence', 'digitsOfInt', 'sumList','???']
 problems_hw2 = ['build', 'eval', 'exprToString', 'fixpoint', 'wwhile', 'removeDuplicates', 'assoc','???']
 problems_hw3 = ['bigMul', 'mulByDigit', 'bigAdd', 'removeZero', 'padZero', 'clone', 'stringOfList', 'sepConcat', 'pipe', 'sqsum','???']
 
+#match home work with their sets
 def find_problem_set(hw_num):
   problem_set = list()
 
@@ -38,6 +43,7 @@ def find_problem_set(hw_num):
 
   return problem_set
 
+#find all the problems in the 'in' field
 def find_all_prob(problem, lines):
   prob_list = list()
 
@@ -55,6 +61,7 @@ def find_all_prob(problem, lines):
 
   return prob_list
 
+#pack homework with the problems
 def build_dict(hw_num, problem):
   new_dict = dict()
   new_dict['hw'] = hw_num
@@ -104,16 +111,17 @@ for i in os.listdir(target):
 
         print(student, hw_num, label, index)
         #print(summary['bad'])
-        '''
-        if(student == 'alperez' and label == 'wwhile' and index == '9'):
-          index+=1
-          continue
-        '''
 
-        #print(student == 'awfong' and label == 'fixpoint' and index == 2)
+        # 5 weird case that make the programs run into infinite loop
         if(student == 'awfong' and label == 'fixpoint' and index == 2) or \
           (student == 'chl218' and label == 'fixpoint' and index == 5)  or \
-          (student == 'cs130saw' and label == 'fixpoint' and index == 21):
+          (student == 'cs130saw' and label == 'fixpoint' and index == 21) or \
+          (student == 'nrashink' and label == 'fixpoint' and index == 49) or \
+          (student == 'r1hull' and label == 'fixpoint' and index == 33) or \
+          (student == 'alperez' and label == 'wwhile' and index == 9) or \
+          (student == 'cs130saj' and label == 'fixpoint' and index == 13) or\
+          (student == 'cs130sat' and label == 'fixpoint' and index == 25):
+
           print("here")
           of = open(output, 'a')
           #print(lines)
@@ -121,12 +129,14 @@ for i in os.listdir(target):
           of.close
           index+=1
           continue
-
-        if label == '???':
-          print('?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????')
-          print(events[index])
-          print(summary)
         
+        ret = type_annotate.annotate_and_compile(events[index], label, hw_num)
+        #print(ret)
+        if('rror' in ret):
+          isfix = False
+        else:
+          isfix = True
+
         # bad programs
         if (events[index]['ocaml'][0]['out'] != ""):
           summary['bad'].append(events[index]['ocaml'][0]['min'])
@@ -136,7 +146,7 @@ for i in os.listdir(target):
           continue
         
         # true fix, write to file
-        elif (summary['bad'] != []) and (type_annotate.annotate_and_compile(events[index], label, hw_num) == ""):
+        elif (summary['bad'] != [] and isfix):
           print(type_annotate.annotate_and_compile(events[index], label, hw_num))
           summary['fix'].append(events[index]['ocaml'][0]['min'])
           print('fix')          
@@ -151,7 +161,7 @@ for i in os.listdir(target):
         else:
           #print(events[index])
           summary['bad'].append(events[index]['ocaml'][0]['min'])
-          print('skip')
+          #print('skip')
           index += 1
 
           continue
@@ -163,12 +173,13 @@ for i in os.listdir(target):
           #print('no fix')
 
           # write to file
+          #print("no fix")
           json.dump(summary, of3)
           of3.write('\n')
           count_groups += 1
 
-        # list is not end, continue
-        summary = build_dict(hw_num, label)
+          # list is not end, continue
+          summary = build_dict(hw_num, label)
 
     inf.close()
 

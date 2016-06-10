@@ -1,3 +1,5 @@
+#This is a program which generate a concise version of all the data sets
+
 import re
 import os
 import json
@@ -16,6 +18,7 @@ problems_hw1 = ['???','palindrome', 'listReverse', 'digitalRoot', 'additivePersi
 problems_hw2 = ['???','build', 'eval', 'exprToString', 'expr', 'fixpoint', 'wwhile', 'removeDuplicates', 'assoc']
 problems_hw3 = ['???', 'bigMul', 'mulByDigit', 'bigAdd', 'removeZero', 'padZero', 'clone', 'stringOfList', 'sepConcat', 'pipe', 'sqsum']
 
+#find which homework function they are working on
 def find_label(hw_num, event):
   if hw_num == 'hw1':
     problem_set = problems_hw1
@@ -36,7 +39,7 @@ def find_label(hw_num, event):
   return label
 
 
-###
+#####################MAIN######################################
 for i in os.listdir(target):
     filename = str.split(i, '.')
     hw_num = filename[1]

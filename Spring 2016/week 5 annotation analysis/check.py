@@ -1,7 +1,10 @@
+#This is a debugging program to show the details of a pair of
+#programs
+
 import json
 import os
 dir = os.path.abspath(__file__ + '/../../')
-target = os.path.join(dir, 'sample.json')
+target = os.path.join(dir, 'check.json')
 
 with open (os.path.join(target), 'r') as myfile:
     for line in myfile:

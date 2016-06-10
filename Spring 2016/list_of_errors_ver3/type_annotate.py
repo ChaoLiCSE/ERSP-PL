@@ -114,7 +114,7 @@ def annotate_and_compile(indice, label, hw_num):
   #print(annotation)
   annotated_prog = add_annotation(annotation, label, indice['ocaml'][0]['min'])
   #print (annotated_prog)
-  #annotated_prog = add_annotation( ": ('a -> 'a * bool) * 'a -> 'a",'wwhile',"let rec wwhile (f,b) = let (b',c') = f b in if c' then wwhile (f, b') else b';;\n let _ = let f x = let xx = (x * x) * x in (xx, (xx < 100)) in wwhile (f, 1);;")
+  #annotated_prog = "\nlet rec mulByDigit  : int -> int list -> int list  = fun i l  -> \n  match List.rev l with\n  | [] -> []\n  | h::t ->\n      let rec helper acc v =\n        if v = 0 then acc else helper ((v mod 10) :: acc) (v / 10) in\n      let rec adder x = match x with | [] -> [] | h::t -> [h] in\n      adder\n        ((mulByDigit i (List.rev (List.map (fun x  -> x * 10) t))) @\n           [helper [] (h * i)]);;\n"
   #annotated_prog = "let rec wwhile  : ('a -> 'a * bool) * 'a -> 'a = fun (f,b)  ->  let c' = f b in if c' = b then c' else wwhile (f, c');;"
   
   try:
@@ -135,12 +135,12 @@ def annotate_and_compile(indice, label, hw_num):
   #print(error_output)
   
   if(error_output == 'Expired'):
-    #print()
     #print("logic")
     return "logic error"
 
   #print(error_output)
   if "rror" in error_output.stdout:
+    print("err")
     return error_output.stdout
   else:
     return ""
@@ -153,3 +153,4 @@ def annotate_and_compile(indice, label, hw_num):
 
 #obj = {"event": "eval", "ocaml": [{"type": "other", "in": "let rec mulByDigit i l = \nmatch (List.rev l) with\n| []   -> 0\n| h::t -> ( (h*i)/10 + List.rev i t )", "min": "\nlet rec mulByDigit i l =\n  match List.rev l with | [] -> 0 | h::t -> ((h * i) / 10) + (List.rev i t);;\n", "out": "Characters 85-93:\n  | h::t -> ( (h*i)/10 + List.rev i t );;\n                         ^^^^^^^^\nError: This function has type 'a list -> 'a list\n       It is applied to too many arguments; maybe you forgot a `;'.\n"}]}
 #print(annotate_and_compile(obj,'mulByDigit','hw3'))
+#annotate_and_compile(1,'mulByDigit','hw3')

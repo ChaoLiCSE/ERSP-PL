@@ -1,3 +1,6 @@
+#This is a program to check whether the position provided  by complier
+#is the correct location
+
 import re
 import subprocess
 import os
@@ -152,7 +155,8 @@ def string_diff(old, new):
     return diff(old.split(), new.split(),0,0)
 
        
-
+#This is a function that takes in an Ocaml object and return 
+#its error position
 def get_pos(prog):
     
     to_run = prog.split(';;')
@@ -168,7 +172,6 @@ def get_pos(prog):
 
         error_output = subprocess.run(["ocaml"], input = to_con+';;', 
                    stdout=subprocess.PIPE,universal_newlines = True)
-        #print(error_output)
 
         if "rror" in error_output.stdout:
             m = re.search('(?<=Characters )([1-9][0-9][0-9]|[1-9][0-9]|[0-9])', error_output.stdout) 
@@ -179,29 +182,19 @@ def get_pos(prog):
             continue
     
 
-    #print(m.group(0))
-    #print(n.group(0))
     try:
         if(m != None and n != None):
             start = int(m.group(0)) + count
             end = int(n.group(0)) + count
         else:
-            #print(to_run)
-            #print(error_output)
+           
             return [-1,-1]
     except UnboundLocalError:
-        #print(to_run)
-        #print(error_output)
         return([-1,-1])
 
-    #print(prog[0:start])
-    #print(prog[0:end])
     start_pos = len(str.split(prog[0:start]))-1
     end_pos = len(str.split(prog[0:end]))-1
     
-    #print(str.split(prog[0:start]))
-    #print(str.split(prog[0:end]))
-    #print([start_pos,end_pos])
     return([start_pos,end_pos])
 
 #the function to expand the length of the token span
@@ -222,6 +215,8 @@ def expand(end, pos):
     #print(epos)
     return epos
 
+#the function to get the corresponding place from old 
+#string to the new one
 def find_new_pos(bad, fix, pos):
 
     s = string_diff(bad, fix)
@@ -230,17 +225,15 @@ def find_new_pos(bad, fix, pos):
     old_pos_start = 0
     for i in s:
 
-
+        #when some words are added
         if(i[0] == '+'):
 
             new_pos_start = new_pos_start + (i[2][1] - i[2][0] + 1)
             if(old_pos_start >= pos[0]):
-
                 new_pos_start = new_pos_start-(old_pos_start- pos[0])
-                #new_pos_start = pos[0]-old_pos_start+new_pos_start
                 break
 
-
+        #when this portion of words does not change
         if(i[0] == '='):
             new_pos_start = new_pos_start + (i[2][1] - i[2][0] + 1)
             old_pos_start = old_pos_start + (i[2][1] - i[2][0] + 1)
@@ -251,7 +244,7 @@ def find_new_pos(bad, fix, pos):
                 new_pos_start = new_pos_start-(old_pos_start- pos[0])
                 break
 
-
+        #when some words are deleted
         if(i[0] == '-'):
             
             if((pos[0] <= i[2][0] and pos[1] >= i[2][0] ) or 
@@ -259,57 +252,57 @@ def find_new_pos(bad, fix, pos):
           (pos[0] >= i[2][0] and pos[1] <= i[2][1])):
                return [-1,-1]
 
-            #new_pos_start = new_pos_start - (i[2][1] - i[2][0] + 1)
             old_pos_start = old_pos_start + (i[2][1] - i[2][0] + 1)
             if(old_pos_start >= pos[0]):
                 new_pos_start = new_pos_start-(old_pos_start- pos[0])
-                #new_pos_start = pos[0]-old_pos_start+new_pos_start
                 break
-    '''
-    print('old comp')
-    print(pos)
-    print([new_pos_start, new_pos_start+pos[1] - pos[0]])
-    '''
+
     return [new_pos_start, new_pos_start+pos[1] - pos[0]]
 
+#take in a bad program, a fixed program, and a position, check
+#whether the error happened in that position
+#EXAMPLES:
+#print(err_judge('quick red ', 'Hi hello world quick red', [0,0]))
+#--->1
+
+#print(err_judge('world quick red ', 'Hi hello world quick red', [1,1]))
+#--->0
+
+#print(err_judge('quick red ', 'Hi hello world quick red', [1,1]))
+#--->0    
+
+#print(err_judge(' quick red fox dog', 'Hi quick fox head paint red', [1,1]))          
+#--->1
+
+#print(err_judge('a b c m d e', 'p m n c m d e q', [3,4]))
+#--->0
+
+#print(err_judge('quick red ', 'Hi hello world quck red', [0,0])) 
+#--->0
+
+#print(err_judge('world quick red ', 'Hi hello world quick red', [1,1]))
+#--->0
+
 def err_judge(bad, fix, pos):
-    
-    '''
-    print('bad:')
-    print (bad)
-    print('fix:')
-    print (fix)
-    print (pos)
-    '''
-
-
 
     end = len(bad.split())-1
     new_pos_start = 0
     pos_it = 0
 
-    #print(pos)
 	#get the key word to judge whether it is changed
     ex_pos = expand(len(bad), pos)
     new_pos = find_new_pos(bad, fix, pos)
     ex_new_pos = expand(len(bad),new_pos)
 
-
-    '''
-    print('poses:')
-    print(pos)
-    print(ex_pos)
-    print(new_pos)
-    print(ex_new_pos)
-    '''
-
+    #the word in the wanted position has been deleted
     if(new_pos == [-1,-1]):
         #print('-1-1 correct')
         return 1
 
+    #perform a string diff on bad and fix
     s= string_diff(bad,fix)
 
-    
+    #check whether the position has been changed using diff
     for i in s:
       
       if (i[0] == '=' and ex_pos[0] >= i[2][0] and ex_pos[1] <= i[2][1] and (ex_pos[1]-ex_pos[0] >=2)):
@@ -338,10 +331,10 @@ def err_judge(bad, fix, pos):
     return 0
 
 
-
+##################### MAIN ##########################
 dir = os.path.abspath(__file__ + '/../../')
-target = os.path.join(dir, 'list_of_errors_ver3.json')
-#target = os.path.join(dir, 'sample.json')
+#target = os.path.join(dir, 'list_of_errors_ver3.json')
+target = os.path.join(dir, 'sample.json')
 #target = os.path.join(dir, 'check.json')
 
 target2 = os.path.join(dir, 'problems.txt')
@@ -357,32 +350,24 @@ only_anno_corr = 0
 only_pre_corr = 0
 no_fix = 0
 
+
 with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w') as out:
     for line in myfile:
       total = total+1
 
+      
       item = eval(line)
       i=item["bad"]
-      #for i in item["bad"]:
-      '''
-      print(i)
-      print(item["fix"])
-      print(item["annotated"])
-      print(item["annotated_fix"])
-'''
+      
+      #skip no fix situation
       if(item["fix"] == ""):
         print('no fix')
         no_fix = no_fix+1
         continue
       
-      #print(i)
+      #get wrong position
       pos = get_pos(i)
-      
-      #if(pos==[-1,-1]):
-        #print (item)
-
       retVal = err_judge(i,item["fix"],pos)
-      #print(retVal)
 
       if(retVal == -1):
           print('cannot judge at 1')
@@ -395,10 +380,6 @@ with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w
       
       #deal with annotated
       pos = get_pos(item["annotated"] )
-
-      #if(pos==[-1,-1]):
-       # print (item)
-
       retVal_a = err_judge(item["annotated"], item["annotated_fix"], pos)
 
 
@@ -428,6 +409,9 @@ with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w
       else:
             both_wrong = both_wrong +1
 
+      if (total == 500):
+          break;
+
 myfile.close() 
 s = 'in the total of ' + str(total) + ' programs, both correct is: ' + str(both_correct) + 'only annotated correct is: ' \
      + str(only_anno_corr) + 'only pre correct is: ' + str(only_pre_corr) + 'both wrong is: '+str(both_wrong) +\
@@ -437,25 +421,3 @@ print (s)
 
 
 
-#print(find_new_pos('red fox pop', 'Hi hello world quick red',[2,2]))
-
-#print(err_judge('quick red ', 'Hi hello world quick red', [0,0]))
-#--->1
-
-#print(err_judge('world quick red ', 'Hi hello world quick red', [1,1]))
-#--->0
-
-#print(err_judge('quick red ', 'Hi hello world quick red', [1,1]))
-#--->0    
-
-#print(err_judge(' quick red fox dog', 'Hi quick fox head paint red', [1,1]))          
-#--->1
-
-#print(err_judge('a b c m d e', 'p m n c m d e q', [3,4]))
-#--->0
-
-#print(err_judge('quick red ', 'Hi hello world quck red', [0,0])) 
-#--->0
-
-#print(err_judge('world quick red ', 'Hi hello world quick red', [1,1]))
-#--->0

@@ -1,11 +1,15 @@
+#This is a program adding type annotation to all the files
+
 import os
 import re
 import json
 
+#These are the problem names
 hw1 = ['???','sumList','digitsOfInt', 'additivePersistence', 'digitalRoot', 'listReverse', 'palindrome']
 hw2 = ['???','assoc','removeDuplicates', 'wwhile','fixpoint', 'exprToString', 'eval', 'build']
 hw3 = ['???','sqsum', 'pipe', 'sepConcat', 'stringOfList', 'clone', 'padZero', 'removeZero', 'bigAdd', 'mulByDigit', 'bigMul']
 
+#These are matching type annotations
 annotation_hw1 = ["",\
 	" : int list -> int", \
 	" : int -> int list", \
@@ -35,6 +39,7 @@ annotation_hw3 = ["",\
 	" : int -> int list -> int list ", \
 	" : int list -> int list -> int list"]
 
+#add annotation to the code
 def add_annotation(annotation, problem_name, code):
 	# match the variables
 	var_regex = '(?<=' + problem_name + ')(.*?)(?=\=)'
@@ -45,6 +50,7 @@ def add_annotation(annotation, problem_name, code):
 	#print (result)
 	return result
 
+#get the replace ment text for the certain problem
 def replace(match, variables, annotation):
 	replacement = annotation
 	replacement += ' = fun '
@@ -52,7 +58,7 @@ def replace(match, variables, annotation):
 	replacement += ' -> '
 	return replacement
 
-###
+######################################MAIN##################################
 dir = os.path.abspath(__file__ + '/../../../')
 target = os.path.join(dir, 'Win 2016\week 7 list_of_errors\list_of_errors.json')
 output = os.path.join(dir, r'Spring 2016\annotated_6507.json')

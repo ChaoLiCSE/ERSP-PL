@@ -1,3 +1,6 @@
+#This is a program to generate a file of json objects
+#containing bad, anotated_bad, fix and annotated_fix
+
 import random
 import os
 import json
