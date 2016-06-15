@@ -98,7 +98,7 @@ for i in os.listdir(target):
       summary = build_dict(hw_num, label)
       events = find_all_prob(label, lines)
       #print(len(events))
-      
+
       index = 0
 
       # find the first bad program
@@ -120,7 +120,20 @@ for i in os.listdir(target):
           (student == 'r1hull' and label == 'fixpoint' and index == 33) or \
           (student == 'alperez' and label == 'wwhile' and index == 9) or \
           (student == 'cs130saj' and label == 'fixpoint' and index == 13) or\
-          (student == 'cs130sat' and label == 'fixpoint' and index == 25):
+          (student == 'cs130sat' and label == 'fixpoint' and index == 25) or \
+          (student == 'cs130sat' and label == 'fixpoint' and index == 27) or \
+          (student == 'cs130sat' and label == 'fixpoint' and index == 31) or \
+          (student == 'cs130sax' and label == 'fixpoint' and index == 54) or \
+          (student == 'cs130sbk' and label == 'fixpoint' and index == 16) or \
+          (student == 'ichin' and label == 'fixpoint' and index == 10) or \
+          (student == 'jnonno' and label == 'fixpoint' and index == 39) or \
+          (student == 'nbradbur' and label == 'fixpoint' and index == 13) or \
+          (student == 'phngo' and label == 'wwhile' and index == 13) or \
+          (student == 't10lee' and label == 'fixpoint' and index == 6) or\
+          (student == 'w7lau' and label == 'fixpoint' and index == 66) or \
+          (student == 'w7lau' and label == 'wwhile' and index == 0) or \
+          (student == 'w7lau' and label == 'wwhile' and index == 3) or \
+          (student == 'w7lau' and label == 'wwhile' and index == 13) :
 
           print("here")
           of = open(output, 'a')
@@ -129,14 +142,7 @@ for i in os.listdir(target):
           of.close
           index+=1
           continue
-        
-        ret = type_annotate.annotate_and_compile(events[index], label, hw_num)
-        #print(ret)
-        if('rror' in ret):
-          isfix = False
-        else:
-          isfix = True
-
+     
         # bad programs
         if (events[index]['ocaml'][0]['out'] != ""):
           summary['bad'].append(events[index]['ocaml'][0]['min'])
@@ -145,41 +151,51 @@ for i in os.listdir(target):
           print('bad')
           continue
         
-        # true fix, write to file
-        elif (summary['bad'] != [] and isfix):
-          print(type_annotate.annotate_and_compile(events[index], label, hw_num))
-          summary['fix'].append(events[index]['ocaml'][0]['min'])
-          print('fix')          
-          index += 1
-
-          # write to file, ignore empty dicts
-          json.dump(summary, of3)
-          of3.write('\n')
-          count_groups += 1
-
-        # skip false fix
+        #need to judge whether it is a true fix or not
         else:
-          #print(events[index])
-          summary['bad'].append(events[index]['ocaml'][0]['min'])
-          #print('skip')
-          index += 1
 
-          continue
+          ret = type_annotate.annotate_and_compile(events[index], label, hw_num)
+          #print(ret)
+          if('rror' in ret):
+            isfix = False
+          else:
+            isfix = True
+
+          # true fix, write to file
+          if (summary['bad'] != [] and isfix):
+            #print(type_annotate.annotate_and_compile(events[index], label, hw_num))
+            summary['fix'].append(events[index]['ocaml'][0]['min'])
+            print('fix')          
+            index += 1
+
+            # write to file, ignore empty dicts
+            json.dump(summary, of3)
+            of3.write('\n')
+            count_groups += 1
+
+          # skip false fix
+          elif( not isfix):
+            #print(events[index])
+            summary['bad'].append(events[index]['ocaml'][0]['min'])
+            #print('skip')
+            index += 1
+
+            continue
 
         # reach end of the list but finds no fix
-        if index >= len(events) and summary['bad'] and not summary['fix']:
-          summary['fix'].append('')
-          count_no_fix += 1
-          #print('no fix')
+      if summary['bad'] and (summary['fix'] == '' or not summary['fix']):
+        summary['fix'].append('')
+        count_no_fix += 1
+        #print('no fix')
 
-          # write to file
-          #print("no fix")
-          json.dump(summary, of3)
-          of3.write('\n')
-          count_groups += 1
+        # write to file
+        #print("no fix")
+        json.dump(summary, of3)
+        of3.write('\n')
+        count_groups += 1
 
-          # list is not end, continue
-          summary = build_dict(hw_num, label)
+        # list is not end, continue
+        summary = build_dict(hw_num, label)
 
     inf.close()
 

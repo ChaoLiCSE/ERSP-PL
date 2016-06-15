@@ -1,4 +1,0 @@
-Characters 39-40:
-  | (n mod 10) + digitsOfInt  (n/10);;
-    ^
-Syntax error: ')' expected, the highlighted '(' might be unmatched

@@ -1,4 +1,0 @@
-Characters 39-40:
-  | (n>0) -> 0
-    ^
-Syntax error: ')' expected, the highlighted '(' might be unmatched

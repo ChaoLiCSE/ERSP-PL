@@ -1,5 +1,0 @@
-in the total of 6509 programs,
- both correct is: 5661
-only annotated correct is: 35
-only pre correct is: 17
-both wrong is: 796

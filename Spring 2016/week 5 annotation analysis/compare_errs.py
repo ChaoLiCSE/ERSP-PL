@@ -187,10 +187,11 @@ def get_pos(prog):
             start = int(m.group(0)) + count
             end = int(n.group(0)) + count
         else:
-           
+            #print("all correct")
             return [-1,-1]
     except UnboundLocalError:
-        return([-1,-1])
+        #print("no m and n")
+        return([-2,-2])
 
     start_pos = len(str.split(prog[0:start]))-1
     end_pos = len(str.split(prog[0:end]))-1
@@ -289,6 +290,9 @@ def err_judge(bad, fix, pos):
     new_pos_start = 0
     pos_it = 0
 
+    #the bad does not give any clue
+    if(pos == [-2, -2]):
+        return 0;
 	#get the key word to judge whether it is changed
     ex_pos = expand(len(bad), pos)
     new_pos = find_new_pos(bad, fix, pos)
@@ -336,7 +340,6 @@ dir = os.path.abspath(__file__ + '/../../')
 #target = os.path.join(dir, 'list_of_errors_ver3.json')
 target = os.path.join(dir, 'sample.json')
 #target = os.path.join(dir, 'check.json')
-
 target2 = os.path.join(dir, 'problems.txt')
 
 total = 0
@@ -367,6 +370,7 @@ with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w
       
       #get wrong position
       pos = get_pos(i)
+      #print(pos)
       retVal = err_judge(i,item["fix"],pos)
 
       if(retVal == -1):
@@ -409,8 +413,7 @@ with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w
       else:
             both_wrong = both_wrong +1
 
-      if (total == 500):
-          break;
+
 
 myfile.close() 
 s = 'in the total of ' + str(total) + ' programs, both correct is: ' + str(both_correct) + 'only annotated correct is: ' \

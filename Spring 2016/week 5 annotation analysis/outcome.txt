@@ -1,0 +1,1 @@
+in the total of 6507 programs, both correct is: 4733 only annotated correct is: 574only pre correct is: 44both wrong is: 1125 no fix: 31
