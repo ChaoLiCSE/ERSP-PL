@@ -58,3 +58,4 @@ target/
 
 test.json
 alperez.json
+*.json
