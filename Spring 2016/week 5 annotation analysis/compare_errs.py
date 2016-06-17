@@ -152,6 +152,7 @@ def string_diff(old, new):
         ('=', ['fox'], [3, 3])]
 
     '''
+
     return diff(old.split(), new.split(),0,0)
 
        
@@ -172,20 +173,23 @@ def get_pos(prog):
 
         error_output = subprocess.run(["ocaml"], input = to_con+';;', 
                    stdout=subprocess.PIPE,universal_newlines = True)
-
+        
+        #print(error_output)
         if "rror" in error_output.stdout:
-            m = re.search('(?<=Characters )([1-9][0-9][0-9]|[1-9][0-9]|[0-9])', error_output.stdout) 
-            n = re.search('(?<=-)([1-9][0-9][0-9]|[1-9][0-9]|[0-9])', error_output.stdout)
+            m = re.findall('(?<=Characters )([1-9][0-9][0-9]|[1-9][0-9]|[0-9])', error_output.stdout) 
+            n = re.findall('(?<=-)([1-9][0-9][0-9]|[1-9][0-9]|[0-9])', error_output.stdout)
+            #print(m)
+            #print(n)
             break
         else:
-            count+=len(part)
+            count+=len(part)+2
             continue
     
 
     try:
-        if(m != None and n != None):
-            start = int(m.group(0)) + count
-            end = int(n.group(0)) + count
+        if(m != [] and n != []):
+            start = int(m[-1]) + count + 1
+            end = int(n[-1]) + count + 1
         else:
             #print("all correct")
             return [-1,-1]
@@ -196,6 +200,7 @@ def get_pos(prog):
     start_pos = len(str.split(prog[0:start]))-1
     end_pos = len(str.split(prog[0:end]))-1
     
+    #print(prog[start:end])
     return([start_pos,end_pos])
 
 #the function to expand the length of the token span
@@ -221,7 +226,7 @@ def expand(end, pos):
 def find_new_pos(bad, fix, pos):
 
     s = string_diff(bad, fix)
-    #print(s)
+    
     new_pos_start = 0
     old_pos_start = 0
     for i in s:
@@ -297,7 +302,10 @@ def err_judge(bad, fix, pos):
     ex_pos = expand(len(bad), pos)
     new_pos = find_new_pos(bad, fix, pos)
     ex_new_pos = expand(len(bad),new_pos)
-
+    
+    #print("in err_judge")
+    #print(new_pos)
+    #print(pos)
     #the word in the wanted position has been deleted
     if(new_pos == [-1,-1]):
         #print('-1-1 correct')
@@ -341,6 +349,8 @@ dir = os.path.abspath(__file__ + '/../../')
 target = os.path.join(dir, 'sample.json')
 #target = os.path.join(dir, 'check.json')
 target2 = os.path.join(dir, 'problems.txt')
+#target3 = os.path.join(dir, 'pre.json')
+target3 = os.path.join(dir, 'pre.json')
 
 total = 0
 prev_corr = 0
@@ -354,7 +364,7 @@ only_pre_corr = 0
 no_fix = 0
 
 
-with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w') as out:
+with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w') as out, open (os.path.join(target3), 'w') as prefile:
     for line in myfile:
       total = total+1
 
@@ -384,6 +394,7 @@ with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w
       
       #deal with annotated
       pos = get_pos(item["annotated"] )
+      #print(pos)
       retVal_a = err_judge(item["annotated"], item["annotated_fix"], pos)
 
 
@@ -410,12 +421,16 @@ with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w
             out.write('only_pre_corr\n')
             out.write(line)
             out.write('\n')
+            prefile.write(line)
       else:
             both_wrong = both_wrong +1
 
 
 
 myfile.close() 
+out.close()
+prefile.close()
+
 s = 'in the total of ' + str(total) + ' programs, both correct is: ' + str(both_correct) + 'only annotated correct is: ' \
      + str(only_anno_corr) + 'only pre correct is: ' + str(only_pre_corr) + 'both wrong is: '+str(both_wrong) +\
      ' no fix: ' + str(no_fix)

@@ -1,0 +1,2760 @@
+0
+---------------------bad------------------------
+let rec build (rand,depth) =
+  if depth = 0
+  then buildSine (buildX ())
+  else
+    (let randNum = rand (1, 2) in
+     let randNum2 = rand (3, 4) in
+     match (randNum, randNum2) with
+     | (1,3) -> buildSine (buildX ())
+     | _ -> buildCosine (buildX ()));;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build (rand,depth) =
+  let randNum = rand (1, 2) in
+  if randNum = 1 then buildSine (buildX ()) else buildCosine (buildY ());;
+-------------------anno bad--------------------------
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  if depth = 0
+  then buildSine (buildX ())
+  else
+    (let randNum = rand (1, 2) in
+     let randNum2 = rand (3, 4) in
+     match (randNum, randNum2) with
+     | (1,3) -> buildSine (buildX ())
+     | _ -> buildCosine (buildX ()));;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  let randNum = rand (1, 2) in
+  if randNum = 1 then buildSine (buildX ()) else buildCosine (buildY ());;
+
+1
+---------------------bad------------------------
+let rec build (rand,depth) =
+  if depth = 0
+  then buildSine (buildX ())
+  else
+    (let randNum = rand (1, 2) in
+     let randNum2 = rand (1, 2) in
+     let randNum3 = rand (1, 4) in
+     match (randNum, randNum2) with
+     | (1,1) -> buildSine (build (rand, (depth - 1)))
+     | (2,2) -> buildCosine (build (rand, (depth - 1)))
+     | _ ->
+         (match randNum3 with
+          | 1 -> buildSine (buildOp1 (build (rand, (depth - 1))))
+          | 2 -> buildCosine (buildOp1 (build (rand, (depth - 1))))
+          | _ -> buildSine (buildCosine (build (rand, (deth - 1))))));;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build (rand,depth) =
+  let randNum = rand (1, 2) in
+  if randNum = 1 then buildSine (buildX ()) else buildCosine (buildY ());;
+-------------------anno bad--------------------------
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  if depth = 0
+  then buildSine (buildX ())
+  else
+    (let randNum = rand (1, 2) in
+     let randNum2 = rand (1, 2) in
+     let randNum3 = rand (1, 4) in
+     match (randNum, randNum2) with
+     | (1,1) -> buildSine (build (rand, (depth - 1)))
+     | (2,2) -> buildCosine (build (rand, (depth - 1)))
+     | _ ->
+         (match randNum3 with
+          | 1 -> buildSine (buildOp1 (build (rand, (depth - 1))))
+          | 2 -> buildCosine (buildOp1 (build (rand, (depth - 1))))
+          | _ -> buildSine (buildCosine (build (rand, (deth - 1))))));;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  let randNum = rand (1, 2) in
+  if randNum = 1 then buildSine (buildX ()) else buildCosine (buildY ());;
+
+2
+---------------------bad------------------------
+let rec eval (e,x,y) = assert (((-1.0) <= eval) && (eval <= 1.0)); eval;;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let rec exprToString e =
+  match e with
+  | VarX  -> "x"
+  | VarY  -> "y"
+  | Sine e -> "sin(pi*" ^ ((exprToString e) ^ ")")
+  | Cosine e -> "cos(pi*" ^ ((exprToString e) ^ ")")
+  | Average (e1,e2) ->
+      "((" ^ ((exprToString e1) ^ ("+" ^ ((exprToString e2) ^ ")/2)")))
+  | Times (e1,e2) -> (exprToString e1) ^ ("*" ^ (exprToString e2))
+  | Thresh (e1,e2,e3,e4) ->
+      "(" ^
+        ((exprToString e1) ^
+           ("<" ^
+              ((exprToString e2) ^
+                 ("?" ^
+                    ((exprToString e3) ^ (":" ^ ((exprToString e4) ^ ")")))))));;
+
+let rec eval (e,x,y) = float_of_string (exprToString e);;
+-------------------anno bad--------------------------
+let rec eval  : expr * float * float -> float = fun (e,x,y)  ->  assert (((-1.0) <= eval) && (eval <= 1.0)); eval;;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let rec exprToString e =
+  match e with
+  | VarX  -> "x"
+  | VarY  -> "y"
+  | Sine e -> "sin(pi*" ^ ((exprToString e) ^ ")")
+  | Cosine e -> "cos(pi*" ^ ((exprToString e) ^ ")")
+  | Average (e1,e2) ->
+      "((" ^ ((exprToString e1) ^ ("+" ^ ((exprToString e2) ^ ")/2)")))
+  | Times (e1,e2) -> (exprToString e1) ^ ("*" ^ (exprToString e2))
+  | Thresh (e1,e2,e3,e4) ->
+      "(" ^
+        ((exprToString e1) ^
+           ("<" ^
+              ((exprToString e2) ^
+                 ("?" ^
+                    ((exprToString e3) ^ (":" ^ ((exprToString e4) ^ ")")))))));;
+
+let rec eval  : expr * float * float -> float = fun (e,x,y)  ->  float_of_string (exprToString e);;
+
+3
+---------------------bad------------------------
+let rec build (rand,depth) =
+  if depth <= 0
+  then
+    let bin_rand = rand (0, 2) in
+    (if bin_rand = 0 then buildX () else buildY ())
+  else
+    (let exp_rand = rand (0, 60000) in
+     let first_forced = build (rand, (depth - 1)) in
+     match exp_rand with
+     | 0 -> buildSine first_forced
+     | 1 -> buildCosine first_forced
+     | 2 -> buildAverage (first_forced, (build (rand, (depth - 1))))
+     | 3 -> buildTimes (first_forced, (build (rand, (depth - 1))))
+     | 4 ->
+         buildThresh
+           (first_forced, (build (rand, (depth - 1))),
+             (build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | 5 -> buildAcossin (first_forced, (build (rand, (depth - 1))))
+     | _ -> buildCrazy (first_forced, first_forced, first_forced));;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build (rand,depth) =
+  if depth <= 0
+  then
+    let bin_rand = rand (1, 2) in
+    (if bin_rand = 1 then buildX () else buildY ())
+  else
+    (let exp_rand = rand (1, 5) in
+     let first_forced = build (rand, (depth - 1)) in
+     match exp_rand with
+     | 1 -> buildSine first_forced
+     | 2 -> buildCosine first_forced
+     | 3 -> buildAverage (first_forced, (build (rand, (depth - 1))))
+     | 4 -> buildTimes (first_forced, (build (rand, (depth - 1))))
+     | 5 ->
+         buildThresh
+           (first_forced, (build (rand, (depth - 1))),
+             (build (rand, (depth - 1))), (build (rand, (depth - 1)))));;
+-------------------anno bad--------------------------
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  if depth <= 0
+  then
+    let bin_rand = rand (0, 2) in
+    (if bin_rand = 0 then buildX () else buildY ())
+  else
+    (let exp_rand = rand (0, 60000) in
+     let first_forced = build (rand, (depth - 1)) in
+     match exp_rand with
+     | 0 -> buildSine first_forced
+     | 1 -> buildCosine first_forced
+     | 2 -> buildAverage (first_forced, (build (rand, (depth - 1))))
+     | 3 -> buildTimes (first_forced, (build (rand, (depth - 1))))
+     | 4 ->
+         buildThresh
+           (first_forced, (build (rand, (depth - 1))),
+             (build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | 5 -> buildAcossin (first_forced, (build (rand, (depth - 1))))
+     | _ -> buildCrazy (first_forced, first_forced, first_forced));;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  if depth <= 0
+  then
+    let bin_rand = rand (1, 2) in
+    (if bin_rand = 1 then buildX () else buildY ())
+  else
+    (let exp_rand = rand (1, 5) in
+     let first_forced = build (rand, (depth - 1)) in
+     match exp_rand with
+     | 1 -> buildSine first_forced
+     | 2 -> buildCosine first_forced
+     | 3 -> buildAverage (first_forced, (build (rand, (depth - 1))))
+     | 4 -> buildTimes (first_forced, (build (rand, (depth - 1))))
+     | 5 ->
+         buildThresh
+           (first_forced, (build (rand, (depth - 1))),
+             (build (rand, (depth - 1))), (build (rand, (depth - 1)))));;
+
+4
+---------------------bad------------------------
+let rec build (rand,depth) =
+  if depth < 0
+  then
+    let r = rand (0, 2) in
+    match r with
+    | 0 -> buildX ()
+    | 1 -> buildY ()
+    | _ -> failwith "Make the non-exhaustve pattern match warning shut up"
+  else
+    (let d = depth - 1 in
+     match rand (0, 5) with
+     | 0 -> buildSine (build (rand, d))
+     | 1 -> buildCosine (build (rand, d))
+     | 2 -> buildAverage ((build (rand, d)), (build (rand, d)))
+     | 3 -> buildTimes ((build (rand, d)), (build (rand, d)))
+     | 4 ->
+         buildThresh
+           ((build (rand, d)), (build (rand, d)), (build (rand, d)),
+             (build (rand, d)))
+     | _ -> failwith "Make the non-exhaustve pattern match warning shut up ");;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build (rand,depth) =
+  if depth > 0
+  then
+    let r = rand (0, 5) in
+    let d = depth - 1 in
+    match r with
+    | 0 -> buildSine (build (rand, d))
+    | 1 -> buildCosine (build (rand, d))
+    | 2 -> buildAverage ((build (rand, d)), (build (rand, d)))
+    | 3 -> buildTimes ((build (rand, d)), (build (rand, d)))
+    | 4 ->
+        buildThresh
+          ((build (rand, d)), (build (rand, d)), (build (rand, d)),
+            (build (rand, d)))
+  else
+    (let r = rand (0, 2) in match r with | 0 -> buildX () | 1 -> buildY ());;
+-------------------anno bad--------------------------
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  if depth < 0
+  then
+    let r = rand (0, 2) in
+    match r with
+    | 0 -> buildX ()
+    | 1 -> buildY ()
+    | _ -> failwith "Make the non-exhaustve pattern match warning shut up"
+  else
+    (let d = depth - 1 in
+     match rand (0, 5) with
+     | 0 -> buildSine (build (rand, d))
+     | 1 -> buildCosine (build (rand, d))
+     | 2 -> buildAverage ((build (rand, d)), (build (rand, d)))
+     | 3 -> buildTimes ((build (rand, d)), (build (rand, d)))
+     | 4 ->
+         buildThresh
+           ((build (rand, d)), (build (rand, d)), (build (rand, d)),
+             (build (rand, d)))
+     | _ -> failwith "Make the non-exhaustve pattern match warning shut up ");;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  if depth > 0
+  then
+    let r = rand (0, 5) in
+    let d = depth - 1 in
+    match r with
+    | 0 -> buildSine (build (rand, d))
+    | 1 -> buildCosine (build (rand, d))
+    | 2 -> buildAverage ((build (rand, d)), (build (rand, d)))
+    | 3 -> buildTimes ((build (rand, d)), (build (rand, d)))
+    | 4 ->
+        buildThresh
+          ((build (rand, d)), (build (rand, d)), (build (rand, d)),
+            (build (rand, d)))
+  else
+    (let r = rand (0, 2) in match r with | 0 -> buildX () | 1 -> buildY ());;
+
+5
+---------------------bad------------------------
+let rec build (rand,depth) =
+  if depth < 0
+  then
+    let r = rand (0, 2) in
+    match r with
+    | 0 -> buildX ()
+    | 1 -> buildY ()
+    | _ -> failwith "Make the non-exhaustve pattern match warning shut up"
+  else
+    (let d = depth - 1 in
+     match rand (0, 5) with
+     | 0 -> buildSine (build (rand, d))
+     | 1 -> buildCosine (build (rand, d))
+     | 2 -> buildAverage ((build (rand, d)), (build (rand, d)))
+     | 3 -> buildTimes ((build (rand, d)), (build (rand, d)))
+     | 4 ->
+         buildThresh
+           ((build (rand, d)), (build (rand, d)), (build (rand, d)),
+             (build (rand, d)))
+     | _ -> failwith "Make the non-exhaustve pattern match warning shut up ");;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build (rand,depth) =
+  if depth > 0
+  then
+    let r = rand (0, 5) in
+    let d = depth - 1 in
+    match r with
+    | 0 -> buildSine (build (rand, d))
+    | 1 -> buildCosine (build (rand, d))
+    | 2 -> buildAverage ((build (rand, d)), (build (rand, d)))
+    | 3 -> buildTimes ((build (rand, d)), (build (rand, d)))
+    | 4 ->
+        buildThresh
+          ((build (rand, d)), (build (rand, d)), (build (rand, d)),
+            (build (rand, d)))
+  else
+    (let r = rand (0, 2) in match r with | 0 -> buildX () | 1 -> buildY ());;
+-------------------anno bad--------------------------
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  if depth < 0
+  then
+    let r = rand (0, 2) in
+    match r with
+    | 0 -> buildX ()
+    | 1 -> buildY ()
+    | _ -> failwith "Make the non-exhaustve pattern match warning shut up"
+  else
+    (let d = depth - 1 in
+     match rand (0, 5) with
+     | 0 -> buildSine (build (rand, d))
+     | 1 -> buildCosine (build (rand, d))
+     | 2 -> buildAverage ((build (rand, d)), (build (rand, d)))
+     | 3 -> buildTimes ((build (rand, d)), (build (rand, d)))
+     | 4 ->
+         buildThresh
+           ((build (rand, d)), (build (rand, d)), (build (rand, d)),
+             (build (rand, d)))
+     | _ -> failwith "Make the non-exhaustve pattern match warning shut up ");;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  if depth > 0
+  then
+    let r = rand (0, 5) in
+    let d = depth - 1 in
+    match r with
+    | 0 -> buildSine (build (rand, d))
+    | 1 -> buildCosine (build (rand, d))
+    | 2 -> buildAverage ((build (rand, d)), (build (rand, d)))
+    | 3 -> buildTimes ((build (rand, d)), (build (rand, d)))
+    | 4 ->
+        buildThresh
+          ((build (rand, d)), (build (rand, d)), (build (rand, d)),
+            (build (rand, d)))
+  else
+    (let r = rand (0, 2) in match r with | 0 -> buildX () | 1 -> buildY ());;
+
+6
+---------------------bad------------------------
+let rec wwhile (f,b) =
+  match (f, b) with | (x,y) -> if y = false then x else wwhile (f, x);;
+
+let _ = let f x = let xx = (x * x) * x in (xx, (xx < 100)) in wwhile (f, 2);;
+--------------------fix-------------------------
+let rec wwhile (f,b) =
+  let check = f b in
+  match check with | (x,y) -> if y = false then x else wwhile (f, x);;
+
+let fixpoint (f,b) = wwhile ((fun x  -> let b = f x in (b, (b != x))), b);;
+-------------------anno bad--------------------------
+let rec wwhile  : ('a -> 'a * bool) * 'a -> 'a = fun (f,b)  -> 
+  match (f, b) with | (x,y) -> if y = false then x else wwhile (f, x);;
+
+let _ = let f x = let xx = (x * x) * x in (xx, (xx < 100)) in wwhile (f, 2);;
+---------------------annofix------------------------
+let rec wwhile  : ('a -> 'a * bool) * 'a -> 'a = fun (f,b)  -> 
+  let check = f b in
+  match check with | (x,y) -> if y = false then x else wwhile (f, x);;
+
+let fixpoint (f,b) = wwhile ((fun x  -> let b = f x in (b, (b != x))), b);;
+
+7
+---------------------bad------------------------
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval (e,x,y) =
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine e1 -> sin (pi *. (eval (e1, x, y)))
+  | Cosine e1 -> cos (pi *. (eval (e1, x, y)))
+  | Average (e1,e2) -> ((eval (e1, x, y)) +. (eval (e2, x, y))) /. 2.0
+  | Times (e1,e2) -> (eval (e1, x, y)) *. (eval (e2, x, y))
+  | Thresh (e1,e2,e3,e4) ->
+      if (eval (e1, x, y)) < (eval (e2, x, y))
+      then eval (e3, x, y)
+      else eval (e4, x, y)
+  | Negate e1 -> (eval (e1, x, y)) *. (-1.0);;
+
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr
+  | Negate of expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildNegate e = Negate e;;
+
+let buildSine e = Sine e;;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build (rand,depth) =
+  if depth = 0
+  then match rand (0, 2) with | 0 -> buildX () | 1 -> buildY ()
+  else
+    (match rand (0, 100) with
+     | i when i < 20 -> buildSine (build (rand, (depth - 1)))
+     | i when i < 45 -> buildCosine (build (rand, (depth - 1)))
+     | i when i < 65 ->
+         buildAverage
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | i when i < 75 ->
+         buildTimes
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | i when i < 80 ->
+         buildThresh
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+             (build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | i when i < 100 -> buildNegate (build (rand, (depth - 1))));;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+
+let eval_fn e (x,y) =
+  let rv = eval (e, x, y) in assert (((-1.0) <= rv) && (rv <= 1.0)); rv;;
+
+let rec exprToString e =
+  match e with
+  | VarX  -> "x"
+  | VarY  -> "y"
+  | Sine e' -> "sin(pi*" ^ ((exprToString e') ^ ")")
+  | Cosine e' -> "cos(pi*" ^ ((exprToString e') ^ ")")
+  | Average (e1,e2) ->
+      "((" ^ ((exprToString e1) ^ ("+" ^ ((exprToString e2) ^ ")/2)")))
+  | Times (e1,e2) -> (exprToString e1) ^ ("*" ^ (exprToString e2))
+  | Thresh (e1,e2,e3,e4) ->
+      "(" ^
+        ((exprToString e1) ^
+           ("<" ^
+              ((exprToString e2) ^
+                 ("?" ^
+                    ((exprToString e3) ^ (":" ^ ((exprToString e4) ^ ")")))))))
+  | Negate e' -> "negate(" ^ ((exprToString e') ^ ")");;
+
+let makeRand (seed1,seed2) =
+  let seed = Array.of_list [seed1; seed2] in
+  let s = Random.State.make seed in
+  fun (x,y)  -> x + (Random.State.int s (y - x));;
+
+let doRandomGray (depth,seed1,seed2) =
+  let g = makeRand (seed1, seed2) in
+  let e = build (g, depth) in
+  let _ = print_string (exprToString e) in
+  let f = eval_fn e in
+  let n = 150 in
+  let name = Format.sprintf "%d_%d_%d" depth seed1 seed2 in
+  emitGrayscale (f, n, name);;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval (e,x,y) =
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine e -> sin (pi *. (eval (e, 0.0, 0.0)));;
+-------------------anno bad--------------------------
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval  : expr * float * float -> float = fun (e,x,y)  -> 
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine e1 -> sin (pi *. (eval (e1, x, y)))
+  | Cosine e1 -> cos (pi *. (eval (e1, x, y)))
+  | Average (e1,e2) -> ((eval (e1, x, y)) +. (eval (e2, x, y))) /. 2.0
+  | Times (e1,e2) -> (eval (e1, x, y)) *. (eval (e2, x, y))
+  | Thresh (e1,e2,e3,e4) ->
+      if (eval (e1, x, y)) < (eval (e2, x, y))
+      then eval (e3, x, y)
+      else eval (e4, x, y)
+  | Negate e1 -> (eval (e1, x, y)) *. (-1.0);;
+
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr
+  | Negate of expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildNegate e = Negate e;;
+
+let buildSine e = Sine e;;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build (rand,depth) =
+  if depth = 0
+  then match rand (0, 2) with | 0 -> buildX () | 1 -> buildY ()
+  else
+    (match rand (0, 100) with
+     | i when i < 20 -> buildSine (build (rand, (depth - 1)))
+     | i when i < 45 -> buildCosine (build (rand, (depth - 1)))
+     | i when i < 65 ->
+         buildAverage
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | i when i < 75 ->
+         buildTimes
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | i when i < 80 ->
+         buildThresh
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+             (build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | i when i < 100 -> buildNegate (build (rand, (depth - 1))));;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+
+let eval_fn e (x,y) =
+  let rv = eval (e, x, y) in assert (((-1.0) <= rv) && (rv <= 1.0)); rv;;
+
+let rec exprToString e =
+  match e with
+  | VarX  -> "x"
+  | VarY  -> "y"
+  | Sine e' -> "sin(pi*" ^ ((exprToString e') ^ ")")
+  | Cosine e' -> "cos(pi*" ^ ((exprToString e') ^ ")")
+  | Average (e1,e2) ->
+      "((" ^ ((exprToString e1) ^ ("+" ^ ((exprToString e2) ^ ")/2)")))
+  | Times (e1,e2) -> (exprToString e1) ^ ("*" ^ (exprToString e2))
+  | Thresh (e1,e2,e3,e4) ->
+      "(" ^
+        ((exprToString e1) ^
+           ("<" ^
+              ((exprToString e2) ^
+                 ("?" ^
+                    ((exprToString e3) ^ (":" ^ ((exprToString e4) ^ ")")))))))
+  | Negate e' -> "negate(" ^ ((exprToString e') ^ ")");;
+
+let makeRand (seed1,seed2) =
+  let seed = Array.of_list [seed1; seed2] in
+  let s = Random.State.make seed in
+  fun (x,y)  -> x + (Random.State.int s (y - x));;
+
+let doRandomGray (depth,seed1,seed2) =
+  let g = makeRand (seed1, seed2) in
+  let e = build (g, depth) in
+  let _ = print_string (exprToString e) in
+  let f = eval_fn e in
+  let n = 150 in
+  let name = Format.sprintf "%d_%d_%d" depth seed1 seed2 in
+  emitGrayscale (f, n, name);;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval  : expr * float * float -> float = fun (e,x,y)  -> 
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine e -> sin (pi *. (eval (e, 0.0, 0.0)));;
+
+8
+---------------------bad------------------------
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval (e,x,y) =
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine e1 -> sin (pi *. (eval (e1, x, y)))
+  | Cosine e1 -> cos (pi *. (eval (e1, x, y)))
+  | Average (e1,e2) -> ((eval (e1, x, y)) +. (eval (e2, x, y))) /. 2.0
+  | Times (e1,e2) -> (eval (e1, x, y)) *. (eval (e2, x, y))
+  | Thresh (e1,e2,e3,e4) ->
+      if (eval (e1, x, y)) < (eval (e2, x, y))
+      then eval (e3, x, y)
+      else eval (e4, x, y)
+  | Log e1 -> let b = eval (e1, x, y) in if b > 1.0 then log b else 0.0
+  | SumOfSquares (e1,e2,e3) ->
+      (((eval (e1, x, y)) ** 2.0) +. ((eval (e2, x, y)) ** 2.0)) +.
+        ((eval (e3, x, y)) ** 2.0);;
+
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr
+  | Log of expr
+  | SumOfSquares of expr* expr* expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildLog e = Log e;;
+
+let buildSine e = Sine e;;
+
+let buildSumOfSquares (e1,e2,e3) = SumOfSquares (e1, e2, e3);;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build (rand,depth) =
+  if depth = 0
+  then match rand (0, 2) with | 0 -> buildX () | 1 -> buildY ()
+  else
+    (match rand (0, 100) with
+     | i when i < 15 -> buildSine (build (rand, (depth - 1)))
+     | i when i < 30 -> buildCosine (build (rand, (depth - 1)))
+     | i when i < 40 ->
+         buildAverage
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | i when i < 50 ->
+         buildTimes
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | i when i < 60 ->
+         buildThresh
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+             (build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | i when i < 80 -> buildLog (build (rand, (depth - 1)))
+     | i when i < 100 ->
+         buildSumOfSquares
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+             (build (rand, (depth - 1)))));;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+
+let eval_fn e (x,y) =
+  let rv = eval (e, x, y) in assert (((-1.0) <= rv) && (rv <= 1.0)); rv;;
+
+let rec exprToString e =
+  match e with
+  | VarX  -> "x"
+  | VarY  -> "y"
+  | Sine e' -> "sin(pi*" ^ ((exprToString e') ^ ")")
+  | Cosine e' -> "cos(pi*" ^ ((exprToString e') ^ ")")
+  | Average (e1,e2) ->
+      "((" ^ ((exprToString e1) ^ ("+" ^ ((exprToString e2) ^ ")/2)")))
+  | Times (e1,e2) -> (exprToString e1) ^ ("*" ^ (exprToString e2))
+  | Thresh (e1,e2,e3,e4) ->
+      "(" ^
+        ((exprToString e1) ^
+           ("<" ^
+              ((exprToString e2) ^
+                 ("?" ^
+                    ((exprToString e3) ^ (":" ^ ((exprToString e4) ^ ")")))))))
+  | Log e' -> "log(" ^ ((exprToString e') ^ ")")
+  | SumOfSquares (e1,e2,e3) ->
+      "sumsqr(" ^
+        ((exprToString e1) ^
+           ("," ^ ((exprToString e2) ^ ("," ^ ((exprToString e3) ^ ")")))));;
+
+let makeRand (seed1,seed2) =
+  let seed = Array.of_list [seed1; seed2] in
+  let s = Random.State.make seed in
+  fun (x,y)  -> x + (Random.State.int s (y - x));;
+
+let doRandomGray (depth,seed1,seed2) =
+  let g = makeRand (seed1, seed2) in
+  let e = build (g, depth) in
+  let _ = print_string (exprToString e) in
+  let f = eval_fn e in
+  let n = 150 in
+  let name = Format.sprintf "%d_%d_%d" depth seed1 seed2 in
+  emitGrayscale (f, n, name);;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval (e,x,y) =
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine e -> sin (pi *. (eval (e, 0.0, 0.0)));;
+-------------------anno bad--------------------------
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval  : expr * float * float -> float = fun (e,x,y)  -> 
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine e1 -> sin (pi *. (eval (e1, x, y)))
+  | Cosine e1 -> cos (pi *. (eval (e1, x, y)))
+  | Average (e1,e2) -> ((eval (e1, x, y)) +. (eval (e2, x, y))) /. 2.0
+  | Times (e1,e2) -> (eval (e1, x, y)) *. (eval (e2, x, y))
+  | Thresh (e1,e2,e3,e4) ->
+      if (eval (e1, x, y)) < (eval (e2, x, y))
+      then eval (e3, x, y)
+      else eval (e4, x, y)
+  | Log e1 -> let b = eval (e1, x, y) in if b > 1.0 then log b else 0.0
+  | SumOfSquares (e1,e2,e3) ->
+      (((eval (e1, x, y)) ** 2.0) +. ((eval (e2, x, y)) ** 2.0)) +.
+        ((eval (e3, x, y)) ** 2.0);;
+
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr
+  | Log of expr
+  | SumOfSquares of expr* expr* expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildLog e = Log e;;
+
+let buildSine e = Sine e;;
+
+let buildSumOfSquares (e1,e2,e3) = SumOfSquares (e1, e2, e3);;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build (rand,depth) =
+  if depth = 0
+  then match rand (0, 2) with | 0 -> buildX () | 1 -> buildY ()
+  else
+    (match rand (0, 100) with
+     | i when i < 15 -> buildSine (build (rand, (depth - 1)))
+     | i when i < 30 -> buildCosine (build (rand, (depth - 1)))
+     | i when i < 40 ->
+         buildAverage
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | i when i < 50 ->
+         buildTimes
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | i when i < 60 ->
+         buildThresh
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+             (build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | i when i < 80 -> buildLog (build (rand, (depth - 1)))
+     | i when i < 100 ->
+         buildSumOfSquares
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+             (build (rand, (depth - 1)))));;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+
+let eval_fn e (x,y) =
+  let rv = eval (e, x, y) in assert (((-1.0) <= rv) && (rv <= 1.0)); rv;;
+
+let rec exprToString e =
+  match e with
+  | VarX  -> "x"
+  | VarY  -> "y"
+  | Sine e' -> "sin(pi*" ^ ((exprToString e') ^ ")")
+  | Cosine e' -> "cos(pi*" ^ ((exprToString e') ^ ")")
+  | Average (e1,e2) ->
+      "((" ^ ((exprToString e1) ^ ("+" ^ ((exprToString e2) ^ ")/2)")))
+  | Times (e1,e2) -> (exprToString e1) ^ ("*" ^ (exprToString e2))
+  | Thresh (e1,e2,e3,e4) ->
+      "(" ^
+        ((exprToString e1) ^
+           ("<" ^
+              ((exprToString e2) ^
+                 ("?" ^
+                    ((exprToString e3) ^ (":" ^ ((exprToString e4) ^ ")")))))))
+  | Log e' -> "log(" ^ ((exprToString e') ^ ")")
+  | SumOfSquares (e1,e2,e3) ->
+      "sumsqr(" ^
+        ((exprToString e1) ^
+           ("," ^ ((exprToString e2) ^ ("," ^ ((exprToString e3) ^ ")")))));;
+
+let makeRand (seed1,seed2) =
+  let seed = Array.of_list [seed1; seed2] in
+  let s = Random.State.make seed in
+  fun (x,y)  -> x + (Random.State.int s (y - x));;
+
+let doRandomGray (depth,seed1,seed2) =
+  let g = makeRand (seed1, seed2) in
+  let e = build (g, depth) in
+  let _ = print_string (exprToString e) in
+  let f = eval_fn e in
+  let n = 150 in
+  let name = Format.sprintf "%d_%d_%d" depth seed1 seed2 in
+  emitGrayscale (f, n, name);;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval  : expr * float * float -> float = fun (e,x,y)  -> 
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine e -> sin (pi *. (eval (e, 0.0, 0.0)));;
+
+9
+---------------------bad------------------------
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval (e,x,y) =
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine e1 -> sin (pi *. (eval (e1, x, y)))
+  | Cosine e1 -> cos (pi *. (eval (e1, x, y)))
+  | Average (e1,e2) -> ((eval (e1, x, y)) +. (eval (e2, x, y))) /. 2.0
+  | Times (e1,e2) -> (eval (e1, x, y)) *. (eval (e2, x, y))
+  | Thresh (e1,e2,e3,e4) ->
+      if (eval (e1, x, y)) < (eval (e2, x, y))
+      then eval (e3, x, y)
+      else eval (e4, x, y)
+  | ModF e1 -> (match modf ((eval (e1, x, y)) *. 10.0) with | (f,i) -> f)
+  | SumOfSquares (e1,e2,e3) ->
+      ((((eval (e1, x, y)) ** 2.0) +. ((eval (e2, x, y)) ** 2.0)) +.
+         ((eval (e3, x, y)) ** 2.0))
+        /. 3.0;;
+
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr
+  | ModF of expr
+  | SumOfSquares of expr* expr* expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildModF e = ModF e;;
+
+let buildSine e = Sine e;;
+
+let buildSumOfSquares (e1,e2,e3) = SumOfSquares (e1, e2, e3);;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build (rand,depth) =
+  if depth = 0
+  then match rand (0, 2) with | 0 -> buildX () | 1 -> buildY ()
+  else
+    (match rand (0, 100) with
+     | i when i < 20 -> buildSine (build (rand, (depth - 1)))
+     | i when i < 40 -> buildCosine (build (rand, (depth - 1)))
+     | i when i < 50 ->
+         buildAverage
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | i when i < 60 ->
+         buildTimes
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | i when i < 70 ->
+         buildThresh
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+             (build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | i when i < 85 -> buildModF (build (rand, (depth - 1)))
+     | i when i < 100 ->
+         buildSumOfSquares
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+             (build (rand, (depth - 1)))));;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+
+let eval_fn e (x,y) =
+  let rv = eval (e, x, y) in assert (((-1.0) <= rv) && (rv <= 1.0)); rv;;
+
+let rec exprToString e =
+  match e with
+  | VarX  -> "x"
+  | VarY  -> "y"
+  | Sine e' -> "sin(pi*" ^ ((exprToString e') ^ ")")
+  | Cosine e' -> "cos(pi*" ^ ((exprToString e') ^ ")")
+  | Average (e1,e2) ->
+      "((" ^ ((exprToString e1) ^ ("+" ^ ((exprToString e2) ^ ")/2)")))
+  | Times (e1,e2) -> (exprToString e1) ^ ("*" ^ (exprToString e2))
+  | Thresh (e1,e2,e3,e4) ->
+      "(" ^
+        ((exprToString e1) ^
+           ("<" ^
+              ((exprToString e2) ^
+                 ("?" ^
+                    ((exprToString e3) ^ (":" ^ ((exprToString e4) ^ ")")))))))
+  | ModF e' -> "log(" ^ ((exprToString e') ^ ")")
+  | SumOfSquares (e1,e2,e3) ->
+      "sumsqr(" ^
+        ((exprToString e1) ^
+           ("," ^ ((exprToString e2) ^ ("," ^ ((exprToString e3) ^ ")")))));;
+
+let makeRand (seed1,seed2) =
+  let seed = Array.of_list [seed1; seed2] in
+  let s = Random.State.make seed in
+  fun (x,y)  -> x + (Random.State.int s (y - x));;
+
+let doRandomGray (depth,seed1,seed2) =
+  let g = makeRand (seed1, seed2) in
+  let e = build (g, depth) in
+  let _ = print_string (exprToString e) in
+  let f = eval_fn e in
+  let n = 150 in
+  let name = Format.sprintf "%d_%d_%d" depth seed1 seed2 in
+  emitGrayscale (f, n, name);;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval (e,x,y) =
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine e -> sin (pi *. (eval (e, 0.0, 0.0)));;
+-------------------anno bad--------------------------
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval  : expr * float * float -> float = fun (e,x,y)  -> 
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine e1 -> sin (pi *. (eval (e1, x, y)))
+  | Cosine e1 -> cos (pi *. (eval (e1, x, y)))
+  | Average (e1,e2) -> ((eval (e1, x, y)) +. (eval (e2, x, y))) /. 2.0
+  | Times (e1,e2) -> (eval (e1, x, y)) *. (eval (e2, x, y))
+  | Thresh (e1,e2,e3,e4) ->
+      if (eval (e1, x, y)) < (eval (e2, x, y))
+      then eval (e3, x, y)
+      else eval (e4, x, y)
+  | ModF e1 -> (match modf ((eval (e1, x, y)) *. 10.0) with | (f,i) -> f)
+  | SumOfSquares (e1,e2,e3) ->
+      ((((eval (e1, x, y)) ** 2.0) +. ((eval (e2, x, y)) ** 2.0)) +.
+         ((eval (e3, x, y)) ** 2.0))
+        /. 3.0;;
+
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr
+  | ModF of expr
+  | SumOfSquares of expr* expr* expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildModF e = ModF e;;
+
+let buildSine e = Sine e;;
+
+let buildSumOfSquares (e1,e2,e3) = SumOfSquares (e1, e2, e3);;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build (rand,depth) =
+  if depth = 0
+  then match rand (0, 2) with | 0 -> buildX () | 1 -> buildY ()
+  else
+    (match rand (0, 100) with
+     | i when i < 20 -> buildSine (build (rand, (depth - 1)))
+     | i when i < 40 -> buildCosine (build (rand, (depth - 1)))
+     | i when i < 50 ->
+         buildAverage
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | i when i < 60 ->
+         buildTimes
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | i when i < 70 ->
+         buildThresh
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+             (build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | i when i < 85 -> buildModF (build (rand, (depth - 1)))
+     | i when i < 100 ->
+         buildSumOfSquares
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+             (build (rand, (depth - 1)))));;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+
+let eval_fn e (x,y) =
+  let rv = eval (e, x, y) in assert (((-1.0) <= rv) && (rv <= 1.0)); rv;;
+
+let rec exprToString e =
+  match e with
+  | VarX  -> "x"
+  | VarY  -> "y"
+  | Sine e' -> "sin(pi*" ^ ((exprToString e') ^ ")")
+  | Cosine e' -> "cos(pi*" ^ ((exprToString e') ^ ")")
+  | Average (e1,e2) ->
+      "((" ^ ((exprToString e1) ^ ("+" ^ ((exprToString e2) ^ ")/2)")))
+  | Times (e1,e2) -> (exprToString e1) ^ ("*" ^ (exprToString e2))
+  | Thresh (e1,e2,e3,e4) ->
+      "(" ^
+        ((exprToString e1) ^
+           ("<" ^
+              ((exprToString e2) ^
+                 ("?" ^
+                    ((exprToString e3) ^ (":" ^ ((exprToString e4) ^ ")")))))))
+  | ModF e' -> "log(" ^ ((exprToString e') ^ ")")
+  | SumOfSquares (e1,e2,e3) ->
+      "sumsqr(" ^
+        ((exprToString e1) ^
+           ("," ^ ((exprToString e2) ^ ("," ^ ((exprToString e3) ^ ")")))));;
+
+let makeRand (seed1,seed2) =
+  let seed = Array.of_list [seed1; seed2] in
+  let s = Random.State.make seed in
+  fun (x,y)  -> x + (Random.State.int s (y - x));;
+
+let doRandomGray (depth,seed1,seed2) =
+  let g = makeRand (seed1, seed2) in
+  let e = build (g, depth) in
+  let _ = print_string (exprToString e) in
+  let f = eval_fn e in
+  let n = 150 in
+  let name = Format.sprintf "%d_%d_%d" depth seed1 seed2 in
+  emitGrayscale (f, n, name);;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval  : expr * float * float -> float = fun (e,x,y)  -> 
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine e -> sin (pi *. (eval (e, 0.0, 0.0)));;
+
+10
+---------------------bad------------------------
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+let rec build (rand,depth) = failwith "TBD";;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+
+let makeRand (seed1,seed2) =
+  let seed = Array.of_list [seed1; seed2] in
+  let s = Random.State.make seed in
+  fun (x,y)  -> x + (Random.State.int s (y - x));;
+
+let doRandomGray (depth,seed1,seed2) =
+  let g = makeRand (seed1, seed2) in
+  let e = build (g, depth) in
+  let _ = print_string (exprToString e) in
+  let f = eval_fn e in
+  let n = 150 in
+  let name = Format.sprintf "%d_%d_%d" depth seed1 seed2 in
+  emitGrayscale (f, n, name);;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | PowerUp of expr* expr
+  | Square2 of expr* expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildSine e = Sine e;;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let rec build (rand,depth) =
+  match depth with
+  | 0 -> buildX ()
+  | 1 -> buildSine (build (rand, (depth - (depth - 1))))
+  | 2 ->
+      buildTimes
+        ((build (rand, (depth - (depth - 2)))),
+          (build (rand, (depth - (depth - 2)))));;
+-------------------anno bad--------------------------
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  ->  failwith "TBD";;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+
+let makeRand (seed1,seed2) =
+  let seed = Array.of_list [seed1; seed2] in
+  let s = Random.State.make seed in
+  fun (x,y)  -> x + (Random.State.int s (y - x));;
+
+let doRandomGray (depth,seed1,seed2) =
+  let g = makeRand (seed1, seed2) in
+  let e = build (g, depth) in
+  let _ = print_string (exprToString e) in
+  let f = eval_fn e in
+  let n = 150 in
+  let name = Format.sprintf "%d_%d_%d" depth seed1 seed2 in
+  emitGrayscale (f, n, name);;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | PowerUp of expr* expr
+  | Square2 of expr* expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildSine e = Sine e;;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  match depth with
+  | 0 -> buildX ()
+  | 1 -> buildSine (build (rand, (depth - (depth - 1))))
+  | 2 ->
+      buildTimes
+        ((build (rand, (depth - (depth - 2)))),
+          (build (rand, (depth - (depth - 2)))));;
+
+11
+---------------------bad------------------------
+let rec build (rand,depth) =
+  match depth with
+  | 0 -> buildX
+  | 1 -> buildSine (build (rand, (depth - (depth - 1))))
+  | 2 ->
+      buildTimes
+        ((build (rand, (depth - (depth - 2)))),
+          (build (rand, (depth - (depth - 2)))));;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | PowerUp of expr* expr
+  | Square2 of expr* expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildSine e = Sine e;;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let rec build (rand,depth) =
+  match depth with
+  | 0 -> buildX ()
+  | 1 -> buildSine (build (rand, (depth - (depth - 1))))
+  | 2 ->
+      buildTimes
+        ((build (rand, (depth - (depth - 2)))),
+          (build (rand, (depth - (depth - 2)))));;
+-------------------anno bad--------------------------
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  match depth with
+  | 0 -> buildX
+  | 1 -> buildSine (build (rand, (depth - (depth - 1))))
+  | 2 ->
+      buildTimes
+        ((build (rand, (depth - (depth - 2)))),
+          (build (rand, (depth - (depth - 2)))));;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | PowerUp of expr* expr
+  | Square2 of expr* expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildSine e = Sine e;;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  match depth with
+  | 0 -> buildX ()
+  | 1 -> buildSine (build (rand, (depth - (depth - 1))))
+  | 2 ->
+      buildTimes
+        ((build (rand, (depth - (depth - 2)))),
+          (build (rand, (depth - (depth - 2)))));;
+
+12
+---------------------bad------------------------
+let rec build (rand,depth) =
+  match depth with
+  | 0 -> buildX
+  | 1 -> build (rand, (depth - (depth - 1)))
+  | 2 ->
+      buildTimes
+        ((build (rand, (depth - (depth - 2)))),
+          (build (rand, (depth - (depth - 2)))));;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | PowerUp of expr* expr
+  | Square2 of expr* expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildSine e = Sine e;;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let rec build (rand,depth) =
+  match depth with
+  | 0 -> buildX ()
+  | 1 -> buildSine (build (rand, (depth - (depth - 1))))
+  | 2 ->
+      buildTimes
+        ((build (rand, (depth - (depth - 2)))),
+          (build (rand, (depth - (depth - 2)))));;
+-------------------anno bad--------------------------
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  match depth with
+  | 0 -> buildX
+  | 1 -> build (rand, (depth - (depth - 1)))
+  | 2 ->
+      buildTimes
+        ((build (rand, (depth - (depth - 2)))),
+          (build (rand, (depth - (depth - 2)))));;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | PowerUp of expr* expr
+  | Square2 of expr* expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildSine e = Sine e;;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  match depth with
+  | 0 -> buildX ()
+  | 1 -> buildSine (build (rand, (depth - (depth - 1))))
+  | 2 ->
+      buildTimes
+        ((build (rand, (depth - (depth - 2)))),
+          (build (rand, (depth - (depth - 2)))));;
+
+13
+---------------------bad------------------------
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+let rec build (rand,depth) = failwith "TBD";;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+
+let makeRand (seed1,seed2) =
+  let seed = Array.of_list [seed1; seed2] in
+  let s = Random.State.make seed in
+  fun (x,y)  -> x + (Random.State.int s (y - x));;
+
+let doRandomGray (depth,seed1,seed2) =
+  let g = makeRand (seed1, seed2) in
+  let e = build (g, depth) in
+  let _ = print_string (exprToString e) in
+  let f = eval_fn e in
+  let n = 150 in
+  let name = Format.sprintf "%d_%d_%d" depth seed1 seed2 in
+  emitGrayscale (f, n, name);;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | PowerUp of expr* expr
+  | Square2 of expr* expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildSine e = Sine e;;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let rec build (rand,depth) =
+  match depth with
+  | 0 -> buildX ()
+  | 1 -> buildSine (build (rand, (depth - (depth - 1))))
+  | 2 ->
+      buildTimes
+        ((build (rand, (depth - (depth - 2)))),
+          (build (rand, (depth - (depth - 2)))));;
+-------------------anno bad--------------------------
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  ->  failwith "TBD";;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+
+let makeRand (seed1,seed2) =
+  let seed = Array.of_list [seed1; seed2] in
+  let s = Random.State.make seed in
+  fun (x,y)  -> x + (Random.State.int s (y - x));;
+
+let doRandomGray (depth,seed1,seed2) =
+  let g = makeRand (seed1, seed2) in
+  let e = build (g, depth) in
+  let _ = print_string (exprToString e) in
+  let f = eval_fn e in
+  let n = 150 in
+  let name = Format.sprintf "%d_%d_%d" depth seed1 seed2 in
+  emitGrayscale (f, n, name);;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | PowerUp of expr* expr
+  | Square2 of expr* expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildSine e = Sine e;;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  match depth with
+  | 0 -> buildX ()
+  | 1 -> buildSine (build (rand, (depth - (depth - 1))))
+  | 2 ->
+      buildTimes
+        ((build (rand, (depth - (depth - 2)))),
+          (build (rand, (depth - (depth - 2)))));;
+
+14
+---------------------bad------------------------
+let rec build (rand,depth) =
+  match depth with
+  | 0 -> buildX
+  | 1 -> build (rand, (depth - (depth - 1)))
+  | 2 ->
+      buildTimes
+        ((build (rand, (depth - (depth - 2)))),
+          (build (rand, (depth - (depth - 2)))));;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | PowerUp of expr* expr
+  | Square2 of expr* expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildSine e = Sine e;;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let rec build (rand,depth) =
+  match depth with
+  | 0 -> buildX ()
+  | 1 -> buildSine (build (rand, (depth - (depth - 1))))
+  | 2 ->
+      buildTimes
+        ((build (rand, (depth - (depth - 2)))),
+          (build (rand, (depth - (depth - 2)))));;
+-------------------anno bad--------------------------
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  match depth with
+  | 0 -> buildX
+  | 1 -> build (rand, (depth - (depth - 1)))
+  | 2 ->
+      buildTimes
+        ((build (rand, (depth - (depth - 2)))),
+          (build (rand, (depth - (depth - 2)))));;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | PowerUp of expr* expr
+  | Square2 of expr* expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildSine e = Sine e;;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  match depth with
+  | 0 -> buildX ()
+  | 1 -> buildSine (build (rand, (depth - (depth - 1))))
+  | 2 ->
+      buildTimes
+        ((build (rand, (depth - (depth - 2)))),
+          (build (rand, (depth - (depth - 2)))));;
+
+15
+---------------------bad------------------------
+let rec build (rand,depth) =
+  if depth = 0
+  then let num = rand (1, 10) in (if num > 4 then buildX () else buildY ())
+  else
+    (let num = rand (1, 6) in
+     match num with
+     | 1 -> buildSine (buildSine (build (rand, (depth - 1))))
+     | 2 -> buildCosine (buildCosine (build (rand, (depth - 1))))
+     | 3 ->
+         buildAverage
+           ((buildSine (build (rand, (depth - 1)))),
+             (buildCosine (build (rand, (depth - 1)))))
+     | 4 ->
+         buildTimes
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | 5 ->
+         buildThresh
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+             (build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | _ -> buildSine (build (rand, (depth - 1))));;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildX () = VarX;;
+
+let rec build (rand,depth) =
+  match depth with
+  | 0 -> buildX ()
+  | 1 -> buildSine (build (rand, (depth - 1)))
+  | _ -> buildCosine (build (rand, (depth - 1)));;
+-------------------anno bad--------------------------
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  if depth = 0
+  then let num = rand (1, 10) in (if num > 4 then buildX () else buildY ())
+  else
+    (let num = rand (1, 6) in
+     match num with
+     | 1 -> buildSine (buildSine (build (rand, (depth - 1))))
+     | 2 -> buildCosine (buildCosine (build (rand, (depth - 1))))
+     | 3 ->
+         buildAverage
+           ((buildSine (build (rand, (depth - 1)))),
+             (buildCosine (build (rand, (depth - 1)))))
+     | 4 ->
+         buildTimes
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | 5 ->
+         buildThresh
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+             (build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | _ -> buildSine (build (rand, (depth - 1))));;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildX () = VarX;;
+
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  match depth with
+  | 0 -> buildX ()
+  | 1 -> buildSine (build (rand, (depth - 1)))
+  | _ -> buildCosine (build (rand, (depth - 1)));;
+
+16
+---------------------bad------------------------
+let rec build (rand,depth) =
+  if depth = 0
+  then let num = rand (1, 10) in (if num > 4 then buildX () else buildY ())
+  else
+    (let num = rand (1, 6) in
+     match num with
+     | 1 -> buildSine (build (rand, (depth - 1)))
+     | 2 -> buildCosine (build (rand, (depth - 1)))
+     | 3 ->
+         buildAverage
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | 4 ->
+         buildTimes
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | 5 ->
+         buildThresh
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+             (build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | _ -> build (rand, (depth - 1)));;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildX () = VarX;;
+
+let rec build (rand,depth) =
+  match depth with
+  | 0 -> buildX ()
+  | 1 -> buildSine (build (rand, (depth - 1)))
+  | _ -> buildCosine (build (rand, (depth - 1)));;
+-------------------anno bad--------------------------
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  if depth = 0
+  then let num = rand (1, 10) in (if num > 4 then buildX () else buildY ())
+  else
+    (let num = rand (1, 6) in
+     match num with
+     | 1 -> buildSine (build (rand, (depth - 1)))
+     | 2 -> buildCosine (build (rand, (depth - 1)))
+     | 3 ->
+         buildAverage
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | 4 ->
+         buildTimes
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | 5 ->
+         buildThresh
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+             (build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | _ -> build (rand, (depth - 1)));;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildX () = VarX;;
+
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  match depth with
+  | 0 -> buildX ()
+  | 1 -> buildSine (build (rand, (depth - 1)))
+  | _ -> buildCosine (build (rand, (depth - 1)));;
+
+17
+---------------------bad------------------------
+let rec build (rand,depth) =
+  if depth = 0
+  then let num = rand (1, 10) in (if num > 4 then buildX () else buildY ())
+  else
+    (let num = rand (1, 6) in
+     match num with
+     | 1 -> buildSine (buildSine (build (rand, (depth - 1))))
+     | 2 -> buildCosine (buildCosine (build (rand, (depth - 1))))
+     | 3 ->
+         buildAverage
+           ((buildSine (build (rand, (depth - 1)))),
+             (buildCosine (build (rand, (depth - 1)))))
+     | 4 ->
+         buildTimes
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | 5 ->
+         buildThresh
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+             (build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | _ -> buildSine (build (rand, (depth - 1))));;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildX () = VarX;;
+
+let rec build (rand,depth) =
+  match depth with
+  | 0 -> buildX ()
+  | 1 -> buildSine (build (rand, (depth - 1)))
+  | _ -> buildCosine (build (rand, (depth - 1)));;
+-------------------anno bad--------------------------
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  if depth = 0
+  then let num = rand (1, 10) in (if num > 4 then buildX () else buildY ())
+  else
+    (let num = rand (1, 6) in
+     match num with
+     | 1 -> buildSine (buildSine (build (rand, (depth - 1))))
+     | 2 -> buildCosine (buildCosine (build (rand, (depth - 1))))
+     | 3 ->
+         buildAverage
+           ((buildSine (build (rand, (depth - 1)))),
+             (buildCosine (build (rand, (depth - 1)))))
+     | 4 ->
+         buildTimes
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | 5 ->
+         buildThresh
+           ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+             (build (rand, (depth - 1))), (build (rand, (depth - 1))))
+     | _ -> buildSine (build (rand, (depth - 1))));;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildX () = VarX;;
+
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  match depth with
+  | 0 -> buildX ()
+  | 1 -> buildSine (build (rand, (depth - 1)))
+  | _ -> buildCosine (build (rand, (depth - 1)));;
+
+18
+---------------------bad------------------------
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval (e,x,y) =
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine a -> sin (pi *. (eval (a, x, y)))
+  | Cosine a -> cos (pi *. (eval (a, x, y)))
+  | Average (a,b) -> ((eval (a, x, y)) +. (eval (b, x, y))) /. 2.0
+  | Times (a,b) -> (eval (a, x, y)) *. (eval (b, x, y))
+  | Thresh (a,b,c,d) ->
+      if (eval (a, x, y)) < (eval (b, x, y))
+      then eval (c, x, y)
+      else eval (d, x, y);;
+
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build (rand,depth) =
+  match depth with
+  | 0 -> let r = rand (0, 2) in if r = 0 then buildX () else buildY ()
+  | _ ->
+      let r = rand (0, 5) in
+      if r = 0
+      then buildSine (build (rand, (depth - 1)))
+      else
+        if r = 1
+        then buildCosine (build (rand, (depth - 1)))
+        else
+          if r = 2
+          then
+            buildAverage
+              ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+          else
+            if r = 3
+            then
+              buildTimes
+                ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+            else
+              buildThresh
+                ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+                  (build (rand, (depth - 1))), (build (rand, (depth - 1))));;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+
+let eval_fn e (x,y) =
+  let rv = eval (e, x, y) in assert (((-1.0) <= rv) && (rv <= 1.0)); rv;;
+
+let rec exprToString e =
+  match e with
+  | VarX  -> "x"
+  | VarY  -> "y"
+  | Sine x -> "sin(pi*" ^ ((exprToString x) ^ ")")
+  | Cosine x -> "cos(pi*" ^ ((exprToString x) ^ ")")
+  | Average (x,y) ->
+      "((" ^ ((exprToString x) ^ ("+" ^ ((exprToString y) ^ ")/2)")))
+  | Times (x,y) -> (exprToString x) ^ ("*" ^ (exprToString y))
+  | Thresh (w,x,y,z) ->
+      "(" ^
+        ((exprToString w) ^
+           ("<" ^
+              ((exprToString x) ^
+                 ("?" ^ ((exprToString y) ^ (":" ^ ((exprToString z) ^ ")")))))));;
+
+let makeRand (seed1,seed2) =
+  let seed = Array.of_list [seed1; seed2] in
+  let s = Random.State.make seed in
+  fun (x,y)  -> x + (Random.State.int s (y - x));;
+
+let doRandomGray (depth,seed1,seed2) =
+  let g = makeRand (seed1, seed2) in
+  let e = build (g, depth) in
+  let _ = print_string (exprToString e) in
+  let f = eval_fn e in
+  let n = 150 in
+  let name = Format.sprintf "%d_%d_%d" depth seed1 seed2 in
+  emitGrayscale (f, n, name);;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval (e,x,y) =
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine a -> sin (pi *. x)
+  | Cosine a -> cos (pi *. y);;
+-------------------anno bad--------------------------
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval  : expr * float * float -> float = fun (e,x,y)  -> 
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine a -> sin (pi *. (eval (a, x, y)))
+  | Cosine a -> cos (pi *. (eval (a, x, y)))
+  | Average (a,b) -> ((eval (a, x, y)) +. (eval (b, x, y))) /. 2.0
+  | Times (a,b) -> (eval (a, x, y)) *. (eval (b, x, y))
+  | Thresh (a,b,c,d) ->
+      if (eval (a, x, y)) < (eval (b, x, y))
+      then eval (c, x, y)
+      else eval (d, x, y);;
+
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build (rand,depth) =
+  match depth with
+  | 0 -> let r = rand (0, 2) in if r = 0 then buildX () else buildY ()
+  | _ ->
+      let r = rand (0, 5) in
+      if r = 0
+      then buildSine (build (rand, (depth - 1)))
+      else
+        if r = 1
+        then buildCosine (build (rand, (depth - 1)))
+        else
+          if r = 2
+          then
+            buildAverage
+              ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+          else
+            if r = 3
+            then
+              buildTimes
+                ((build (rand, (depth - 1))), (build (rand, (depth - 1))))
+            else
+              buildThresh
+                ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+                  (build (rand, (depth - 1))), (build (rand, (depth - 1))));;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+
+let eval_fn e (x,y) =
+  let rv = eval (e, x, y) in assert (((-1.0) <= rv) && (rv <= 1.0)); rv;;
+
+let rec exprToString e =
+  match e with
+  | VarX  -> "x"
+  | VarY  -> "y"
+  | Sine x -> "sin(pi*" ^ ((exprToString x) ^ ")")
+  | Cosine x -> "cos(pi*" ^ ((exprToString x) ^ ")")
+  | Average (x,y) ->
+      "((" ^ ((exprToString x) ^ ("+" ^ ((exprToString y) ^ ")/2)")))
+  | Times (x,y) -> (exprToString x) ^ ("*" ^ (exprToString y))
+  | Thresh (w,x,y,z) ->
+      "(" ^
+        ((exprToString w) ^
+           ("<" ^
+              ((exprToString x) ^
+                 ("?" ^ ((exprToString y) ^ (":" ^ ((exprToString z) ^ ")")))))));;
+
+let makeRand (seed1,seed2) =
+  let seed = Array.of_list [seed1; seed2] in
+  let s = Random.State.make seed in
+  fun (x,y)  -> x + (Random.State.int s (y - x));;
+
+let doRandomGray (depth,seed1,seed2) =
+  let g = makeRand (seed1, seed2) in
+  let e = build (g, depth) in
+  let _ = print_string (exprToString e) in
+  let f = eval_fn e in
+  let n = 150 in
+  let name = Format.sprintf "%d_%d_%d" depth seed1 seed2 in
+  emitGrayscale (f, n, name);;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval  : expr * float * float -> float = fun (e,x,y)  -> 
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine a -> sin (pi *. x)
+  | Cosine a -> cos (pi *. y);;
+
+19
+---------------------bad------------------------
+let rec build (rand,depth) = if depth > 0 then Format.sprintf "%d" depth;;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build (rand,depth) =
+  if depth > 0
+  then
+    let rnd = rand (0, 100) in
+    (if (rnd mod 5) = 0
+     then buildSine (build (rand, (depth - 1)))
+     else
+       if (rnd mod 5) = 1
+       then buildCosine (build (rand, (depth - 1)))
+       else
+         if (rnd mod 5) = 2
+         then buildAverage ((buildX ()), (buildY ()))
+         else
+           if (rnd mod 5) = 3
+           then buildTimes ((buildX ()), (buildY ()))
+           else
+             buildThresh
+               ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+                 (build (rand, (depth - 1))), (build (rand, (depth - 1)))))
+  else
+    (let rnd = rand (0, 100) in
+     if (rnd mod 2) = 0
+     then buildAverage ((buildX ()), (buildY ()))
+     else buildTimes ((buildX ()), (buildY ())));;
+-------------------anno bad--------------------------
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  ->  if depth > 0 then Format.sprintf "%d" depth;;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  if depth > 0
+  then
+    let rnd = rand (0, 100) in
+    (if (rnd mod 5) = 0
+     then buildSine (build (rand, (depth - 1)))
+     else
+       if (rnd mod 5) = 1
+       then buildCosine (build (rand, (depth - 1)))
+       else
+         if (rnd mod 5) = 2
+         then buildAverage ((buildX ()), (buildY ()))
+         else
+           if (rnd mod 5) = 3
+           then buildTimes ((buildX ()), (buildY ()))
+           else
+             buildThresh
+               ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+                 (build (rand, (depth - 1))), (build (rand, (depth - 1)))))
+  else
+    (let rnd = rand (0, 100) in
+     if (rnd mod 2) = 0
+     then buildAverage ((buildX ()), (buildY ()))
+     else buildTimes ((buildX ()), (buildY ())));;
+
+20
+---------------------bad------------------------
+let rec build (rand,depth) = if depth > 0 then Format.sprintf "%d" depth;;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build (rand,depth) =
+  if depth > 0
+  then
+    let rnd = rand (0, 100) in
+    (if (rnd mod 5) = 0
+     then buildSine (build (rand, (depth - 1)))
+     else
+       if (rnd mod 5) = 1
+       then buildCosine (build (rand, (depth - 1)))
+       else
+         if (rnd mod 5) = 2
+         then buildAverage ((buildX ()), (buildY ()))
+         else
+           if (rnd mod 5) = 3
+           then buildTimes ((buildX ()), (buildY ()))
+           else
+             buildThresh
+               ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+                 (build (rand, (depth - 1))), (build (rand, (depth - 1)))))
+  else
+    (let rnd = rand (0, 100) in
+     if (rnd mod 2) = 0
+     then buildAverage ((buildX ()), (buildY ()))
+     else buildTimes ((buildX ()), (buildY ())));;
+-------------------anno bad--------------------------
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  ->  if depth > 0 then Format.sprintf "%d" depth;;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  if depth > 0
+  then
+    let rnd = rand (0, 100) in
+    (if (rnd mod 5) = 0
+     then buildSine (build (rand, (depth - 1)))
+     else
+       if (rnd mod 5) = 1
+       then buildCosine (build (rand, (depth - 1)))
+       else
+         if (rnd mod 5) = 2
+         then buildAverage ((buildX ()), (buildY ()))
+         else
+           if (rnd mod 5) = 3
+           then buildTimes ((buildX ()), (buildY ()))
+           else
+             buildThresh
+               ((build (rand, (depth - 1))), (build (rand, (depth - 1))),
+                 (build (rand, (depth - 1))), (build (rand, (depth - 1)))))
+  else
+    (let rnd = rand (0, 100) in
+     if (rnd mod 2) = 0
+     then buildAverage ((buildX ()), (buildY ()))
+     else buildTimes ((buildX ()), (buildY ())));;
+
+21
+---------------------bad------------------------
+let rec wwhile (f,b) =
+  match f with | (num,b00l) -> if b00l then num else wwhile (f, num);;
+
+let _ = let f x = let xx = (x * x) * x in (xx, (xx < 100)) in wwhile (f, 2);;
+--------------------fix-------------------------
+let rec wwhile (f,b) =
+  match f b with | (num,b00l) -> if b00l then num else wwhile (f, num);;
+-------------------anno bad--------------------------
+let rec wwhile  : ('a -> 'a * bool) * 'a -> 'a = fun (f,b)  -> 
+  match f with | (num,b00l) -> if b00l then num else wwhile (f, num);;
+
+let _ = let f x = let xx = (x * x) * x in (xx, (xx < 100)) in wwhile (f, 2);;
+---------------------annofix------------------------
+let rec wwhile  : ('a -> 'a * bool) * 'a -> 'a = fun (f,b)  -> 
+  match f b with | (num,b00l) -> if b00l then num else wwhile (f, num);;
+
