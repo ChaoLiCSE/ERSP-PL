@@ -1,0 +1,25 @@
+{"ocaml": [{"min": "", "in": "let rec sumList xs = failwith \"TBD:sumList\"", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = failwith \"TBD:sumList\"\n1 + 2", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = (* failwith \"TBD:sumList\" *)\n1 + 2", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\nh :: t -> h + sumList t\n| [] -> 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n > 0\nthen digitsOfInt (n/10) @ n mod 10 :: []\nelse []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let digits n = digitsOfInt (abs n)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n =\n  if n > 0 then (digitsOfInt (n / 10)) @ [n mod 10] else [];;\n\nlet rec digits n = digitsOfInt (abs n) digits (-124074);;\n", "in": "let rec digits n = digitsOfInt (abs n)\n\ndigits (-124074)", "type": "type", "out": "Error: This function has type int -> int list\n       It is applied to too many arguments; maybe you forgot a `;'.\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digits n = digitsOfInt (abs n)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitalRoot n = \nif n > 10\nthen digitalRoot ( sumList (digitsOfInt n) )\nelse n", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = failwith \"TBD\"", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\nh :: t -> h + sumList t\n| [] -> 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\nh::t -> (listReverse t) @ h :: []\n| [] -> []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\nh :: t -> h + sumList t\n| [] -> 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let palindrome w = match listReverse (explode w) with\nh :: t -> listReverse (explode w) = explode w\n| [] -> true", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "palindrome \"bob\"", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\nh :: t -> h + sumList t\n| [] -> 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\nh :: t -> h + sumList t\n| [] -> 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\nh :: t -> h + sumList t\n| [] -> 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n =\n  if n > 0 then (digitsOfInt (n / 10)) @ [n mod 10] else [];;\n\nlet rec sumList xs = match xs with | h::t -> h + (sumList t) | [] -> 0;;\n\nlet rec inc i n = if n > 9 then inc (i + 1) sumList (digitsOfInt n) else i;;\n", "in": "let rec inc i n = \nif n>9 \nthen inc (i+1) sumList (digitsOfInt n)\nelse i", "type": "type", "out": "Error: This expression has type int list -> int\n       but an expression was expected of type int\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec inc i n = \nif n>9 \nthen inc (i+1) ( sumList (digitsOfInt n) )\nelse i", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = \ninc 0 n", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\nh :: t -> h + sumList t\n| [] -> 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let additivePersistence n = \nlet rec inc i n = \nif(n>9) \nthen inc (i+1) ( sumList (digitsOfInt n) )\nelse i in\ninc 0 n", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = \nlet rec inc i n = \nif(n>9) \nthen inc (i+1) ( sumList (digitsOfInt n) )\nelse i in\ninc 0 n", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\nh :: t -> h + sumList t\n| [] -> 0", "type": "", "out": ""}], "event": "eval"}

@@ -1,0 +1,6 @@
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| [] -> 0\n| h::t -> h + sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitalRoot n = \nif n < 10 then n\nelse digitalRoot (sumList (digits n))", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| [] -> 0\n| h::t -> h + sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitalRoot n = \nif n < 10 then n\nelse digitalRoot (sumList (digits n))", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| [] -> 0\n| h::t -> h + sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| [] -> 0\n| h::t -> h + sumList t", "type": "", "out": ""}], "event": "eval"}

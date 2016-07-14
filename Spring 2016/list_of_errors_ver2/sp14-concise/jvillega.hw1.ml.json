@@ -1,0 +1,10 @@
+{"ocaml": [{"min": "", "in": "let rec sumList xs = \nmatch xs with\n| [] -> 0\n| h::t -> h + (sumList t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = \nmatch xs with\n| [] -> 0\n| h::t -> h + (sumList t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let listReverse l = \n(*let finalList = [] in*)\nlet rec addPers_helper finalList l = \nmatch l with\n| [] -> finalList\n| h::t -> let finalList = h::finalList in\naddPers_helper finalList t\nin addPers_helper [] l", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let listReverse l = \n(*let finalList = [] in*)\nlet rec addPers_helper finalList l = \nmatch l with\n| [] -> finalList\n| h::t -> let finalList = h::finalList in\naddPers_helper finalList t\nin addPers_helper [] l", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let digitsOfInt n = listReverse (backwardDigits n)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let digits n = digitsOfInt (abs n)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitalRoot n = \nif n < 10 && n >= 0 then n \nelse\nlet dig = digits n in\nlet sum = sumList dig in \ndigitalRoot sum", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let palindrome w = \nlet paliChars = explode w in\nlet backChars = listReverse paliChars in\nif paliChars = backChars then true\nelse false", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = \nmatch xs with\n| [] -> 0\n| h::t -> h + (sumList t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = \nmatch xs with\n| [] -> 0\n| h::t -> h + (sumList t)", "type": "", "out": ""}], "event": "eval"}

@@ -1,0 +1,14 @@
+{"ocaml": [{"min": "", "in": "let rec listReverse l = \nmatch l with\n| [] -> []\n| x::xs -> listReverse xs @ [x]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n =\nlet l = [] in\nlet m = n mod 10 in\nmatch m with\n| n -> n::l\n| _ -> n::digitsOfInt (n/10)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n = if n < 0 then [];;\n", "in": "let rec digitsOfInt n =\nif n<0 then []", "type": "type", "out": "Error: This variant expression is expected to have type unit\n       The constructor [] does not belong to type unit\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n = let l = [] in if n < 0 then l;;\n", "in": "let rec digitsOfInt n =\nlet l = [] in\nif n<0 then l", "type": "type", "out": "Error: This expression has type 'a list\n       but an expression was expected of type unit\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n =\nlet l = [] in\nif n<0 then l else l", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet digitsOfInt n = let l = [] in if n < 0 then l else digitsHelper n l;;\n", "in": "let digitsOfInt n =\nlet l = [] in\nif n<0 then l else digitsHelper n l", "type": "scope", "out": "Error: Unbound value digitsHelper\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let digitsOfInt n =\nlet l = [] in\nif n<0 then l else digitsHelper n l", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let digitsOfInt n =\nlet l = [] in\nif n<0 then l else digitsHelper n l", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let digitsOfInt n =\nlet l = [] in\nif n<0 then l else digitsHelper n l", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let digitsOfInt n =\nlet l = [] in\nif n<0 then l else digitsHelper n l", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsHelper n l =\n  if n < 10 then n :: l else digitsHelper (n / 10) ((n mod 10) :: l);;\n\nlet digitsOfInt n = let l = [] in if n < 0 then l else digitsHelper n l;;\n\nlet rec digitalRoot n =\n  let l = digitsOfInt n in\n  let x = sumList l in if x = n then x else digitalRoot x;;\n", "in": "let rec digitalRoot n =\nlet l = digitsOfInt n in\nlet x = sumList l in\nif x = n then x else digitalRoot x", "type": "scope", "out": "Error: Unbound value sumList\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = \nmatch l with\n| [] -> []\n| x::xs -> listReverse xs @ [x]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let palindrome w = \nlet normal = explode w in\nlet reverse = listReverse (explode w) in\npalinHelper normal reverse", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = \nmatch xs with\n| [] -> 0\n| x::xs -> x + sumList xs", "type": "", "out": ""}], "event": "eval"}

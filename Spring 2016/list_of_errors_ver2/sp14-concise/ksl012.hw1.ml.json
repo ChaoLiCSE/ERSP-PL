@@ -1,0 +1,229 @@
+{"ocaml": [{"min": "", "in": "let rec sumList xs = failwith \"TBD:sumList\"", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec sumList xs = match 1 with | [] -> 0 | h::t -> h + (sumList t);;\n", "in": "let rec sumList xs = \nmatch 1 with\n| [] -> 0\n| h::t -> h+sumList t", "type": "type", "out": "Error: This pattern matches values of type 'a list\n       but a pattern was expected which matches values of type int\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec sumList xs = match 1 with | [] -> 0 | h::t -> h + (sumList t);;\n", "in": "let rec sumList xs = \nmatch 1 with\n| [] -> 0\n| h::t -> h+sumList t", "type": "type", "out": "Error: This pattern matches values of type 'a list\n       but a pattern was expected which matches values of type int\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec sumList xs = match 1 with | [] -> 0 | h::t -> h + (sumList t);;\n", "in": "let rec sumList xs = \nmatch 1 with\n| []-> 0\n| h::t -> h+sumList t", "type": "type", "out": "Error: This pattern matches values of type 'a list\n       but a pattern was expected which matches values of type int\n"}, {"min": "", "in": "let rec digitsOfInt n = failwith \"TBD:digitsOfInt\"", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = \nmatch xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = \nmatch xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = \nmatch xs with\n| []-> 1\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = \nmatch xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = \nmatch xs with\n| []-> 1\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = \nmatch xs with\n| []-> 2\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = \nmatch xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n = if (h % 2) = 0 then [] else tail;;\n", "in": "let rec digitsOfInt n = \nif( h % 2) = 0 \nthen [] \nelse tail", "type": "scope", "out": "Error: Unbound value %\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n = if (h mod 2) = 0 then [] else tail;;\n", "in": "let rec digitsOfInt n = \nif( h mod 2) = 0 \nthen [] \nelse tail", "type": "scope", "out": "Error: Unbound value h\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n = if (head mod 2) = 0 then [] else tail;;\n", "in": "let rec digitsOfInt n = \nif( head mod 2) = 0 \nthen [] \nelse tail", "type": "scope", "out": "Error: Unbound value head\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n = if (hd mod 2) = 0 then [] else tl;;\n", "in": "let rec digitsOfInt n = \nif( hd mod 2) = 0 \nthen [] \nelse tl", "type": "scope", "out": "Error: Unbound value hd\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n = if n < 0 then [];;\n", "in": "let rec digitsOfInt n = \nif (n < 0) then []", "type": "type", "out": "Error: This variant expression is expected to have type unit\n       The constructor [] does not belong to type unit\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n = match n with | [] -> [] | h::t -> if n < 0 then [];;\n", "in": "let rec digitsOfInt n = match n with\n| [] -> []\n| h::t -> if (n < 0) then []", "type": "type", "out": "Error: This expression has type int but an expression was expected of type\n         'a list\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n = match n with | [] -> [] | _ -> if n < 0 then [];;\n", "in": "let rec digitsOfInt n = match n with\n| [] -> []\n| _ -> if n < 0 then []", "type": "type", "out": "Error: This expression has type int but an expression was expected of type\n         'a list\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n = match n with | _ -> if n < 0 then [];;\n", "in": "let rec digitsOfInt n = match n with\n| _ -> if n < 0 then []", "type": "type", "out": "Error: This variant expression is expected to have type unit\n       The constructor [] does not belong to type unit\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = match n < 0 with\n| true -> []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let digitsOfInt n = match n < 0 with\n| true -> []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let digitsOfInt n = match n < 0 with\n| true -> []\n| false -> [0]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let digitsOfInt n = match n < 0 with\n| true -> []\n| false -> [0,1]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let digitsOfInt n = \nif n < 0 \nthen []\nelse digitsOfInt (n mod 10) :: []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet digitsOfInt n = match n < 0 with | true  -> [] | false  -> [(0, 1)];;\n\nlet digitsOfInt n = if n < 0 then [] else [digitsOfInt (n mod 10)];;\n\nlet digitsOfInt n =\n  if n < 0 then [] else if n < 10 then [n] else digitsOfInt (n mod 10);;\n", "in": "let digitsOfInt n = \nif n < 0 \nthen []\nelse if n < 10\nthen n:: []\nelse\ndigitsOfInt (n mod 10)", "type": "type", "out": "Error: This expression has type (int * int) list list\n       but an expression was expected of type int list\n       Type (int * int) list is not compatible with type int \n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet digitsOfInt n = match n < 0 with | true  -> [] | false  -> [(0, 1)];;\n\nlet digitsOfInt n = if n < 0 then [] else [digitsOfInt (n mod 10)];;\n\nlet digitsOfInt n =\n  if n < 0 then [] else if n < 10 then [n] else digitsOfInt (n / 10);;\n", "in": "let digitsOfInt n = \nif n < 0 \nthen []\nelse if n < 10\nthen n:: []\nelse\ndigitsOfInt (n / 10)", "type": "type", "out": "Error: This expression has type (int * int) list list\n       but an expression was expected of type int list\n       Type (int * int) list is not compatible with type int \n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let digitsOfInt n = \nif n <= 0 \nthen []\nelse\ndigitsOfInt(n/10)::[]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let digitsOfInt n = \nif n <= 0 \nthen []\nelse\ndigitsOfInt (n mod 10)::[]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet digitsOfInt n = match n < 0 with | true  -> [] | false  -> [(0, 1)];;\n\nlet digitsOfInt n = if n < 0 then [] else [digitsOfInt (n mod 10)];;\n\nlet digitsOfInt n = if n <= 0 then [] else [digitsOfInt (n / 10)];;\n\nlet digitsOfInt n = if n <= 0 then [] else [digitsOfInt (n / 10)];;\n\nlet digitsOfInt n = if n <= 0 then [] else [digitsOfInt (n mod 10)];;\n\nlet digitsOfInt n = if n <= 0 then [] else [digitsOfInt (n mod 10)];;\n\nlet digitsOfInt n =\n  if n <= 0 then [] else (digitsOfInt (n / 10)) @ [n mod 10];;\n", "in": "let digitsOfInt n = \nif n <= 0 \nthen []\nelse\ndigitsOfInt (n/10) @ (n mod 10)::[]", "type": "type", "out": "Error: This expression has type int but an expression was expected of type\n         (int * int) list list list list list\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\ndigitsOfInt (n/10) @ (n mod 10)::[]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n = if n <= 0 then [] else [digitsOfInt (n / 10)];;\n", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\ndigitsOfInt (n/10) ::[]", "type": "type", "out": "Error: This expression has type 'a list\n       but an expression was expected of type 'a\n       The type variable 'a occurs inside 'a list\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\ndigitsOfInt (n/10) @ (n mod 10)::[]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n = if n <= 0 then [] else [digitsOfInt (n / 10)];;\n", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\ndigitsOfInt (n/10)::[]", "type": "type", "out": "Error: This expression has type 'a list\n       but an expression was expected of type 'a\n       The type variable 'a occurs inside 'a list\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n = if n <= 0 then [] else [digitsOfInt (n mod 10)];;\n", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\ndigitsOfInt (n mod 10)::[]", "type": "type", "out": "Error: This expression has type 'a list\n       but an expression was expected of type 'a\n       The type variable 'a occurs inside 'a list\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n = if n <= 0 then [] else [digitsOfInt (n mod 10); []];;\n", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\ndigitsOfInt (n mod 10)::[]::[]", "type": "type", "out": "Error: This expression has type 'a list\n       but an expression was expected of type 'a\n       The type variable 'a occurs inside 'a list\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n =\n  let myList = [] in if n <= 0 then [] else [digitsOfInt (n mod 10)];;\n", "in": "let rec digitsOfInt n = \nlet myList = [] in\nif n <= 0 \nthen []\nelse\ndigitsOfInt (n mod 10)::[]", "type": "type", "out": "Error: This expression has type 'a list\n       but an expression was expected of type 'a\n       The type variable 'a occurs inside 'a list\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n =\n  let myList = [] in if n <= 0 then [] else [(digitsOfInt n) mod 10];;\n", "in": "let rec digitsOfInt n = \nlet myList = [] in\nif n <= 0 \nthen []\nelse\ndigitsOfInt n mod 10::[]", "type": "type", "out": "Error: This expression has type 'a list\n       but an expression was expected of type int\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n =\n  let myList = [] in\n  if n <= 0 then [] else [digitsOfInt (n mod 10); digitsOfInt (n / 10)];;\n", "in": "let rec digitsOfInt n = \nlet myList = [] in\nif n <= 0 \nthen []\nelse\ndigitsOfInt (n mod 10) :: digitsOfInt(n / 10) :: []", "type": "type", "out": "Error: This expression has type 'a list\n       but an expression was expected of type 'a\n       The type variable 'a occurs inside 'a list\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n =\n  let myList = [] in\n  if n <= 0\n  then []\n  else if n < 10 then [num] else (digitsOfInt (n / 10)) @ [n mod 10];;\n", "in": "let rec digitsOfInt n = \nlet myList = [] in\nif n <= 0 \nthen []\nelse\nif n < 10\nthen [num]\nelse\ndigitsOfInt (n/10) @ n mod 10 :: []", "type": "scope", "out": "Error: Unbound value num\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nlet myList = [] in\nif n <= 0 \nthen []\nelse\nif n < 10\nthen [n]\nelse\ndigitsOfInt (n/10) @ n mod 10 :: []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nlet myList = [] in\nif n <= 0 \nthen []\nelse\nif n < 10\nthen [n]\nelse\ndigitsOfInt (n/10) @ n mod 10 :: []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nlet myList = [] in\nif n <= 0 \nthen []\nelse\nif n < 10\nthen [n]\nelse\nn mod 10 :: []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nlet myList = [] in\nif n <= 0 \nthen []\nelse\nn mod 10 :: []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nlet myList = [] in\nif n <= 0 \nthen []\nelse\nn mod 10 :: myList", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n =\n  if n <= 0 then [] else (n mod 10) :: [] :: (digitsOfInt (n / 10));;\n", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nn mod 10 :: [] :: digitsOfInt (n / 10)", "type": "type", "out": "Error: This expression has type 'a list\n       but an expression was expected of type int\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n =\n  if n <= 0 then [] else [n mod 10; digitsOfInt (n / 10)];;\n", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nn mod 10 :: digitsOfInt (n / 10) :: []", "type": "type", "out": "Error: This expression has type int list\n       but an expression was expected of type int\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n =\n  if n <= 0 then [] else [n mod 10; [digitsOfInt (n / 10)]];;\n", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nn mod 10 :: [digitsOfInt (n / 10)] :: []", "type": "type", "out": "Error: This expression has type 'a list\n       but an expression was expected of type int\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n = if n <= 0 then [] else [digitsOfInt (n / 10)];;\n", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\ndigitsOfInt(n / 10) :: []", "type": "type", "out": "Error: This expression has type 'a list\n       but an expression was expected of type 'a\n       The type variable 'a occurs inside 'a list\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n =\n  if n <= 0 then [] else [((digitsOfInt (n / 10)), (n mod 10))];;\n", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\n( digitsOfInt(n / 10), n mod 10) :: []", "type": "type", "out": "Error: This expression has type ('a * 'b) list\n       but an expression was expected of type 'a\n       The type variable 'a occurs inside ('a * 'b) list\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nn mod 10 :: []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n =\n  if n <= 0 then [] else (n mod 10) :: [] :: (digitsOfInt (n / 10));;\n", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nn mod 10 :: [] :: digitsOfInt( n / 10)", "type": "type", "out": "Error: This expression has type 'a list\n       but an expression was expected of type int\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nn mod 10 :: []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nn mod 100 :: []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\ndigitsOfInt(n / 10) @ n mod 10 :: []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\ndigitsOfInt(n / 10) @ n mod 10 :: []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen [0]\nelse\ndigitsOfInt(n / 10) @ n mod 10 :: []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\ndigitsOfInt(n / 10) @ n mod 10 :: []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = match n with\n|0 -> []\n|_ -> n mod 10 :: []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n =\n  match n with | 0 -> [] | _ -> ([n mod 10], (digitsOfInt (n / 10)));;\n", "in": "let rec digitsOfInt n = match n with\n|0 -> []\n|_ -> (n mod 10 :: [], digitsOfInt( n /10))", "type": "type", "out": "Error: This expression has type 'a * 'b\n       but an expression was expected of type 'c list\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n =\n  match n with | 0 -> [] | _ -> [n mod 10; digitsOfInt (n / 10)];;\n", "in": "let rec digitsOfInt n = match n with\n|0 -> []\n|_ -> n mod 10 :: [digitsOfInt(n/10)]", "type": "type", "out": "Error: This expression has type int list\n       but an expression was expected of type int\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec digitsOfInt n =\n  match n with | 0 -> [] | _ -> [digitsOfInt (n / 10); n mod 10];;\n", "in": "let rec digitsOfInt n = match n with\n|0 -> []\n|_ -> digitsOfInt(n/10) :: [n mod 10]", "type": "type", "out": "Error: This expression has type 'a list\n       but an expression was expected of type 'a\n       The type variable 'a occurs inside 'a list\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nn mod 10 :: digitsOfInt(n/10);", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> l;\n|h::t -> listReverse(h::l)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> listReverse(t) :: h", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet _ = listReverse [1; 2; 3; 4];;\n", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> listReverse(t) :: l", "type": "scope", "out": "Error: Unbound value listReverse\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet _ = listReverse [1; 2; 3; 4];;\n", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> listReverse(t)", "type": "scope", "out": "Error: Unbound value listReverse\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> listReverse(t) :: l", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> h :: listReverse(t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> listReverse(t) :: [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> h :: listReverse(t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|listReverse(t):: h;", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet _ = digitsOfInt 3124;;\n", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nn mod 10 :: digitsOfInt(n/10);", "type": "scope", "out": "Error: Unbound value digitsOfInt\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> h::l listReverse(t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> h::[] listReverse(t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> h:: listReverse t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> h::l listReverse t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::listReverse(t) -> h::l", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::listReverse t -> h::l", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> listReverse t @ h", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec listReverse l = match l with | [] -> [] | h::t -> (listReverse t) @ h;;\n\nlet _ = listReverse [1; 2; 3; 4];;\n", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> listReverse t @ []", "type": "type", "out": "Error: This expression has type int but an expression was expected of type\n         'a list\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> listReverse t :: [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> l;\n|h::t -> listReverse(h::l)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> l;\n|h::t -> listReverse(h::l) t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet _ = listReverse [1; 2; 3; 4];;\n", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nn mod 10 :: digitsOfInt(n/10)", "type": "scope", "out": "Error: Unbound value listReverse\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let digits n = digitsOfInt (abs n)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> l;\n|h::t -> listReverse(h::t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> listReverse(h::t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> h::t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> h::listReverse t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> h::[2;2]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec listReverse l = match l with | [] -> [] | h::t -> [h; 2; 2];;\n\nlet _ = listReverse [\"a\"; \"b\"; \"c\"; \"d\"];;\n", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> h:: [listReverse t]", "type": "type", "out": "Error: This expression has type string but an expression was expected of type\n         int\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> listReverse t @ [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [];\n|h::t -> listReverse t :: [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [h];\n|h::t -> listReverse t :: [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [l];\n|h::t -> listReverse t :: [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [l];\n|h::t -> h :: listReverse t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> [l];\n|h::t -> [h] :: listReverse t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|h::t -> [h] :: listReverse t\n|[] -> [l]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|h::t -> h :: listReverse t\n|[] -> []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|h::t -> h :: l listReverse t\n|[] -> []", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|h::t -> h :: l listReverse t\n|[] -> l", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> l\n|h::t -> h::listReverse t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> h::listReverse t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> h @ listReverse t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec listReverse l = match l with | [] -> [] | h::t -> h @ (listReverse t);;\n\nlet _ = listReverse [1; 2; 3; 4];;\n", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> listReverse t @ h", "type": "type", "out": "Error: This expression has type int but an expression was expected of type\n         'a list\n"}], "event": "eval"}
+{"ocaml": [{"min": "\nlet rec listReverse l = match l with | [] -> [] | h::t -> (listReverse t) @ h;;\n\nlet _ = listReverse [1; 2; 3; 4];;\n", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> listReverse t @ l", "type": "type", "out": "Error: This expression has type int but an expression was expected of type\n         'a list\n"}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> listReverse t @ [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> listReverse t :: [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> listReverse t.hd :: [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> listReverse t @ [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> l\n|h::t -> h::listReverse l", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> l\n|h::t -> h::listReverse t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> l\n|h::t -> h", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> l\n|h::t -> h", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> l\n|h::t -> [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = failwith \"TBD\"", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> listReverse t\n|h::t -> h::l", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> listReverse []\n|h::t -> h::l", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> h::l", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> listReverse t @ [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> listReverse t @ [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nlet _ = n mod 10 :: digitsOfInt(n/10)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nlet _ = n mod 10 :: digitsOfInt(n/10) in\nlistReverse _", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nlistReverse (n mod 10 :: digitsOfInt(n/10))", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nlistReverse n mod 10 :: listReverse(digitsOfInt(n/10))", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nn mod 10 :: listReverse digitsOfInt(n/10)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nn mod 10 :: listReverse(digitsOfInt(n/10))", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen listReverse []\nelse\nn mod 10 :: listReverse(digitsOfInt(n/10))", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen  []\nelse\nn mod 10 :: listReverse(digitsOfInt(n/10))", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen  []\nelse if n > 9\nn mod 10 :: digitsOfInt(n/10)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen  []\nelse if n > 9\nthen n mod 10 :: digitsOfInt(n/10)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n| []-> 0\n| h::t -> h+sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> listReverse t @ [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nn mod 10 :: listReverse digitsOfInt(n/10)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nn mod 10 :: listReverse(digitsOfInt(n/10))", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nlistReverse(n mod 10 :: digitsOfInt(n/10))", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nlistReverse(n mod 10 :: listReverse(digitsOfInt(n/10)))", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let digits n = digitsOfInt (abs n)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = \ndigitsOfInt(n)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = \nsumList(digitsOfInt(n))", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = \nlet sumList(digitsOfInt(n)) sum in\nif sum < 10\nthen 5", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = \nif sumList(digitsOfInt(n)) > 9\nthen 1", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = \nif sumList(digitsOfInt(n)) > 9\nthen 2", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = \nif sumList(digitsOfInt(n)) > 9\nthen 20", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = \nif sumList(digitsOfInt(n)) > 9\nthen sumList(digitsOfInt(n))", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = \nif sumList(digitsOfInt(n)) > 9\nthen sumList [1;2]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = \nif sumList(digitsOfInt(n)) > 9\nthen 0\nelse 1", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = \nif sumList(digitsOfInt(n)) > 9\nthen sumList(digitsOfInt(n))\nelse 1", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = \nif sumList(digitsOfInt(n)) > 9\nthen sumList(sumList(digitsOfInt(digitsOfInt(n))))\nelse 1", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = \nif sumList(digitsOfInt(n)) > 9\nthen sumList(digitsOfInt(sumList(digitsOfInt(n))))\nelse 1", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitalRoot n = \nif sumList(digitsOfInt(n)) > 9\nthen sumList(digitsOfInt(sumList(digitsOfInt(n))))\nelse 1", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n|[]-> 0\n| h::t -> h + sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = \nif sumList(digitsOfInt(n)) > 9\nthen sumList(digitsOfInt(sumList(digitsOfInt(n))))\nelse 1", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitalRoot n = \nif sumList(digitsOfInt(n)) > 9\nthen sumList(digitsOfInt(sumList(digitsOfInt(n))))", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitalRoot n = \nif sumList(digitsOfInt(n)) > 9\nthen sumList(digitsOfInt(sumList(digitsOfInt(n))))\nelse 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitalRoot n = \nif sumList(digitsOfInt(n)) > 9\nthen sumList(digitsOfInt(sumList(digitsOfInt(n))))\nelse n", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitalRoot n = \nif n > 9\nthen sumList(digitsOfInt(sumList(digitsOfInt(n))))\nelse n", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = \nif n > 9\nthen sumList(digitsOfInt(sumList(digitsOfInt(n))))\nelse 1", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n|[]-> 0\n| h::t -> h + sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let additivePersistence n = \nlet count = 0 in\nlet rec helper n =\nif n > 9\nthen sumList(digitsOfInt(sumList(digitsOfInt(n))))\nelse count + 1", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let additivePersistence n = \nlet count = 0 in\nlet rec helper n =\nif n > 9\nthen sumList(digitsOfInt(sumList(digitsOfInt(n))))\nelse count", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let additivePersistence n = \nlet count = 0 in\nlet rec helper n =\nif n > 9\nthen sumList(digitsOfInt(sumList(digitsOfInt(n))))\nelse 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let additivePersistence n = \nlet count = 0 in\nlet rec helper n =\nif n > 9\nthen sumList(digitsOfInt(sumList(digitsOfInt(n))))", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let additivePersistence n = \nlet count = 0 in\nlet rec helper n =\n0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let additivePersistence n = \nlet inc = fun x -> x + 1 in\nlet count = 0 in\nlet rec helper n =\nif n > 9\nthen sumList(digitsOfInt(sumList(digitsOfInt(n))))\nelse 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let additivePersistence n = \nlet inc = fun x -> x + 1 in\nlet count = 0 in\nlet rec helper n =\nif n > 9\nthen 1\nelse 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let additivePersistence n = \nlet inc = fun x -> x + 1 in\nlet count = 0 in\nlet rec helper n =\nif n > 9\nthen 1\nelse", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let additivePersistence n = failwith \"tbd\"", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitalRoot n = \nif n > 9\nthen sumList(digitsOfInt(sumList(digitsOfInt(n))))\nelse n", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let palindrome w = \nif listReverse explode w  = explode w \nthen true\nelse false", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let palindrome w = \nif listReverse(explode w)  = explode w \nthen true\nelse false", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n =\nif n > 9\nthen additivePersistence (sumList(digitsOfInt(n)) + 1)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n =\nif n > 9\nthen additivePersistence (sumList(digitsOfInt(n)) + 1)\nelse 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n =\nif n > 9\nthen additivePersistence (1 + sumList(digitsOfInt(n)))\nelse 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n|[]-> 0\n| h::t -> h + sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n = \nif (n > 9) then (1 + additivePersistence (sumList(digitsOfInt(n)))) else 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n =\nif n > 9\nthen additivePersistence (sumList(digitsOfInt(n))) + 1\nelse 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitalRoot n = \nif n > 9\nthen digitalRoot(sumList(digitsOfInt n))\n(*then sumList(digitsOfInt(sumList(digitsOfInt(n)))) *)\nelse n", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n =\nif n > 9\nthen additivePersistence sumList(digitsOfInt(n)) + 1\nelse 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n =\nif n > 9\nthen additivePersistence (sumList(digitsOfInt(n))) + 1\nelse 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitalRoot n = \nif n > 9\nthen digitalRoot(sumList(digitsOfInt n)\nelse n", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitalRoot n = \nif n > 9\nthen digitalRoot(sumList(digitsOfInt n))\nelse n", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n =\nif n > 9\nthen additivePersistence(sumList(digitsOfInt(n))) + 1\nelse 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> listReverse (listreverse t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> listReverse (listReverse t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> h:: listReverse (listReverse t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> h:: listReverse (listReverse h)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> h:: listReverse (listReverse l)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> l\n|h::t -> h:: listReverse (listReverse l)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> l\n|h::t -> h:: listReverse (listReverse t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> l\n|h::t -> h :: listReverse (t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> listReverse(l)\n|h::t -> h :: listReverse (t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> listReverse(l)\n|h::t -> h :: listReverse (t)", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> \n|h::t -> append t [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> append listReverse(t) [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> append (listReverse(t) [h])", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> listReverse(t) @ [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> append(listReverse(t), [h])", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> append(listReverse(t) [h])", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> append(listReverse(t) ; [h])", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> append listReverse(t) [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> append [h] [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> append t [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> append listReverse(t) [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n(*|h::t -> append listReverse(t) [h]*)\n|h::t -> listReverse(t) @ [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> append(listReverse(t)) [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec listReverse l = match l with\n|[] -> []\n|h::t -> append(listReverse(t)) [h]", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n|[]-> 0\n| h::t -> h + sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n|[]-> 0\n| h::t -> h + sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitsOfInt n = \nif n <= 0 \nthen []\nelse\nlistReverse(n mod 10 :: listReverse(digitsOfInt(n/10)))", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec digitalRoot n = \nif n > 9\nthen digitalRoot(sumList(digitsOfInt n))\nelse n", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n|[]    -> 0\n| h::t -> h + sumList t", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec additivePersistence n =\nif n > 9\nthen additivePersistence(sumList(digitsOfInt(n))) + 1\nelse 0", "type": "", "out": ""}], "event": "eval"}
+{"ocaml": [{"min": "", "in": "let rec sumList xs = match xs with\n|[]    -> 0\n| h::t -> h + sumList t", "type": "", "out": ""}], "event": "eval"}
