@@ -348,9 +348,12 @@ dir = os.path.abspath(__file__ + '/../../')
 #target = os.path.join(dir, 'list_of_errors_ver3.json')
 target = os.path.join(dir, 'sample.json')
 #target = os.path.join(dir, 'check.json')
-target2 = os.path.join(dir, 'problems.txt')
+target2 = os.path.join(dir, 'problems.json')
 #target3 = os.path.join(dir, 'pre.json')
-target3 = os.path.join(dir, 'pre.json')
+target3 = os.path.join(dir, 'title.txt')
+
+target_false_fix = os.path.join(dir, 'false_fix.json')
+target_empty = os.path.join(dir, 'empty_mn.json')
 
 total = 0
 prev_corr = 0
@@ -364,7 +367,9 @@ only_pre_corr = 0
 no_fix = 0
 
 
-with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w') as out, open (os.path.join(target3), 'w') as prefile:
+with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w') as out, open (os.path.join(target3), 'w') as title:
+     #open (os.path.join(target_false_fix), 'w')as false_fix, open (os.path.join(target_empty), 'w')as empty_mn:
+
     for line in myfile:
       total = total+1
 
@@ -380,6 +385,13 @@ with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w
       
       #get wrong position
       pos = get_pos(i)
+      '''
+      if(pos == [-2, -2]):
+        false_fix.write(line)
+
+      if(pos == [-1, -1]):
+        empty_mn.write(line)
+      '''
       #print(pos)
       retVal = err_judge(i,item["fix"],pos)
 
@@ -411,31 +423,39 @@ with open (os.path.join(target), 'r') as myfile, open (os.path.join(target2), 'w
             both_correct = both_correct +1
       elif(retVal_a == 1 and retVal == 0):
             only_anno_corr = only_anno_corr + 1
+            '''
             print('anno correct')
             out.write('only_anno_corr \n')
             out.write(line)
             out.write('\n')
+            annofile.write(line)
+            '''
       elif(retVal_a == 0 and retVal == 1):
             only_pre_corr = only_pre_corr + 1
+            '''
             print('pre correct')
             out.write('only_pre_corr\n')
             out.write(line)
             out.write('\n')
-            prefile.write(line)
+            '''
       else:
             both_wrong = both_wrong +1
+            out.write(line)
+            title.write(str(both_wrong) + " "+(item["prob"]))
+            title.write('\n')
+            print(both_wrong)
+            
 
 
 
 myfile.close() 
 out.close()
-prefile.close()
+#prefile.close()
 
 s = 'in the total of ' + str(total) + ' programs, both correct is: ' + str(both_correct) + 'only annotated correct is: ' \
      + str(only_anno_corr) + 'only pre correct is: ' + str(only_pre_corr) + 'both wrong is: '+str(both_wrong) +\
      ' no fix: ' + str(no_fix)
 
 print (s)
-
 
 

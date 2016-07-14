@@ -1,0 +1,16 @@
+1.what kind of problem can the annotation fix?
+
+   - previously looks correct but with wrong type (false fix 646, in anno 525), 
+     but not necessarily give correct location. But it is better to 
+     give an in time complie warning
+
+   - recursion base case problem 
+       first, take out all the recursive function in annotation correct  --- 408 70.1%
+       then compare to all bad recursive functions --- 5687 87.39%
+       
+   - will it also fix the forever loop?
+
+In all anno correct, 525 programs are false fix problems, 57 are not.
+among the 57 not false fix problems, 18 are not recursive, 39 are recursive
+
+2. what kind of error can not fix?

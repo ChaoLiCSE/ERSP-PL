@@ -1,0 +1,214 @@
+0
+---------------------bad------------------------
+let sqsum xs =
+  let f a x = a + (x * x) in let base = f 4 xs in List.fold_left f base xs;;
+--------------------fix-------------------------
+let sqsum xs = let f a x = a in let base = f 2 xs in List.fold_left f base xs;;
+-------------------anno bad--------------------------
+let sqsum  : int list -> int  = fun xs  -> 
+  let f a x = a + (x * x) in let base = f 4 xs in List.fold_left f base xs;;
+---------------------annofix------------------------
+let sqsum  : int list -> int  = fun xs  ->  let f a x = a in let base = f 2 xs in List.fold_left f base xs;;
+
+1
+---------------------bad------------------------
+let sqsum xs =
+  let f a x = a + (x * x) in let base = f 4 xs in List.fold_left f base xs;;
+--------------------fix-------------------------
+let sqsum xs = let f a x = a in let base = f 2 xs in List.fold_left f base xs;;
+-------------------anno bad--------------------------
+let sqsum  : int list -> int  = fun xs  -> 
+  let f a x = a + (x * x) in let base = f 4 xs in List.fold_left f base xs;;
+---------------------annofix------------------------
+let sqsum  : int list -> int  = fun xs  ->  let f a x = a in let base = f 2 xs in List.fold_left f base xs;;
+
+2
+---------------------bad------------------------
+let sqsum xs =
+  let f a x = a * a in let base = f xs xs in List.fold_left f base xs;;
+--------------------fix-------------------------
+let sqsum xs = let f a x = a in let base = f 2 xs in List.fold_left f base xs;;
+-------------------anno bad--------------------------
+let sqsum  : int list -> int  = fun xs  -> 
+  let f a x = a * a in let base = f xs xs in List.fold_left f base xs;;
+---------------------annofix------------------------
+let sqsum  : int list -> int  = fun xs  ->  let f a x = a in let base = f 2 xs in List.fold_left f base xs;;
+
+3
+---------------------bad------------------------
+let sqsum xs =
+  let f a x = a + (x * x) in let base = f 4 xs in List.fold_left f base xs;;
+--------------------fix-------------------------
+let sqsum xs = let f a x = a in let base = f 2 xs in List.fold_left f base xs;;
+-------------------anno bad--------------------------
+let sqsum  : int list -> int  = fun xs  -> 
+  let f a x = a + (x * x) in let base = f 4 xs in List.fold_left f base xs;;
+---------------------annofix------------------------
+let sqsum  : int list -> int  = fun xs  ->  let f a x = a in let base = f 2 xs in List.fold_left f base xs;;
+
+4
+---------------------bad------------------------
+let sqsum xs =
+  let f a x = a + (x * x) in let base = f 4 xs in List.fold_left f base xs;;
+--------------------fix-------------------------
+let sqsum xs = let f a x = a in let base = f 2 xs in List.fold_left f base xs;;
+-------------------anno bad--------------------------
+let sqsum  : int list -> int  = fun xs  -> 
+  let f a x = a + (x * x) in let base = f 4 xs in List.fold_left f base xs;;
+---------------------annofix------------------------
+let sqsum  : int list -> int  = fun xs  ->  let f a x = a in let base = f 2 xs in List.fold_left f base xs;;
+
+5
+---------------------bad------------------------
+let sqsum xs =
+  let f a x = (a * a) + x in let base = f 4 xs in List.fold_left f base xs;;
+--------------------fix-------------------------
+let sqsum xs = let f a x = a in let base = f 2 xs in List.fold_left f base xs;;
+-------------------anno bad--------------------------
+let sqsum  : int list -> int  = fun xs  -> 
+  let f a x = (a * a) + x in let base = f 4 xs in List.fold_left f base xs;;
+---------------------annofix------------------------
+let sqsum  : int list -> int  = fun xs  ->  let f a x = a in let base = f 2 xs in List.fold_left f base xs;;
+
+6
+---------------------bad------------------------
+let sqsum xs =
+  let f a x = a * a in let base = f xs xs in List.fold_left f base xs;;
+--------------------fix-------------------------
+let sqsum xs = let f a x = a in let base = f 2 xs in List.fold_left f base xs;;
+-------------------anno bad--------------------------
+let sqsum  : int list -> int  = fun xs  -> 
+  let f a x = a * a in let base = f xs xs in List.fold_left f base xs;;
+---------------------annofix------------------------
+let sqsum  : int list -> int  = fun xs  ->  let f a x = a in let base = f 2 xs in List.fold_left f base xs;;
+
+7
+---------------------bad------------------------
+let sqsum xs =
+  let f a x = (a * a) + x in let base = f 4 xs in List.fold_left f base xs;;
+--------------------fix-------------------------
+let sqsum xs = let f a x = a in let base = f 2 xs in List.fold_left f base xs;;
+-------------------anno bad--------------------------
+let sqsum  : int list -> int  = fun xs  -> 
+  let f a x = (a * a) + x in let base = f 4 xs in List.fold_left f base xs;;
+---------------------annofix------------------------
+let sqsum  : int list -> int  = fun xs  ->  let f a x = a in let base = f 2 xs in List.fold_left f base xs;;
+
+8
+---------------------bad------------------------
+let sqsum xs =
+  let f a x = (a * a) + x in let base = f 4 xs in List.fold_left f base xs;;
+--------------------fix-------------------------
+let sqsum xs = let f a x = a in let base = f 2 xs in List.fold_left f base xs;;
+-------------------anno bad--------------------------
+let sqsum  : int list -> int  = fun xs  -> 
+  let f a x = (a * a) + x in let base = f 4 xs in List.fold_left f base xs;;
+---------------------annofix------------------------
+let sqsum  : int list -> int  = fun xs  ->  let f a x = a in let base = f 2 xs in List.fold_left f base xs;;
+
+9
+---------------------bad------------------------
+let pipe fs = let f a x = fs a x in let base = 0 in List.fold_left f base fs;;
+--------------------fix-------------------------
+let pipe fs y = let f a x = x a in let base = y in List.fold_left f base fs;;
+-------------------anno bad--------------------------
+let pipe  : ('a -> 'a) list -> ('a -> 'a) = fun fs  ->  let f a x = fs a x in let base = 0 in List.fold_left f base fs;;
+---------------------annofix------------------------
+let pipe  : ('a -> 'a) list -> ('a -> 'a) = fun fs y  ->  let f a x = x a in let base = y in List.fold_left f base fs;;
+
+10
+---------------------bad------------------------
+let pipe fs = let f a x = fs a in let base = 0 in List.fold_left f base fs;;
+--------------------fix-------------------------
+let pipe fs y = let f a x = x a in let base = y in List.fold_left f base fs;;
+-------------------anno bad--------------------------
+let pipe  : ('a -> 'a) list -> ('a -> 'a) = fun fs  ->  let f a x = fs a in let base = 0 in List.fold_left f base fs;;
+---------------------annofix------------------------
+let pipe  : ('a -> 'a) list -> ('a -> 'a) = fun fs y  ->  let f a x = x a in let base = y in List.fold_left f base fs;;
+
+11
+---------------------bad------------------------
+let pipe fs = let f a x = fs a in let base = 0 in List.fold_left f base fs;;
+--------------------fix-------------------------
+let pipe fs y = let f a x = x a in let base = y in List.fold_left f base fs;;
+-------------------anno bad--------------------------
+let pipe  : ('a -> 'a) list -> ('a -> 'a) = fun fs  ->  let f a x = fs a in let base = 0 in List.fold_left f base fs;;
+---------------------annofix------------------------
+let pipe  : ('a -> 'a) list -> ('a -> 'a) = fun fs y  ->  let f a x = x a in let base = y in List.fold_left f base fs;;
+
+12
+---------------------bad------------------------
+let pipe fs = let f a x = fs x in let base = 0 in List.fold_left f base fs;;
+--------------------fix-------------------------
+let pipe fs y = let f a x = x a in let base = y in List.fold_left f base fs;;
+-------------------anno bad--------------------------
+let pipe  : ('a -> 'a) list -> ('a -> 'a) = fun fs  ->  let f a x = fs x in let base = 0 in List.fold_left f base fs;;
+---------------------annofix------------------------
+let pipe  : ('a -> 'a) list -> ('a -> 'a) = fun fs y  ->  let f a x = x a in let base = y in List.fold_left f base fs;;
+
+13
+---------------------bad------------------------
+let pipe fs = let f a x = fs a in let base x = x in List.fold_left f base fs;;
+--------------------fix-------------------------
+let pipe fs y = let f a x = x a in let base = y in List.fold_left f base fs;;
+-------------------anno bad--------------------------
+let pipe  : ('a -> 'a) list -> ('a -> 'a) = fun fs  ->  let f a x = fs a in let base x = x in List.fold_left f base fs;;
+---------------------annofix------------------------
+let pipe  : ('a -> 'a) list -> ('a -> 'a) = fun fs y  ->  let f a x = x a in let base = y in List.fold_left f base fs;;
+
+14
+---------------------bad------------------------
+let pipe fs = let f a x = fs a in let base = 0 in List.fold_left f base fs;;
+--------------------fix-------------------------
+let pipe fs y = let f a x = x a in let base = y in List.fold_left f base fs;;
+-------------------anno bad--------------------------
+let pipe  : ('a -> 'a) list -> ('a -> 'a) = fun fs  ->  let f a x = fs a in let base = 0 in List.fold_left f base fs;;
+---------------------annofix------------------------
+let pipe  : ('a -> 'a) list -> ('a -> 'a) = fun fs y  ->  let f a x = x a in let base = y in List.fold_left f base fs;;
+
+15
+---------------------bad------------------------
+let sqsum xs =
+  let f a x = (a * a) + xs in let base = 0 in List.fold_left f base xs;;
+--------------------fix-------------------------
+let sqsum xs =
+  let f a x = (a * a) + x in let base = 0 in List.fold_left f base xs;;
+-------------------anno bad--------------------------
+let sqsum  : int list -> int  = fun xs  -> 
+  let f a x = (a * a) + xs in let base = 0 in List.fold_left f base xs;;
+---------------------annofix------------------------
+let sqsum  : int list -> int  = fun xs  -> 
+  let f a x = (a * a) + x in let base = 0 in List.fold_left f base xs;;
+
+16
+---------------------bad------------------------
+let pipe fs =
+  let f a x = x a in
+  let base = match fs with | (fn,n) -> n in List.fold_left f base fs;;
+--------------------fix-------------------------
+let pipe fs n = let f a x = x a in let base n = 0 in List.fold_left f base fs;;
+-------------------anno bad--------------------------
+let pipe  : ('a -> 'a) list -> ('a -> 'a) = fun fs  -> 
+  let f a x = x a in
+  let base = match fs with | (fn,n) -> n in List.fold_left f base fs;;
+---------------------annofix------------------------
+let pipe  : ('a -> 'a) list -> ('a -> 'a) = fun fs n  ->  let f a x = x a in let base n = 0 in List.fold_left f base fs;;
+
+17
+---------------------bad------------------------
+let pipe fs =
+  match fs with
+  | [] -> 0
+  | f::fs' -> let f a x = x a in let base = fs' in List.fold_left f base fs;;
+--------------------fix-------------------------
+let pipe fs =
+  let f a x p = x (a p) in let base b = b in List.fold_left f base fs;;
+-------------------anno bad--------------------------
+let pipe  : ('a -> 'a) list -> ('a -> 'a) = fun fs  -> 
+  match fs with
+  | [] -> 0
+  | f::fs' -> let f a x = x a in let base = fs' in List.fold_left f base fs;;
+---------------------annofix------------------------
+let pipe  : ('a -> 'a) list -> ('a -> 'a) = fun fs  -> 
+  let f a x p = x (a p) in let base b = b in List.fold_left f base fs;;
+

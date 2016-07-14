@@ -41,6 +41,7 @@ data = list()
 for i in lines:
   item = json.loads(i)
   print(item['problem'])
+  
   # skip bad dictionaries
   if (item['problem'] == 'expr'):
     continue

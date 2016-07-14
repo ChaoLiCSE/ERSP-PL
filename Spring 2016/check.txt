@@ -1,0 +1,1130 @@
+0
+---------------------bad------------------------
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build (rand,depth) =
+  if depth = 0
+  then let x = rand (1, 2) in (if x = 1 then buildX () else buildY ())
+  else
+    (let b = build (rand, (depth - 1)) in
+     match rand (1, 5) with
+     | 1 -> buildSine b
+     | 2 -> buildCosine b
+     | 3 -> buildAverage (b, (build (rand, (depth - 1))))
+     | 4 -> buildTimes (b, (build (rand, (depth - 1))))
+     | _ ->
+         buildThresh
+           (b, (build (rand, (depth - 1))), (build (rand, (depth - 1))),
+             (build (rand, (depth - 1)))));;
+-------------------anno bad--------------------------
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let buildAverage (e1,e2) = Average (e1, e2);;
+
+let buildCosine e = Cosine e;;
+
+let buildSine e = Sine e;;
+
+let buildThresh (a,b,a_less,b_less) = Thresh (a, b, a_less, b_less);;
+
+let buildTimes (e1,e2) = Times (e1, e2);;
+
+let buildX () = VarX;;
+
+let buildY () = VarY;;
+
+let rec build : ((int * int -> int) * int) -> expr = fun (rand,depth)  -> 
+  if depth = 0
+  then let x = rand (1, 2) in (if x = 1 then buildX () else buildY ())
+  else
+    (let b = build (rand, (depth - 1)) in
+     match rand (1, 5) with
+     | 1 -> buildSine b
+     | 2 -> buildCosine b
+     | 3 -> buildAverage (b, (build (rand, (depth - 1))))
+     | 4 -> buildTimes (b, (build (rand, (depth - 1))))
+     | _ ->
+         buildThresh
+           (b, (build (rand, (depth - 1))), (build (rand, (depth - 1))),
+             (build (rand, (depth - 1)))));;
+
+1
+---------------------bad------------------------
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval (e,x,y) =
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine a -> sin (pi *. (eval (a, x, y)))
+  | Cosine a -> cos (pi *. (eval (a, x, y)))
+  | Average (a,b) -> ((eval (a, x, y)) +. (eval (b, x, y))) /. 2.
+  | Times (a,b) -> (eval (a, x, y)) *. (eval (b, x, y))
+  | Thresh (a,b,c,d) ->
+      if (eval (a, x, y)) < (eval (b, x, y))
+      then eval (c, x, y)
+      else eval (d, x, y);;
+-------------------anno bad--------------------------
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval  : expr * float * float -> float = fun (e,x,y)  -> 
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine a -> sin (pi *. (eval (a, x, y)))
+  | Cosine a -> cos (pi *. (eval (a, x, y)))
+  | Average (a,b) -> ((eval (a, x, y)) +. (eval (b, x, y))) /. 2.
+  | Times (a,b) -> (eval (a, x, y)) *. (eval (b, x, y))
+  | Thresh (a,b,c,d) ->
+      if (eval (a, x, y)) < (eval (b, x, y))
+      then eval (c, x, y)
+      else eval (d, x, y);;
+
+2
+---------------------bad------------------------
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval (e,x,y) =
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine a -> sin (pi *. (eval (a, x, y)))
+  | Cosine a -> cos (pi *. (eval (a, x, y)))
+  | Average (a,b) -> ((eval (a, x, y)) +. (eval (b, x, y))) /. 2.
+  | Times (a,b) -> (eval (a, x, y)) *. (eval (b, x, y))
+  | Thresh (a,b,c,d) ->
+      if (eval (a, x, y)) < (eval (b, x, y))
+      then eval (c, x, y)
+      else eval (d, x, y);;
+-------------------anno bad--------------------------
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval  : expr * float * float -> float = fun (e,x,y)  -> 
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine a -> sin (pi *. (eval (a, x, y)))
+  | Cosine a -> cos (pi *. (eval (a, x, y)))
+  | Average (a,b) -> ((eval (a, x, y)) +. (eval (b, x, y))) /. 2.
+  | Times (a,b) -> (eval (a, x, y)) *. (eval (b, x, y))
+  | Thresh (a,b,c,d) ->
+      if (eval (a, x, y)) < (eval (b, x, y))
+      then eval (c, x, y)
+      else eval (d, x, y);;
+
+3
+---------------------bad------------------------
+let prefix130 = "130";;
+
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+
+let print130 s = print_string (prefix130 ^ (">>" ^ s));;
+
+let runWTimeout (f,arg,out,time) =
+  try if (compare (f arg) out) = 0 then Pass else Fail
+  with
+  | e ->
+      (print130 ("Uncaught Exception: " ^ (Printexc.to_string e));
+       ErrorCode "exception");;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval (e,x,y) =
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine a -> sin (pi *. (eval (a, x, y)))
+  | Cosine a -> cos (pi *. (eval (a, x, y)))
+  | Average (a,b) -> ((eval (a, x, y)) +. (eval (b, x, y))) /. 2.
+  | Times (a,b) -> (eval (a, x, y)) *. (eval (b, x, y))
+  | Thresh (a,b,c,d) ->
+      if (eval (a, x, y)) < (eval (b, x, y))
+      then eval (c, x, y)
+      else eval (d, x, y);;
+-------------------anno bad--------------------------
+let prefix130 = "130";;
+
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+
+let print130 s = print_string (prefix130 ^ (">>" ^ s));;
+
+let runWTimeout (f,arg,out,time) =
+  try if (compare (f arg) out) = 0 then Pass else Fail
+  with
+  | e ->
+      (print130 ("Uncaught Exception: " ^ (Printexc.to_string e));
+       ErrorCode "exception");;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval  : expr * float * float -> float = fun (e,x,y)  -> 
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine a -> sin (pi *. (eval (a, x, y)))
+  | Cosine a -> cos (pi *. (eval (a, x, y)))
+  | Average (a,b) -> ((eval (a, x, y)) +. (eval (b, x, y))) /. 2.
+  | Times (a,b) -> (eval (a, x, y)) *. (eval (b, x, y))
+  | Thresh (a,b,c,d) ->
+      if (eval (a, x, y)) < (eval (b, x, y))
+      then eval (c, x, y)
+      else eval (d, x, y);;
+
+4
+---------------------bad------------------------
+let prefix130 = "130";;
+
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+
+let print130 s = print_string (prefix130 ^ (">>" ^ s));;
+
+let runWTimeout (f,arg,out,time) =
+  try if (compare (f arg) out) = 0 then Pass else Fail
+  with
+  | e ->
+      (print130 ("Uncaught Exception: " ^ (Printexc.to_string e));
+       ErrorCode "exception");;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval (e,x,y) =
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine a -> sin (pi *. (eval (a, x, y)))
+  | Cosine a -> cos (pi *. (eval (a, x, y)))
+  | Average (a,b) -> ((eval (a, x, y)) +. (eval (b, x, y))) /. 2.
+  | Times (a,b) -> (eval (a, x, y)) *. (eval (b, x, y))
+  | Thresh (a,b,c,d) ->
+      if (eval (a, x, y)) < (eval (b, x, y))
+      then eval (c, x, y)
+      else eval (d, x, y);;
+-------------------anno bad--------------------------
+let prefix130 = "130";;
+
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+
+let print130 s = print_string (prefix130 ^ (">>" ^ s));;
+
+let runWTimeout (f,arg,out,time) =
+  try if (compare (f arg) out) = 0 then Pass else Fail
+  with
+  | e ->
+      (print130 ("Uncaught Exception: " ^ (Printexc.to_string e));
+       ErrorCode "exception");;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval  : expr * float * float -> float = fun (e,x,y)  -> 
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine a -> sin (pi *. (eval (a, x, y)))
+  | Cosine a -> cos (pi *. (eval (a, x, y)))
+  | Average (a,b) -> ((eval (a, x, y)) +. (eval (b, x, y))) /. 2.
+  | Times (a,b) -> (eval (a, x, y)) *. (eval (b, x, y))
+  | Thresh (a,b,c,d) ->
+      if (eval (a, x, y)) < (eval (b, x, y))
+      then eval (c, x, y)
+      else eval (d, x, y);;
+
+5
+---------------------bad------------------------
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval (e,x,y) =
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine a -> sin (pi *. (eval (a, x, y)))
+  | Cosine a -> cos (pi *. (eval (a, x, y)))
+  | Average (a,b) -> ((eval (a, x, y)) +. (eval (b, x, y))) /. 2.
+  | Times (a,b) -> (eval (a, x, y)) *. (eval (b, x, y))
+  | Thresh (a,b,c,d) ->
+      if (eval (a, x, y)) < (eval (b, x, y))
+      then eval (c, x, y)
+      else eval (d, x, y);;
+-------------------anno bad--------------------------
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr;;
+
+let pi = 4.0 *. (atan 1.0);;
+
+let rec eval  : expr * float * float -> float = fun (e,x,y)  -> 
+  match e with
+  | VarX  -> x
+  | VarY  -> y
+  | Sine a -> sin (pi *. (eval (a, x, y)))
+  | Cosine a -> cos (pi *. (eval (a, x, y)))
+  | Average (a,b) -> ((eval (a, x, y)) +. (eval (b, x, y))) /. 2.
+  | Times (a,b) -> (eval (a, x, y)) *. (eval (b, x, y))
+  | Thresh (a,b,c,d) ->
+      if (eval (a, x, y)) < (eval (b, x, y))
+      then eval (c, x, y)
+      else eval (d, x, y);;
+
+6
+---------------------bad------------------------
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+--------------------fix-------------------------
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+-------------------anno bad--------------------------
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+---------------------annofix------------------------
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+
+7
+---------------------bad------------------------
+let prefix130 = "130";;
+
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+
+let print130 s = print_string (prefix130 ^ (">>" ^ s));;
+
+let runWTimeout (f,arg,out,time) =
+  try if (compare (f arg) out) = 0 then Pass else Fail
+  with
+  | e ->
+      (print130 ("Uncaught Exception: " ^ (Printexc.to_string e));
+       ErrorCode "exception");;
+--------------------fix-------------------------
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+-------------------anno bad--------------------------
+let prefix130 = "130";;
+
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+
+let print130 s = print_string (prefix130 ^ (">>" ^ s));;
+
+let runWTimeout (f,arg,out,time) =
+  try if (compare (f arg) out) = 0 then Pass else Fail
+  with
+  | e ->
+      (print130 ("Uncaught Exception: " ^ (Printexc.to_string e));
+       ErrorCode "exception");;
+---------------------annofix------------------------
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+
+8
+---------------------bad------------------------
+let prefix130 = "130";;
+
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+
+let print130 s = print_string (prefix130 ^ (">>" ^ s));;
+
+let runWTimeout (f,arg,out,time) =
+  try if (compare (f arg) out) = 0 then Pass else Fail
+  with
+  | e ->
+      (print130 ("Uncaught Exception: " ^ (Printexc.to_string e));
+       ErrorCode "exception");;
+--------------------fix-------------------------
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+-------------------anno bad--------------------------
+let prefix130 = "130";;
+
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+
+let print130 s = print_string (prefix130 ^ (">>" ^ s));;
+
+let runWTimeout (f,arg,out,time) =
+  try if (compare (f arg) out) = 0 then Pass else Fail
+  with
+  | e ->
+      (print130 ("Uncaught Exception: " ^ (Printexc.to_string e));
+       ErrorCode "exception");;
+---------------------annofix------------------------
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+
+9
+---------------------bad------------------------
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+--------------------fix-------------------------
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+-------------------anno bad--------------------------
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+---------------------annofix------------------------
+let rec ffor (low,high,f) =
+  if low > high then () else (let _ = f low in ffor ((low + 1), high, f));;
+
+let toIntensity z = int_of_float (127.5 +. (127.5 *. z));;
+
+let toReal (i,n) = (float_of_int i) /. (float_of_int n);;
+
+let emitGrayscale (f,n,name) =
+  let fname = "art_g_" ^ name in
+  let chan = open_out (fname ^ ".pgm") in
+  let n2p1 = (n * 2) + 1 in
+  let _ = output_string chan (Format.sprintf "P5 %d %d 255\n" n2p1 n2p1) in
+  let _ =
+    ffor
+      ((- n), n,
+        (fun ix  ->
+           ffor
+             ((- n), n,
+               (fun iy  ->
+                  let x = toReal (ix, n) in
+                  let y = toReal (iy, n) in
+                  let z = f (x, y) in
+                  let iz = toIntensity z in output_char chan (char_of_int iz))))) in
+  close_out chan;
+  ignore (Sys.command ("convert " ^ (fname ^ (".pgm " ^ (fname ^ ".jpg")))));
+  ignore (Sys.command ("rm " ^ (fname ^ ".pgm")));;
+
+10
+---------------------bad------------------------
+let prefix130 = "130";;
+
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+
+let print130 s = print_string (prefix130 ^ (">>" ^ s));;
+
+let runWTimeout (f,arg,out,time) =
+  try if (compare (f arg) out) = 0 then Pass else Fail
+  with
+  | e ->
+      (print130 ("Uncaught Exception: " ^ (Printexc.to_string e));
+       ErrorCode "exception");;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr
+  | DivAdd of expr* expr* expr* expr
+  | TriMult of expr* expr* expr;;
+
+let rec exprToString e =
+  match e with
+  | VarX  -> "x"
+  | VarY  -> "y"
+  | Sine sin -> "sin(pi*" ^ ((exprToString sin) ^ ")")
+  | Cosine cos -> "cos(pi*" ^ ((exprToString cos) ^ ")")
+  | Average (n1,n2) ->
+      "((" ^ ((exprToString n1) ^ ("+" ^ ((exprToString n2) ^ ")/2)")))
+  | Times (t1,t2) -> (exprToString t1) ^ ("*" ^ (exprToString t2))
+  | Thresh (th1,th2,th3,th4) ->
+      "(" ^
+        ((exprToString th1) ^
+           ("<" ^
+              ((exprToString th2) ^
+                 ("?" ^
+                    ((exprToString th3) ^ (":" ^ ((exprToString th4) ^ ")")))))))
+  | DivAdd (ds1,ds2,ds3,ds4) ->
+      "((" ^
+        ((exprToString ds1) ^
+           ("+" ^
+              ((exprToString ds2) ^
+                 (") / (" ^
+                    ((exprToString ds3) ^ ("+" ^ ((exprToString ds4) ^ "))")))))))
+  | TriMult (tm1,tm2,tm3) ->
+      "(" ^
+        ((exprToString tm1) ^
+           ("*" ^ ((exprToString tm2) ^ ("*" ^ ((exprToString tm3) ^ ")")))));;
+-------------------anno bad--------------------------
+let prefix130 = "130";;
+
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+
+let print130 s = print_string (prefix130 ^ (">>" ^ s));;
+
+let runWTimeout (f,arg,out,time) =
+  try if (compare (f arg) out) = 0 then Pass else Fail
+  with
+  | e ->
+      (print130 ("Uncaught Exception: " ^ (Printexc.to_string e));
+       ErrorCode "exception");;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr
+  | DivAdd of expr* expr* expr* expr
+  | TriMult of expr* expr* expr;;
+
+let rec exprToString e =
+  match e with
+  | VarX  -> "x"
+  | VarY  -> "y"
+  | Sine sin -> "sin(pi*" ^ ((exprToString sin) ^ ")")
+  | Cosine cos -> "cos(pi*" ^ ((exprToString cos) ^ ")")
+  | Average (n1,n2) ->
+      "((" ^ ((exprToString n1) ^ ("+" ^ ((exprToString n2) ^ ")/2)")))
+  | Times (t1,t2) -> (exprToString t1) ^ ("*" ^ (exprToString t2))
+  | Thresh (th1,th2,th3,th4) ->
+      "(" ^
+        ((exprToString th1) ^
+           ("<" ^
+              ((exprToString th2) ^
+                 ("?" ^
+                    ((exprToString th3) ^ (":" ^ ((exprToString th4) ^ ")")))))))
+  | DivAdd (ds1,ds2,ds3,ds4) ->
+      "((" ^
+        ((exprToString ds1) ^
+           ("+" ^
+              ((exprToString ds2) ^
+                 (") / (" ^
+                    ((exprToString ds3) ^ ("+" ^ ((exprToString ds4) ^ "))")))))))
+  | TriMult (tm1,tm2,tm3) ->
+      "(" ^
+        ((exprToString tm1) ^
+           ("*" ^ ((exprToString tm2) ^ ("*" ^ ((exprToString tm3) ^ ")")))));;
+
+11
+---------------------bad------------------------
+exception ErrorCode of string;;
+--------------------fix-------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr
+  | DivAdd of expr* expr* expr* expr
+  | TriMult of expr* expr* expr;;
+
+let rec exprToString e =
+  match e with
+  | VarX  -> "x"
+  | VarY  -> "y"
+  | Sine sin -> "sin(pi*" ^ ((exprToString sin) ^ ")")
+  | Cosine cos -> "cos(pi*" ^ ((exprToString cos) ^ ")")
+  | Average (n1,n2) ->
+      "((" ^ ((exprToString n1) ^ ("+" ^ ((exprToString n2) ^ ")/2)")))
+  | Times (t1,t2) -> (exprToString t1) ^ ("*" ^ (exprToString t2))
+  | Thresh (th1,th2,th3,th4) ->
+      "(" ^
+        ((exprToString th1) ^
+           ("<" ^
+              ((exprToString th2) ^
+                 ("?" ^
+                    ((exprToString th3) ^ (":" ^ ((exprToString th4) ^ ")")))))))
+  | DivAdd (ds1,ds2,ds3,ds4) ->
+      "((" ^
+        ((exprToString ds1) ^
+           ("+" ^
+              ((exprToString ds2) ^
+                 (") / (" ^
+                    ((exprToString ds3) ^ ("+" ^ ((exprToString ds4) ^ "))")))))))
+  | TriMult (tm1,tm2,tm3) ->
+      "(" ^
+        ((exprToString tm1) ^
+           ("*" ^ ((exprToString tm2) ^ ("*" ^ ((exprToString tm3) ^ ")")))));;
+-------------------anno bad--------------------------
+exception ErrorCode of string;;
+---------------------annofix------------------------
+type expr =
+  | VarX
+  | VarY
+  | Sine of expr
+  | Cosine of expr
+  | Average of expr* expr
+  | Times of expr* expr
+  | Thresh of expr* expr* expr* expr
+  | DivAdd of expr* expr* expr* expr
+  | TriMult of expr* expr* expr;;
+
+let rec exprToString e =
+  match e with
+  | VarX  -> "x"
+  | VarY  -> "y"
+  | Sine sin -> "sin(pi*" ^ ((exprToString sin) ^ ")")
+  | Cosine cos -> "cos(pi*" ^ ((exprToString cos) ^ ")")
+  | Average (n1,n2) ->
+      "((" ^ ((exprToString n1) ^ ("+" ^ ((exprToString n2) ^ ")/2)")))
+  | Times (t1,t2) -> (exprToString t1) ^ ("*" ^ (exprToString t2))
+  | Thresh (th1,th2,th3,th4) ->
+      "(" ^
+        ((exprToString th1) ^
+           ("<" ^
+              ((exprToString th2) ^
+                 ("?" ^
+                    ((exprToString th3) ^ (":" ^ ((exprToString th4) ^ ")")))))))
+  | DivAdd (ds1,ds2,ds3,ds4) ->
+      "((" ^
+        ((exprToString ds1) ^
+           ("+" ^
+              ((exprToString ds2) ^
+                 (") / (" ^
+                    ((exprToString ds3) ^ ("+" ^ ((exprToString ds4) ^ "))")))))))
+  | TriMult (tm1,tm2,tm3) ->
+      "(" ^
+        ((exprToString tm1) ^
+           ("*" ^ ((exprToString tm2) ^ ("*" ^ ((exprToString tm3) ^ ")")))));;
+
+12
+---------------------bad------------------------
+let rec clone x n =
+  if n < 0
+  then []
+  else (match n with | 0 -> [] | _ -> (clone x (n - 1)) @ [x]);;
+
+let padZero l1 l2 =
+  let num1 = (List.length l2) - (List.length l1) in
+  let num2 = (List.length l1) - (List.length l2) in
+  (((clone 0 num1) @ l1), ((clone 0 num2) @ l2));;
+
+let rec removeZero l =
+  match l with | [] -> [] | h::t -> if h = 0 then removeZero t else l;;
+
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+
+let bigAdd l1 l2 =
+  let add (l1,l2) =
+    let f a x =
+      match x with
+      | (z,y) ->
+          let sum = z + y in
+          if sum > 10
+          then let result = a @ (sum mod 10) in result @ 1
+          else a @ result in
+    let base = [] in
+    let args = List.combine l1 l2 in
+    let (_,res) = List.fold_left f base args in res in
+  removeZero (add (padZero l1 l2));;
+--------------------fix-------------------------
+let rec clone x n =
+  if n < 0
+  then []
+  else (match n with | 0 -> [] | _ -> (clone x (n - 1)) @ [x]);;
+
+let padZero l1 l2 =
+  let num1 = (List.length l2) - (List.length l1) in
+  let num2 = (List.length l1) - (List.length l2) in
+  (((clone 0 num1) @ l1), ((clone 0 num2) @ l2));;
+-------------------anno bad--------------------------
+let rec clone x n =
+  if n < 0
+  then []
+  else (match n with | 0 -> [] | _ -> (clone x (n - 1)) @ [x]);;
+
+let padZero  : int list -> int list -> int list  * int list = fun l1 l2  -> 
+  let num1 = (List.length l2) - (List.length l1) in
+  let num2 = (List.length l1) - (List.length l2) in
+  (((clone 0 num1) @ l1), ((clone 0 num2) @ l2));;
+
+let rec removeZero l =
+  match l with | [] -> [] | h::t -> if h = 0 then removeZero t else l;;
+
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+
+let bigAdd l1 l2 =
+  let add (l1,l2) =
+    let f a x =
+      match x with
+      | (z,y) ->
+          let sum = z + y in
+          if sum > 10
+          then let result = a @ (sum mod 10) in result @ 1
+          else a @ result in
+    let base = [] in
+    let args = List.combine l1 l2 in
+    let (_,res) = List.fold_left f base args in res in
+  removeZero (add (padZero l1 l2));;
+---------------------annofix------------------------
+let rec clone x n =
+  if n < 0
+  then []
+  else (match n with | 0 -> [] | _ -> (clone x (n - 1)) @ [x]);;
+
+let padZero  : int list -> int list -> int list  * int list = fun l1 l2  -> 
+  let num1 = (List.length l2) - (List.length l1) in
+  let num2 = (List.length l1) - (List.length l2) in
+  (((clone 0 num1) @ l1), ((clone 0 num2) @ l2));;
+
+13
+---------------------bad------------------------
+let rec clone x n =
+  if n < 0
+  then []
+  else (match n with | 0 -> [] | _ -> (clone x (n - 1)) @ [x]);;
+
+let f a x =
+  let rec intlist l = if l < 10 then [l] else (intlist (l / 10)) @ [l mod 10] in
+  match x with
+  | (z,y) ->
+      (match a with
+       | [] -> let sum = z + y in intlist sum
+       | h::t -> let sum = (h + z) + y in (intlist sum) @ t);;
+
+let padZero l1 l2 =
+  let num1 = (List.length l2) - (List.length l1) in
+  let num2 = (List.length l1) - (List.length l2) in
+  (((clone 0 num1) @ l1), ((clone 0 num2) @ l2));;
+
+let rec removeZero l =
+  match l with | [] -> [] | h::t -> if h = 0 then removeZero t else l;;
+
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+
+let _ =
+  let bigAdd l1 l2 =
+    let add (l1,l2) =
+      let f a x =
+        let rec intlist x =
+          if x < 10 then [x] else (intlist (x / 10)) @ [x mod 10] in
+        match x with
+        | (z,y) ->
+            (match a with
+             | [] -> let sum = z + y in intlist sum
+             | h::t -> let sum = (h + z) + y in result = ((intlist sum) @ t)) in
+      if sum < 10 then 0 :: result else result in
+    let base = [0] in
+    let args = List.rev (List.combine l1 l2) in
+    let res = List.fold_left f base args in res in
+  removeZero (add (padZero l1 l2));;
+--------------------fix-------------------------
+let rec clone x n =
+  if n < 0
+  then []
+  else (match n with | 0 -> [] | _ -> (clone x (n - 1)) @ [x]);;
+
+let padZero l1 l2 =
+  let num1 = (List.length l2) - (List.length l1) in
+  let num2 = (List.length l1) - (List.length l2) in
+  (((clone 0 num1) @ l1), ((clone 0 num2) @ l2));;
+-------------------anno bad--------------------------
+let rec clone x n =
+  if n < 0
+  then []
+  else (match n with | 0 -> [] | _ -> (clone x (n - 1)) @ [x]);;
+
+let f a x =
+  let rec intlist l = if l < 10 then [l] else (intlist (l / 10)) @ [l mod 10] in
+  match x with
+  | (z,y) ->
+      (match a with
+       | [] -> let sum = z + y in intlist sum
+       | h::t -> let sum = (h + z) + y in (intlist sum) @ t);;
+
+let padZero  : int list -> int list -> int list  * int list = fun l1 l2  -> 
+  let num1 = (List.length l2) - (List.length l1) in
+  let num2 = (List.length l1) - (List.length l2) in
+  (((clone 0 num1) @ l1), ((clone 0 num2) @ l2));;
+
+let rec removeZero l =
+  match l with | [] -> [] | h::t -> if h = 0 then removeZero t else l;;
+
+type result =
+  | Pass
+  | Fail
+  | ErrorCode of string;;
+
+let _ =
+  let bigAdd l1 l2 =
+    let add (l1,l2) =
+      let f a x =
+        let rec intlist x =
+          if x < 10 then [x] else (intlist (x / 10)) @ [x mod 10] in
+        match x with
+        | (z,y) ->
+            (match a with
+             | [] -> let sum = z + y in intlist sum
+             | h::t -> let sum = (h + z) + y in result = ((intlist sum) @ t)) in
+      if sum < 10 then 0 :: result else result in
+    let base = [0] in
+    let args = List.rev (List.combine l1 l2) in
+    let res = List.fold_left f base args in res in
+  removeZero (add (padZero l1 l2));;
+---------------------annofix------------------------
+let rec clone x n =
+  if n < 0
+  then []
+  else (match n with | 0 -> [] | _ -> (clone x (n - 1)) @ [x]);;
+
+let padZero  : int list -> int list -> int list  * int list = fun l1 l2  -> 
+  let num1 = (List.length l2) - (List.length l1) in
+  let num2 = (List.length l1) - (List.length l2) in
+  (((clone 0 num1) @ l1), ((clone 0 num2) @ l2));;
+

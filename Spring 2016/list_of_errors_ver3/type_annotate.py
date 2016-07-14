@@ -73,6 +73,7 @@ def build_dict(bad, annotation, indice):
 
   dic = dict()
   dic['bad'] = bad
+  dic['prob'] = indice['problem']
   dic['annotated'] = add_annotation(annotation, indice['problem'], bad)
   if not indice['fix']:
     dic['fix'] = ''
